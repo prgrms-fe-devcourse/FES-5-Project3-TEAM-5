@@ -1,10 +1,11 @@
-import { Calender } from './Calendar'
+import { Calender } from './Calendar/Calendar'
 import { TotalReport } from './TotalReport'
+import type { CalendarEventType } from '../model/type'
 
-const events = [
-  { title: '점심 12,000원', date: '2025-08-23' },
-  { title: '커피 4,500원', date: '2025-08-23' },
-  { title: '월급 200만원', date: '2025-08-25' }
+const events: CalendarEventType[] = [
+  { id: '1', date: '2025-08-23', type: 'income', amount: '12000' },
+  { id: '2', date: '2025-08-23', type: 'expense', amount: '4500' },
+  { id: '3', date: '2025-08-25', type: 'income', amount: '2000000' }
 ]
 
 export default function CalendarPage() {

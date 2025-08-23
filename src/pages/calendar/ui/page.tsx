@@ -10,7 +10,7 @@ const events: CalendarEventType[] = [
 
 export default function CalendarPage() {
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       <TotalReport />
       <Calender events={events} />
     </div>

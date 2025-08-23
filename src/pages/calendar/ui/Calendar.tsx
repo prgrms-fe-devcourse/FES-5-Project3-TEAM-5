@@ -15,6 +15,7 @@ export const Calender = ({ events }: Props) => {
       locale={koLocale}
       events={events}
       height="auto"
+      headerToolbar={false}
     />
   )
 }

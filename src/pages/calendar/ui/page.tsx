@@ -1,4 +1,5 @@
 import { Calender } from './Calendar'
+import { TotalReport } from './TotalReport'
 
 const events = [
   { title: '점심 12,000원', date: '2025-08-23' },
@@ -7,5 +8,10 @@ const events = [
 ]
 
 export default function CalendarPage() {
-  return <Calender events={events} />
+  return (
+    <div>
+      <TotalReport />
+      <Calender events={events} />
+    </div>
+  )
 }

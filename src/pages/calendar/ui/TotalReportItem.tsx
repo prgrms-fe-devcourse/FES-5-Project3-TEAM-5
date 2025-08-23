@@ -1,5 +1,6 @@
 import React from 'react'
 import { cn } from '../../../shared/utils/cn'
+import { formatPriceNumber } from '../../../shared/utils/format'
 
 interface Props {
   title: string
@@ -18,7 +19,7 @@ export const TotalReportItem = ({ title, amount }: Props) => {
           title === '잔액' && 'text-black'
         )}>
         {title === '수입' ? '+' : title === '지출' ? '-' : ''}
-        {amount}원
+        {formatPriceNumber(amount)}원
       </p>
     </div>
   )

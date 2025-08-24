@@ -12,6 +12,7 @@
   --color--neutral-DEFAULT: #b5b5b5;
   --color--neutral-light: #f2f2f2;
 
+  --text-size-xxs: 8px;
   --text-size-xs: 10px;
   --text-size-sm: 12px;
   --text-size-md: 14px;
@@ -24,6 +25,11 @@
   html {
     font-family: Pretendard, sans-serif;
   }
+}
+
+.fc {
+  width: 100%;
+  height: 100%;
 }
 
 /* 헤더, 셀 border 제거 */

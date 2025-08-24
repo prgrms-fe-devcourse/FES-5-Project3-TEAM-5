@@ -26,6 +26,14 @@ export const Calender = ({ events }: Props) => {
       height="auto"
       headerToolbar={false}
       eventContent={RenderEventContent}
+      dayCellClassNames={() => [
+        'ring-inset',
+        'hover:ring-1',
+        'hover:ring-primary-base',
+        'hover:ring-offset-0',
+        'rounded-md',
+        'transition'
+      ]}
       dayCellContent={arg => ({ html: arg.dayNumberText.replace(/\D/g, '') })}
     />
   )

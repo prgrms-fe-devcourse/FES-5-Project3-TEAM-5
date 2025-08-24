@@ -10,7 +10,9 @@ export const RenderEventContent = (eventInfo: EventContentArg) => {
   return (
     <div
       className={cn(
-        '!text-size-xs text-center',
+        'text-center ',
+        Number(eventInfo.event.title.length) > 4 && '!text-size-xxs',
+        Number(eventInfo.event.title.length) <= 4 && '!text-size-xs',
         type === 'income' ? 'text-secondary-blue' : 'text-secondary-red'
       )}>
       {type === 'income' ? '+' : '-'}

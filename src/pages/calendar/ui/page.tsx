@@ -1,6 +1,7 @@
 import { Calender } from './Calendar/Calendar'
 import { TotalReport } from './TotalReport'
 import type { CalendarEventType } from '../model/type'
+import { PickDate } from './PickDate'
 
 const events: CalendarEventType[] = [
   { id: '1', date: '2025-08-23', type: 'income', amount: '12000' },
@@ -10,7 +11,8 @@ const events: CalendarEventType[] = [
 
 export default function CalendarPage() {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 items-center">
+      <PickDate />
       <TotalReport />
       <Calender events={events} />
     </div>

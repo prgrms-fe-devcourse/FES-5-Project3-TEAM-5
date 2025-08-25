@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn } from '../../../shared/utils/cn'
+import { tw } from '../../../shared/utils/tw'
 import { formatPriceNumber } from '../../../shared/utils/format'
 
 interface Props {
@@ -12,7 +12,7 @@ export const TotalReportItem = ({ title, amount }: Props) => {
     <div className="flex flex-col text-size-md items-center justify-center">
       <p className="">{title}</p>
       <p
-        className={cn(
+        className={tw(
           'font-bold',
           title === '수입' && 'text-secondary-blue',
           title === '지출' && 'text-secondary-red',

@@ -1,4 +1,4 @@
-import { cn } from '../../../../shared/utils/cn'
+import { tw } from '../../../../shared/utils/tw'
 import { formatPriceNumber } from '../../../../shared/utils/format'
 import type { EventContentArg } from '@fullcalendar/core'
 
@@ -9,7 +9,7 @@ export const RenderEventContent = (eventInfo: EventContentArg) => {
 
   return (
     <div
-      className={cn(
+      className={tw(
         'text-center ',
         Number(eventInfo.event.title.length) > 4 && '!text-size-xxs',
         Number(eventInfo.event.title.length) <= 4 && '!text-size-xs',

@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { ChevronDownIcon } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
+import { Button } from '@/shared/components/shadcn/ui/button'
+import { Calendar } from '@/shared/components/shadcn/ui/calendar'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
-} from '@/components/ui/popover'
+} from '@/shared/components/shadcn/ui/popover'
 
 interface Props {
   value: Date

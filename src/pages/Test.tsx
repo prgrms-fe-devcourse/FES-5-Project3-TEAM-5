@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import AddButton from '@/shared/components/addButton/AddButton'
+import AddButton from '@/shared/components/buttons/AddButton'
 import ConfirmModal from '@/shared/components/modal/ConfirmModal'
 
 export const Test = () => {

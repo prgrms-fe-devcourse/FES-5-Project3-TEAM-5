@@ -1,10 +1,10 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import koLocale from '@fullcalendar/core/locales/ko'
-import interactionPlugin from '@fullcalendar/interaction'
+import interactionPlugin, { type DateClickArg } from '@fullcalendar/interaction'
 import type { CalendarEventType } from '@/features/calendar/model/type'
 import { RenderEventContent } from '@/features/calendar/ui/calendar/RenderEventContent'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 interface Props {
   events: CalendarEventType[]
@@ -14,13 +14,12 @@ interface Props {
 export const Calendar = ({ events, currentDate }: Props) => {
   const ref = useRef<FullCalendar>(null)
 
-  const isSameDate = (date: Date) => {
-    return (
-      date.getFullYear() === currentDate.getFullYear() &&
-      date.getMonth() === currentDate.getMonth() &&
-      date.getDate() === currentDate.getDate()
-    )
-  }
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+
+  const isSameDate = (a: Date, b: Date) =>
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
 
   useEffect(() => {
     ref.current?.getApi().gotoDate(currentDate)
@@ -38,6 +37,10 @@ export const Calendar = ({ events, currentDate }: Props) => {
     [events]
   )
 
+  const handleDateClick = (info: DateClickArg) => {
+    setSelectedDate(info.date)
+  }
+
   return (
     <FullCalendar
       ref={ref}
@@ -49,6 +52,7 @@ export const Calendar = ({ events, currentDate }: Props) => {
       height="auto"
       headerToolbar={false}
       eventContent={RenderEventContent}
+      dateClick={info => handleDateClick(info)}
       dayCellClassNames={arg => {
         const base = [
           'ring-inset',
@@ -58,9 +62,9 @@ export const Calendar = ({ events, currentDate }: Props) => {
           'rounded-md',
           'transition'
         ]
-        if (isSameDate(arg.date)) {
+        if (isSameDate(arg.date, currentDate)) base.push('bg-primary-light')
+        if (selectedDate && isSameDate(arg.date, selectedDate))
           base.push('bg-primary-light')
-        }
         return base
       }}
       dayCellContent={arg => ({ html: arg.dayNumberText.replace(/\D/g, '') })}

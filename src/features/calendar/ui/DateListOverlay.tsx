@@ -1,4 +1,6 @@
 import React, { useEffect, useRef } from 'react'
+import { ListItem } from './ListItem'
+import { ListHeader } from './ListHeader'
 
 interface Props {
   isOpen: boolean
@@ -38,8 +40,13 @@ export const DateListOverlay = ({ isOpen, setIsOpen }: Props) => {
       <div className="relative h-full w-full max-w-[420px] flex items-end">
         <div
           ref={ref}
-          className="w-full h-2/3 rounded-t-lg bg-white shadow-[0_-8px_24px_rgba(0,0,0,0.12)]"
-        />
+          className="w-full h-2/3 rounded-t-lg bg-white shadow-[0_-8px_24px_rgba(0,0,0,0.12)]">
+          <ListHeader />
+          <ListItem />
+          <ListItem />
+          <ListItem />
+          <ListItem />
+        </div>
       </div>
     </div>
   )

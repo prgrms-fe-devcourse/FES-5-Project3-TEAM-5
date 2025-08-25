@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router'
 import { Layout } from '../shared/components/layout/Layout'
 import { Home } from '../pages/Home'
 import CalendarPage from '../pages/calendar/ui/page'
+import NotFound from '@/shared/components/notFound/NotFound'
 
 export const router = createBrowserRouter([
   {
@@ -23,5 +24,10 @@ export const router = createBrowserRouter([
         Component: CalendarPage
       }
     ]
+  },
+  {
+    path: '*',
+    Component: Layout,
+    children: [{ path: '*', Component: NotFound }]
   }
 ])

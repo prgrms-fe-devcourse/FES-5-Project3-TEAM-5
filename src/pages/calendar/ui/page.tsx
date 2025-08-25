@@ -3,6 +3,7 @@ import { TotalReport } from './TotalReport'
 import type { CalendarEventType } from '../model/type'
 import { PickDate } from './PickDate'
 import { useState } from 'react'
+import { DateListBlock } from './Calendar/DateListBlock'
 
 const events: CalendarEventType[] = [
   { id: '1', date: '2025-08-23', type: 'income', amount: '12000' },
@@ -13,19 +14,26 @@ const events: CalendarEventType[] = [
 
 export default function CalendarPage() {
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="flex flex-col gap-2 items-center">
+    <div className="flex flex-col gap-2 items-center h-full">
       <PickDate
         value={date || new Date()}
         onChange={d => d && setDate(d)}
       />
-
       <TotalReport />
-      <Calender
-        events={events}
-        currentDate={date as Date}
-      />
+      <div className="relative ">
+        <Calender
+          events={events}
+          currentDate={date as Date}
+        />
+        <DateListBlock
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+        />
+        <button onClick={() => setIsOpen(true)}>open</button>
+      </div>
     </div>
   )
 }

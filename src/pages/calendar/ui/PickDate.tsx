@@ -9,9 +9,13 @@ import {
   PopoverTrigger
 } from '@/components/ui/popover'
 
-export function PickDate() {
+interface Props {
+  value: Date
+  onChange: (date?: Date) => void
+}
+
+export function PickDate({ value, onChange }: Props) {
   const [open, setOpen] = React.useState(false)
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
 
   return (
     <div className="flex flex-col gap-3 border-none">
@@ -23,7 +27,7 @@ export function PickDate() {
             variant="ghost"
             id="date"
             className="w-32 text-size-lg font-bold justify-between">
-            {date ? date.toLocaleDateString() : '날짜 선택'}
+            {value ? value.toLocaleDateString() : '날짜 선택'}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
@@ -32,10 +36,10 @@ export function PickDate() {
           align="start">
           <Calendar
             mode="single"
-            selected={date}
+            selected={value}
             captionLayout="dropdown"
             onSelect={date => {
-              setDate(date)
+              onChange(date || undefined)
               setOpen(false)
             }}
           />

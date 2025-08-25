@@ -2,6 +2,7 @@ import SearchBar from '@/features/vote/ui/SearchBar'
 import SortButtonList from '@/features/vote/ui/SortButtonList'
 import VoteCard from '@/features/vote/ui/VoteCard'
 import AddButton from '@/shared/components/buttons/AddButton'
+import { Link } from 'react-router'
 
 function VotePage() {
   return (
@@ -11,7 +12,9 @@ function VotePage() {
       <VoteCard />
       <VoteCard />
       <div className="flex justify-end items-end sticky z-50 bottom-18">
-        <AddButton />
+        <Link to="/vote/create">
+          <AddButton />
+        </Link>
       </div>
     </div>
   )

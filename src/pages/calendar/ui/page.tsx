@@ -1,7 +1,7 @@
 import { TotalReport } from './TotalReport'
 import type { CalendarEventType } from '../../../features/calendar/model/type'
 import { useState } from 'react'
-import { Calender, PickDate, DateListOverlay } from '../../../features/calendar'
+import { Calendar, PickDate, DateListOverlay } from '../../../features/calendar'
 
 const events: CalendarEventType[] = [
   { id: '1', date: '2025-08-23', type: 'income', amount: '12000' },
@@ -22,7 +22,7 @@ export const CalendarPage = () => {
       />
       <TotalReport />
       <div className="relative ">
-        <Calender
+        <Calendar
           events={events}
           currentDate={date as Date}
         />

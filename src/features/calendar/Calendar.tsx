@@ -4,14 +4,14 @@ import koLocale from '@fullcalendar/core/locales/ko'
 import interactionPlugin from '@fullcalendar/interaction'
 import { RenderEventContent } from './RenderEventContent'
 import type { CalendarEventType } from './model/type'
-import { useEffect, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 
 interface Props {
   events: CalendarEventType[]
   currentDate: Date
 }
 
-export const Calender = ({ events, currentDate }: Props) => {
+export const Calendar = ({ events, currentDate }: Props) => {
   const ref = useRef<FullCalendar>(null)
 
   const isSameDate = (date: Date) => {
@@ -23,18 +23,21 @@ export const Calender = ({ events, currentDate }: Props) => {
   }
 
   useEffect(() => {
-    if (isSameDate(currentDate)) {
-      ref.current?.getApi().gotoDate(currentDate)
-    }
+    ref.current?.getApi().gotoDate(currentDate)
   }, [currentDate])
 
-  const calendarEvents = events.map(e => ({
-    title: e.amount,
-    start: e.date,
-    extendedProps: { type: e.type },
-    backgroundColor: 'transparent',
-    borderColor: 'transparent'
-  }))
+  const fcEvent = useMemo(
+    () =>
+      events.map(e => ({
+        title: e.amount,
+        start: e.date,
+        extendedProps: { type: e.type },
+        backgroundColor: 'transparent',
+        borderColor: 'transparent'
+      })),
+    [events]
+  )
+
   return (
     <FullCalendar
       ref={ref}
@@ -42,7 +45,7 @@ export const Calender = ({ events, currentDate }: Props) => {
       initialView="dayGridMonth"
       initialDate={currentDate}
       locale={koLocale}
-      events={calendarEvents}
+      events={fcEvent}
       height="auto"
       headerToolbar={false}
       eventContent={RenderEventContent}

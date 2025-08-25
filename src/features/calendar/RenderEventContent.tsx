@@ -1,6 +1,7 @@
 import { tw } from '../../shared/utils/tw'
 import { formatPriceNumber } from '../../shared/utils/format'
 import type { EventContentArg } from '@fullcalendar/core'
+import React from 'react'
 
 export const RenderEventContent = (eventInfo: EventContentArg) => {
   const type = (
@@ -20,3 +21,5 @@ export const RenderEventContent = (eventInfo: EventContentArg) => {
     </div>
   )
 }
+
+React.memo(RenderEventContent)

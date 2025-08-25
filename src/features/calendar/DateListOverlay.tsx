@@ -5,7 +5,7 @@ interface Props {
   setIsOpen: (isOpen: boolean) => void
 }
 
-export const DateListBlock = ({ isOpen, setIsOpen }: Props) => {
+export const DateListOverlay = ({ isOpen, setIsOpen }: Props) => {
   const ref = useRef<HTMLDivElement>(null)
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {

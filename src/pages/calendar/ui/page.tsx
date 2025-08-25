@@ -1,9 +1,7 @@
-import { Calender } from './Calendar/Calendar'
 import { TotalReport } from './TotalReport'
-import type { CalendarEventType } from '../model/type'
-import { PickDate } from './PickDate'
+import type { CalendarEventType } from '../../../features/calendar/model/type'
 import { useState } from 'react'
-import { DateListBlock } from './Calendar/DateListBlock'
+import { Calender, PickDate, DateListOverlay } from '../../../features/calendar'
 
 const events: CalendarEventType[] = [
   { id: '1', date: '2025-08-23', type: 'income', amount: '12000' },
@@ -12,7 +10,7 @@ const events: CalendarEventType[] = [
   { id: '4', date: '2025-07-10', type: 'expense', amount: '10000000' }
 ]
 
-export default function CalendarPage() {
+export const CalendarPage = () => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [isOpen, setIsOpen] = useState(false)
 
@@ -28,7 +26,7 @@ export default function CalendarPage() {
           events={events}
           currentDate={date as Date}
         />
-        <DateListBlock
+        <DateListOverlay
           isOpen={isOpen}
           setIsOpen={setIsOpen}
         />

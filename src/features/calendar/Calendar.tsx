@@ -2,8 +2,8 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import koLocale from '@fullcalendar/core/locales/ko'
 import interactionPlugin from '@fullcalendar/interaction'
-import { RenderEventContent } from './renderEventContent'
-import type { CalendarEventType } from '../../model/type'
+import { RenderEventContent } from './RenderEventContent'
+import type { CalendarEventType } from './model/type'
 import { useEffect, useRef } from 'react'
 
 interface Props {

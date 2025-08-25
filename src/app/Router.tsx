@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import { Layout } from '../shared/components/layout/Layout'
 import { Home } from '../pages/Home'
-import CalendarPage from '../pages/calendar/ui/page'
+import { CalendarPage } from '../pages/calendar'
 
 export const router = createBrowserRouter([
   {

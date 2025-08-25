@@ -42,10 +42,22 @@ export const DateListOverlay = ({ isOpen, setIsOpen }: Props) => {
           ref={ref}
           className="w-full h-2/3 rounded-t-lg bg-white shadow-[0_-8px_24px_rgba(0,0,0,0.12)]">
           <ListHeader />
-          <ListItem />
-          <ListItem />
-          <ListItem />
-          <ListItem />
+          <ListItem
+            icon="beauty"
+            title="월급소득"
+          />
+          <ListItem
+            icon="clothes"
+            title="옷"
+          />
+          <ListItem
+            icon="cultural"
+            title="문화"
+          />
+          <ListItem
+            icon="dailyNecessities"
+            title="생필품"
+          />
         </div>
       </div>
     </div>

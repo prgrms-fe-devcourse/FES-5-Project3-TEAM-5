@@ -1,15 +1,40 @@
+import { tw } from '@/shared/utils/tw'
+
 interface Props {
   text: string
-  className?: string
+  status?: string
+  id: number
+  onStatusChange: (clickedId: number) => void
 }
 
 // disabled , active, hover
 
-function ButtonLayout({ text }: Props) {
+function ButtonLayout({
+  id,
+  text,
+  status = 'inactive',
+  onStatusChange
+}: Props) {
+  const className = () => {
+    switch (status) {
+      case 'active':
+        return 'bg-primary-light font-bold text-black'
+      case 'inactive':
+        return 'bg-neutral-light text-neutral-dark'
+      case 'disabled':
+        return 'bg-neutral-DEFAULT text-black'
+      default:
+        break
+    }
+  }
   return (
     <button
       type="button"
-      className="px-4 py-2 rounded-2xl text-neutral-dark text-size-md bg-neutral-light hover:brightness-90 hover:text-black cursor-pointer">
+      onClick={() => onStatusChange(id)}
+      className={tw(
+        'px-4 py-2 rounded-2xl text-size-md hover:brightness-90 cursor-pointer ',
+        className()
+      )}>
       {text}
     </button>
   )

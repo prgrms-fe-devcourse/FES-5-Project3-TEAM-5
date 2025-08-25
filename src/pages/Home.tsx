@@ -1,4 +1,4 @@
-import AddButton from '@/shared/components/AddButton'
+import AddButton from '@/shared/components/addButton'
 
 export const Home = () => {
   return (

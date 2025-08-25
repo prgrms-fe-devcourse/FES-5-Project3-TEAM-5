@@ -37,6 +37,7 @@ export function PickDate() {
             mode="single"
             selected={date}
             captionLayout="dropdown"
+            defaultMonth={date}
             onSelect={date => {
               setDate(date as Date)
               setOpen(false)

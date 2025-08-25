@@ -23,7 +23,9 @@ export const Calendar = ({ events }: Props) => {
     a.getDate() === b.getDate()
 
   useEffect(() => {
-    ref.current?.getApi().gotoDate(date)
+    Promise.resolve().then(() => {
+      ref.current?.getApi().gotoDate(date)
+    })
   }, [date])
 
   const fcEvent = useMemo(

@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router'
 import { Layout } from '../shared/components/layout/Layout'
 import { Home } from '../pages/Home'
 import CalendarPage from '../pages/calendar/ui/page'
+import { Test } from '@/pages/Test'
 
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,20 @@ export const router = createBrowserRouter([
       {
         path: 'calendar',
         Component: CalendarPage
+      }
+    ]
+  },
+  {
+    path: '/test',
+    Component: Layout,
+    handle: {
+      title: '테스트 페이지입니다',
+      hideNav: true
+    },
+    children: [
+      {
+        index: true,
+        Component: Test
       }
     ]
   }

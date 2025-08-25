@@ -20,8 +20,10 @@
   --text-size-sm: 12px;
   --text-size-md: 14px;
   --text-size-lg: 16px;
-  --text-size-xl: 28px;
+  --text-size-xl: 18px;
   --text-size-2xl: 20px;
+  --text-size-3xl: 24px;
+  --text-size-4xl: 28px;
 }
 
 @layer base {

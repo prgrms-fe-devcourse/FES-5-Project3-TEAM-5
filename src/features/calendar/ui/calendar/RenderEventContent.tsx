@@ -1,5 +1,5 @@
-import { tw } from '../../../shared/utils/tw'
-import { formatPriceNumber } from '../../../shared/utils/format'
+import { tw } from '@/shared/utils/tw'
+import { formatPriceNumber } from '@/shared/utils/format'
 import type { EventContentArg } from '@fullcalendar/core'
 import React from 'react'
 

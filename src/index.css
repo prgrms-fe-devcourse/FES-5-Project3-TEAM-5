@@ -4,24 +4,26 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-  --color-primary-light: #f7d278;
-  --color-primary-base: #ec8e4a;
-  --color-primary-pale: #fff3d6;
+  --color-primary-light: #f9d376;
+  --color-primary-base: #ed944a;
+  --color-primary-pale: #fdf2d6;
 
   --color-secondary-blue: #4285f4;
-  --color-secondary-red: #ea4335;
+  --color-secondary-red: #eb4335;
 
-  --color-neutral-dark: #777777;
-  --color-neutral-DEFAULT: #b5b5b5;
-  --color-neutral-light: #f2f2f2;
+  --color-neutral-dark: #787878;
+  --color-neutral-DEFAULT: #b6b6b6;
+  --color-neutral-light: #f5f5f5;
 
   --text-size-xxs: 8px;
   --text-size-xs: 10px;
   --text-size-sm: 12px;
   --text-size-md: 14px;
   --text-size-lg: 16px;
-  --text-size-xl: 28px;
+  --text-size-xl: 18px;
   --text-size-2xl: 20px;
+  --text-size-3xl: 24px;
+  --text-size-4xl: 28px;
 }
 
 @layer base {

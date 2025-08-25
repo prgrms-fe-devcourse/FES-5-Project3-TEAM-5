@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router'
-import Nav from '../nav/Nav'
+import Navigatie from '../navigatie/Nav'
 
 export const Layout = () => {
   return (
@@ -9,7 +9,7 @@ export const Layout = () => {
           <Outlet />
         </main>
 
-        <Nav />
+        <Navigatie />
       </div>
     </div>
   )

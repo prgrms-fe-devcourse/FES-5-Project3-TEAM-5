@@ -3,6 +3,9 @@ import { Layout } from '../shared/components/layout/Layout'
 import { Home } from '../pages/Home'
 import { CalendarPage } from '../pages/calendar'
 
+import NotFound from '@/shared/components/notFound/NotFound'
+import NotificationPage from '@/pages/notification/NotificationPage'
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -23,5 +26,15 @@ export const router = createBrowserRouter([
         Component: CalendarPage
       }
     ]
+  },
+  {
+    path: '/notification',
+    Component: Layout,
+    children: [{ index: true, Component: NotificationPage }]
+  },
+  {
+    path: '*',
+    Component: Layout,
+    children: [{ path: '*', Component: NotFound }]
   }
 ])

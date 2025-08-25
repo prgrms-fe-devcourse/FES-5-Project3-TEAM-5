@@ -1,7 +1,6 @@
 import Input from '@/shared/components/form/Input'
 import SubmitButton from '@/shared/components/form/SubmitButton'
-
-import AddButton from '@/shared/components/addButton/AddButton'
+import AddButton from '@/shared/components/buttons/AddButton'
 import { useRef } from 'react'
 
 export const Home = () => {

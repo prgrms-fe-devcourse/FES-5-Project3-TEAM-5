@@ -1,20 +1,21 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import koLocale from '@fullcalendar/core/locales/ko'
-import interactionPlugin, { type DateClickArg } from '@fullcalendar/interaction'
+import interactionPlugin from '@fullcalendar/interaction'
 import type { CalendarEventType } from '@/features/calendar/model/type'
 import { RenderEventContent } from '@/features/calendar/ui/calendar/RenderEventContent'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
+import { useSelectedDate } from '../../model/useSelectedDate'
+import { useShallow } from 'zustand/shallow'
 
 interface Props {
   events: CalendarEventType[]
-  currentDate: Date
 }
 
-export const Calendar = ({ events, currentDate }: Props) => {
+export const Calendar = ({ events }: Props) => {
   const ref = useRef<FullCalendar>(null)
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+  const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
 
   const isSameDate = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() &&
@@ -22,8 +23,8 @@ export const Calendar = ({ events, currentDate }: Props) => {
     a.getDate() === b.getDate()
 
   useEffect(() => {
-    ref.current?.getApi().gotoDate(currentDate)
-  }, [currentDate])
+    ref.current?.getApi().gotoDate(date)
+  }, [date])
 
   const fcEvent = useMemo(
     () =>
@@ -37,22 +38,18 @@ export const Calendar = ({ events, currentDate }: Props) => {
     [events]
   )
 
-  const handleDateClick = (info: DateClickArg) => {
-    setSelectedDate(info.date)
-  }
-
   return (
     <FullCalendar
       ref={ref}
       plugins={[dayGridPlugin, interactionPlugin]}
       initialView="dayGridMonth"
-      initialDate={currentDate}
+      initialDate={date}
       locale={koLocale}
       events={fcEvent}
       height="auto"
       headerToolbar={false}
       eventContent={RenderEventContent}
-      dateClick={info => handleDateClick(info)}
+      dateClick={info => setDate(info.date)}
       dayCellClassNames={arg => {
         const base = [
           'ring-inset',
@@ -62,9 +59,7 @@ export const Calendar = ({ events, currentDate }: Props) => {
           'rounded-md',
           'transition'
         ]
-        if (isSameDate(arg.date, currentDate)) base.push('bg-primary-light')
-        if (selectedDate && isSameDate(arg.date, selectedDate))
-          base.push('bg-primary-light')
+        if (date && isSameDate(arg.date, date)) base.push('bg-primary-light')
         return base
       }}
       dayCellContent={arg => ({ html: arg.dayNumberText.replace(/\D/g, '') })}

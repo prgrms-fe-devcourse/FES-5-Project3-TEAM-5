@@ -11,21 +11,14 @@ const events: CalendarEventType[] = [
 ]
 
 export const CalendarPage = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date())
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <div className="flex flex-col gap-2 items-center h-full">
-      <PickDate
-        value={date || new Date()}
-        onChange={d => d && setDate(d)}
-      />
+      <PickDate />
       <TotalReport />
       <div className="relative ">
-        <Calendar
-          events={events}
-          currentDate={date as Date}
-        />
+        <Calendar events={events} />
         <DateListOverlay
           isOpen={isOpen}
           setIsOpen={setIsOpen}

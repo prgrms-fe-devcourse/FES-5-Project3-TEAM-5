@@ -8,14 +8,13 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/shared/components/shadcn/ui/popover'
+import { useSelectedDate } from '../model/useSelectedDate'
+import { useShallow } from 'zustand/shallow'
 
-interface Props {
-  value: Date
-  onChange: (date?: Date) => void
-}
-
-export function PickDate({ value, onChange }: Props) {
+export function PickDate() {
   const [open, setOpen] = React.useState(false)
+
+  const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
 
   return (
     <div className="flex flex-col gap-3 border-none">
@@ -27,7 +26,7 @@ export function PickDate({ value, onChange }: Props) {
             variant="ghost"
             id="date"
             className="w-32 text-size-lg font-bold justify-between">
-            {value ? value.toLocaleDateString() : '날짜 선택'}
+            {date ? date.toLocaleDateString() : '날짜 선택'}
             <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
@@ -36,10 +35,10 @@ export function PickDate({ value, onChange }: Props) {
           align="start">
           <Calendar
             mode="single"
-            selected={value}
+            selected={date}
             captionLayout="dropdown"
             onSelect={date => {
-              onChange(date || undefined)
+              setDate(date as Date)
               setOpen(false)
             }}
           />

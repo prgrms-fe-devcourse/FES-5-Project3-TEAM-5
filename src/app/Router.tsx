@@ -2,6 +2,8 @@ import { createBrowserRouter } from 'react-router'
 import { Layout } from '../shared/components/layout/Layout'
 import { Home } from '../pages/Home'
 import CalendarPage from '../pages/calendar/ui/page'
+import NotFound from '@/shared/components/notFound/NotFound'
+import NotificationPage from '@/pages/notification/NotificationPage'
 import { Test } from '@/pages/Test'
 
 export const router = createBrowserRouter([
@@ -26,6 +28,11 @@ export const router = createBrowserRouter([
     ]
   },
   {
+    path: '/notification',
+    Component: Layout,
+    children: [{ index: true, Component: NotificationPage }]
+  },
+  {
     path: '/test',
     Component: Layout,
     handle: {
@@ -38,5 +45,10 @@ export const router = createBrowserRouter([
         Component: Test
       }
     ]
+  },
+  {
+    path: '*',
+    Component: Layout,
+    children: [{ path: '*', Component: NotFound }]
   }
 ])

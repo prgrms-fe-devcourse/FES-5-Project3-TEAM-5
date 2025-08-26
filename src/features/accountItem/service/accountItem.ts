@@ -20,14 +20,10 @@ export const fetchByMonth = async (month: number) => {
 
 // 캘린더 일 데이터 조회
 export const fetchByDate = async (date: Date) => {
-  const start = dayjs(date).startOf('day').toISOString()
-  const end = dayjs(date).endOf('day').toISOString()
-
   const { data: items } = await supabase
     .from('account_items')
     .select('*')
-    .gte('date', start)
-    .lte('date', end)
+    .eq('date', dayjs(date).format('YYYY-MM-DD'))
 
   const categoryIds = [...new Set(items?.map(item => item.category_id) ?? [])]
 

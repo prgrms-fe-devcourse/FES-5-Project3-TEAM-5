@@ -6,9 +6,9 @@ import { CalendarPage } from '../pages/calendar'
 import NotFound from '@/shared/components/notFound/NotFound'
 import NotificationPage from '@/pages/notification/NotificationPage'
 import VotePage from '@/pages/vote/VotePage'
-import CreateVotePage from '@/pages/vote/CreateVotePage'
 import EditVotePage from '@/pages/vote/EditVotePage'
 import { Test } from '@/pages/Test'
+import AddVotePage from '@/pages/vote/AddVotePage'
 
 export const router = createBrowserRouter([
   {
@@ -42,12 +42,20 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: VotePage },
       {
-        path: 'create',
-        Component: CreateVotePage
+        path: 'add',
+        Component: AddVotePage,
+        handle: {
+          title: '투표 작성',
+          hideNav: true
+        }
       },
       {
         path: 'edit/:editId',
-        Component: EditVotePage
+        Component: EditVotePage,
+        handle: {
+          title: '투표 수정',
+          hideNav: true
+        }
       }
     ]
   },
@@ -68,6 +76,15 @@ export const router = createBrowserRouter([
   {
     path: '*',
     Component: Layout,
-    children: [{ path: '*', Component: NotFound }]
+    children: [
+      {
+        path: '*',
+        Component: NotFound,
+        handle: {
+          title: '404',
+          hideNav: true
+        }
+      }
+    ]
   }
 ])

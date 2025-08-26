@@ -3,7 +3,7 @@ import VoteOption from '@/features/vote/ui/form/VoteOption'
 import VoteQuestion from '@/features/vote/ui/form/VoteQuestion'
 import SubmitButton from '@/shared/components/form/SubmitButton'
 
-function EditVotePage() {
+function AddVotePage() {
   return (
     <form
       className="flex flex-col "
@@ -16,4 +16,4 @@ function EditVotePage() {
     </form>
   )
 }
-export default EditVotePage
+export default AddVotePage

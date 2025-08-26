@@ -39,7 +39,7 @@ function VotePage() {
       )}
       <VoteCard
         people={45}
-        question="dhjkahjkfdshsjkfhjksdhsgjksdh"
+        question="dhjkahjkfdshsjkfhjksdhsgjksdhdhjkahjkfdshsjkfhjksdhsgjksdhdhjkahjkfdshsjkfhjksdhsgjksdh"
         isMine={false}
         onDelete={handleDeleteModal}
       />

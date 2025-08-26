@@ -35,7 +35,9 @@ export function VoteCard({
         )}
       </div>
 
-      <div className="bg-neutral-light p-3 rounded-lg border-2 border-neutral-200 text-black ">
+      <div
+        className="bg-neutral-light p-3 rounded-lg border-2 border-neutral-200 text-black break-keep
+wrap-break-word">
         <p>{question}</p>
       </div>
 

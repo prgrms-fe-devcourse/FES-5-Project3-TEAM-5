@@ -9,18 +9,23 @@ import {
 } from '@/shared/components/shadcn/ui/popover'
 import { useSelectedDate } from '../model/useSelectedDate'
 import { useShallow } from 'zustand/shallow'
+import dayjs from 'dayjs'
+import { useNavigate } from 'react-router'
 
 export function PickDate() {
   const [open, setOpen] = React.useState(false)
 
   const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
-
+  const navigate = useNavigate()
   return (
     <div className=" w-full px-6 flex justify-between border-none items-center">
       <button
         className="group text-3xl font-bold cursor-pointer"
         onClick={() => {
           setDate(new Date(date.setMonth(date.getMonth() - 1)))
+          navigate(
+            `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
+          )
         }}>
         <svg
           width="24"
@@ -65,6 +70,9 @@ export function PickDate() {
         className="group text-3xl font-bold cursor-pointer"
         onClick={() => {
           setDate(new Date(date.setMonth(date.getMonth() + 1)))
+          navigate(
+            `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
+          )
         }}>
         <svg
           width="24"

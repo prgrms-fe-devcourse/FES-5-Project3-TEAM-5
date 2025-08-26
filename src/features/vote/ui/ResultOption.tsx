@@ -3,19 +3,33 @@ import activeCharacter from '@/shared/assets/vote/activeCharacter.png'
 import { motion } from 'framer-motion'
 
 interface Props {
-  isVote: boolean
   selectionText: string
   percent?: number
+  status: 'selected' | 'unselected'
 }
 
-function Selection({ isVote, percent = 0, selectionText }: Props) {
+function ResultOption({
+  percent = 0,
+  selectionText,
+  status = 'unselected'
+}: Props) {
+  const className = () => {
+    switch (status) {
+      case 'selected':
+        return 'bg-primary-pale p-2 rounded-md'
+      case 'unselected':
+        return 'p-2'
+      default:
+        break
+    }
+  }
   return (
     <>
-      <div>
+      <div className={className()}>
         <div className="flex items-center gap-x-2 mb-1">
           <img
             className="w-8"
-            src={isVote ? activeCharacter : inactiveCharacter}
+            src={status === 'selected' ? activeCharacter : inactiveCharacter}
             alt="선택 아이콘"
           />
           <p className="flex-1">{selectionText}</p>
@@ -34,4 +48,4 @@ function Selection({ isVote, percent = 0, selectionText }: Props) {
   )
 }
 
-export default Selection
+export default ResultOption

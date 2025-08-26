@@ -6,6 +6,8 @@ import { CalendarPage } from '../pages/calendar'
 import NotFound from '@/shared/components/notFound/NotFound'
 import NotificationPage from '@/pages/notification/NotificationPage'
 import { Test } from '@/pages/Test'
+import dayjs from 'dayjs'
+import { fetchCalendar } from '@/features/calendar/service/calendar'
 
 export const router = createBrowserRouter([
   {
@@ -24,7 +26,14 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'calendar',
-        Component: CalendarPage
+        Component: CalendarPage,
+        loader: async ({ request }) => {
+          const url = new URL(request.url)
+          const dateParam = url.searchParams.get('date')
+          const base = dateParam ? dayjs(dateParam) : dayjs()
+          const events = await fetchCalendar(base.month())
+          return { initialDate: base.startOf('day').toISOString(), events }
+        }
       }
     ]
   },

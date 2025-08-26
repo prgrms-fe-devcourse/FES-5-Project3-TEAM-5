@@ -1,12 +1,26 @@
 import { TotalReport } from './TotalReport'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Calendar, PickDate, DateListOverlay } from '../../../features/calendar'
+import { useLoaderData } from 'react-router'
+import type { CalendarEventType } from '@/features/calendar/model/type'
+import { useSelectedDate } from '@/features/calendar/model/useSelectedDate'
 import { useCalendar } from '@/features/calendar/model/useCalendar'
+
+interface LoaderData {
+  events: CalendarEventType[]
+  initialDate: string
+}
 
 export const CalendarPage = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const { calendarEvents, calendarEventsByDate, getCalendarByDate } =
-    useCalendar()
+  const { initialDate, events } = useLoaderData() as LoaderData
+
+  const setData = useSelectedDate(s => s.setDate)
+  const { calendarEventsByDate, getCalendarByDate } = useCalendar()
+
+  useEffect(() => {
+    setData(new Date(initialDate))
+  }, [initialDate, setData])
 
   return (
     <div className="flex flex-col gap-2 items-center h-full">
@@ -15,7 +29,7 @@ export const CalendarPage = () => {
       <div className="relative ">
         <Calendar
           setIsOpen={setIsOpen}
-          calendarEvents={calendarEvents}
+          calendarEvents={events}
           getCalendarByDate={getCalendarByDate}
         />
         <DateListOverlay

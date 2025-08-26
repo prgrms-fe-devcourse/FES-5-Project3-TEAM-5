@@ -1,13 +1,15 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import koLocale from '@fullcalendar/core/locales/ko'
-import interactionPlugin, { type DateClickArg } from '@fullcalendar/interaction'
+import interactionPlugin from '@fullcalendar/interaction'
 
 import { RenderEventContent } from '@/features/calendar/ui/calendar/RenderEventContent'
 import { useEffect, useMemo, useRef } from 'react'
 import { useSelectedDate } from '../../model/useSelectedDate'
 import { useShallow } from 'zustand/shallow'
 import type { CalendarEventType } from '../../model/type'
+import dayjs from 'dayjs'
+import { useNavigate } from 'react-router'
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void
@@ -23,6 +25,8 @@ export const Calendar = ({
   const ref = useRef<FullCalendar>(null)
 
   const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
+
+  const navigate = useNavigate()
 
   const isSameDate = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() &&
@@ -48,7 +52,10 @@ export const Calendar = ({
   )
 
   const handleDateClick = async (info: Date) => {
-    setDate(info)
+    navigate(`/accountBook/calendar?date=${dayjs(info).format('YYYY-MM-DD')}`, {
+      replace: true
+    })
+    // 이후 일 데이터 로딩
     await getCalendarByDate(info)
     setIsOpen(true)
   }

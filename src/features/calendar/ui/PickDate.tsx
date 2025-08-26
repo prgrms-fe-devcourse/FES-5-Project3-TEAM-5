@@ -25,9 +25,8 @@ export function PickDate() {
           <Button
             variant="ghost"
             id="date"
-            className="w-32 text-size-lg font-bold justify-between">
+            className="w-32 text-size-lg font-bold justify-center">
             {date ? date.toLocaleDateString() : '날짜 선택'}
-            <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent

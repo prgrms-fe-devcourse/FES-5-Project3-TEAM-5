@@ -1,11 +1,9 @@
-import { useUserContext } from '@/shared/context/UserContext'
+import { useUserStore } from '@/shared/stores/useUserStore'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
 function AuthCallback() {
-  const { isAuth, isLoading } = useUserContext()
-  console.log(isAuth, isLoading)
-
+  const { isAuth, isLoading } = useUserStore()
   const navigate = useNavigate()
 
   useEffect(() => {

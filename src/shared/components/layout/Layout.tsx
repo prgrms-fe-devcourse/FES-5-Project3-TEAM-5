@@ -12,7 +12,7 @@ type RouteHandle = {
 }
 
 export const Layout = () => {
-  const { isAuth, isLoading, initializeUser } = useUserStore()
+  const { isAuth, initializeUser } = useUserStore()
 
   useEffect(() => {
     initializeUser()

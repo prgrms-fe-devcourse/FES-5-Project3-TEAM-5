@@ -18,6 +18,7 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
 
     try {
       const { error } = await supabase.auth.signInWithOAuth({ provider })
+      if (error) throw error
     } catch (error) {
       if (error instanceof Error) {
         console.error('Login failed:', error.message)

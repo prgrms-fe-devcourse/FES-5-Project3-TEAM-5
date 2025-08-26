@@ -61,6 +61,9 @@ export function PickDate() {
             defaultMonth={date}
             onSelect={date => {
               setDate(date as Date)
+              navigate(
+                `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
+              )
               setOpen(false)
             }}
           />

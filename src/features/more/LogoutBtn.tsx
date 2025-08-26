@@ -1,5 +1,4 @@
 import { useUserStore } from '@/shared/stores/useUserStore'
-import { useNavigate } from 'react-router'
 
 function LogoutBtn() {
   const { logout } = useUserStore()
@@ -11,7 +10,7 @@ function LogoutBtn() {
       onClick={() => {
         logout()
       }}
-      className="p-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
+      className="cursor-pointer">
       로그아웃
     </button>
   )

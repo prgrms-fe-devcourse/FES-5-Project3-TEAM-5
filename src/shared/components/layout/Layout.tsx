@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { useUserStore } from '@/shared/stores/useUserStore'
 
 export const Layout = () => {
-  const { isAuth, initializeUser } = useUserStore()
+  const { isAuth, isLoading, initializeUser } = useUserStore()
 
   useEffect(() => {
     initializeUser()

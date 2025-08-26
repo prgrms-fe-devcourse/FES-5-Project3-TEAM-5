@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 interface Props {
   selectionText: string
   percent?: number
-  status: 'selected' | 'unselected'
+  status?: 'selected' | 'unselected'
 }
 
 export function ResultOption({

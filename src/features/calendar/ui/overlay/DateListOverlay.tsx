@@ -69,7 +69,6 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
             <ListItem
               key={item.id}
               icon={item.categories as IconType}
-              title={item.categories}
               amount={item.amount}
               type={item.type}
             />

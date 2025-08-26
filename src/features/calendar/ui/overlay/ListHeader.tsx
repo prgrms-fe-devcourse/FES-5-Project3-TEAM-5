@@ -1,6 +1,14 @@
+import { formatPriceNumber } from '@/shared/utils/format'
 import { useSelectedDate } from '../../model/useSelectedDate'
+import up from '../svg/up.svg'
+import down from '../svg/down.svg'
 
-export const ListHeader = () => {
+interface Props {
+  income: number
+  expense: number
+}
+
+export const ListHeader = ({ income, expense }: Props) => {
   const date = useSelectedDate(s => s.date)
 
   return (
@@ -10,8 +18,20 @@ export const ListHeader = () => {
         <div className="px-2.5 py-0.5 bg-neutral-light rounded-lg">금요일</div>
       </div>
       <div className="flex gap-2.5">
-        <div>123,123,123원</div>
-        <div>123,123,123원</div>
+        <div className="flex items-center gap-1">
+          <img
+            src={up}
+            alt="up"
+          />
+          <div>{formatPriceNumber(income)}원</div>
+        </div>
+        <div className="flex items-center gap-1">
+          <img
+            src={down}
+            alt="down"
+          />
+          <div>{formatPriceNumber(expense)}원</div>
+        </div>
       </div>
     </div>
   )

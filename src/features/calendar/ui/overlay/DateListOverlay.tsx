@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { ListItem, type IconType } from './ListItem'
 import { ListHeader } from './ListHeader'
 
@@ -18,6 +18,23 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
       setIsOpen(false)
     }
   }
+
+  const { income, expense } = useMemo(() => {
+    return events.reduce(
+      (acc, item) => {
+        if (item.type === 'income') {
+          acc.income += item.amount
+        } else {
+          acc.expense += item.amount
+        }
+        return acc
+      },
+      {
+        income: 0,
+        expense: 0
+      }
+    )
+  }, [events])
 
   // 스크롤 방지
   useEffect(() => {
@@ -44,7 +61,10 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
         <div
           ref={ref}
           className="w-full h-2/3 rounded-t-lg bg-white shadow-[0_-8px_24px_rgba(0,0,0,0.12)]">
-          <ListHeader />
+          <ListHeader
+            income={income}
+            expense={expense}
+          />
           {events.map(item => (
             <ListItem
               key={item.id}

@@ -1,7 +1,8 @@
 import { createBrowserRouter } from 'react-router'
 import { Layout } from '../shared/components/layout/Layout'
 import { Home } from '../pages/Home'
-import CalendarPage from '../pages/calendar/ui/page'
+import { CalendarPage } from '../pages/calendar'
+
 import NotFound from '@/shared/components/notFound/NotFound'
 import NotificationPage from '@/pages/notification/NotificationPage'
 import { Test } from '@/pages/Test'

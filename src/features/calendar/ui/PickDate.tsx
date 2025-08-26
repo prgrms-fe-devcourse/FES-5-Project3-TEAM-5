@@ -1,17 +1,20 @@
 import * as React from 'react'
 import { ChevronDownIcon } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
+import { Button } from '@/shared/components/shadcn/ui/button'
+import { Calendar } from '@/shared/components/shadcn/ui/calendar'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger
-} from '@/components/ui/popover'
+} from '@/shared/components/shadcn/ui/popover'
+import { useSelectedDate } from '../model/useSelectedDate'
+import { useShallow } from 'zustand/shallow'
 
 export function PickDate() {
   const [open, setOpen] = React.useState(false)
-  const [date, setDate] = React.useState<Date | undefined>(new Date())
+
+  const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
 
   return (
     <div className="flex flex-col gap-3 border-none">
@@ -34,8 +37,9 @@ export function PickDate() {
             mode="single"
             selected={date}
             captionLayout="dropdown"
+            defaultMonth={date}
             onSelect={date => {
-              setDate(date)
+              setDate(date as Date)
               setOpen(false)
             }}
           />

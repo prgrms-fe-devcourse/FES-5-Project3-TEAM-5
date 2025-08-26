@@ -2,12 +2,10 @@ import { useUserStore } from '@/shared/stores/useUserStore'
 import moreBear from '@/shared/assets/morebear.png'
 
 function NicknameCard() {
-  //   const nickname = useUserStore(
-  //     state =>
-  //       state.user?.user_metadata.user_name || state.user?.user_metadata.name
-  //   )
-
-  const nickname = '얄리얄리 얄라셩 얄라샤샤샤 오오 구구 '
+  const nickname = useUserStore(
+    state =>
+      state.user?.user_metadata.user_name || state.user?.user_metadata.name
+  )
 
   const formatNickname = (nickname: string): string => {
     if (!nickname) return ''

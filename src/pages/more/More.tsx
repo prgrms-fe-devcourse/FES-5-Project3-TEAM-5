@@ -3,7 +3,7 @@ import NicknameCard from '@/features/more/NicknameCard'
 
 function More() {
   return (
-    <div className="flex flex-col gap-4 bg-light-gray">
+    <div className="flex flex-col gap-4 bg-light-gray mt-2">
       <div>
         <NicknameCard />
       </div>

@@ -1,20 +1,28 @@
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import koLocale from '@fullcalendar/core/locales/ko'
-import interactionPlugin from '@fullcalendar/interaction'
+import interactionPlugin, { type DateClickArg } from '@fullcalendar/interaction'
 
 import { RenderEventContent } from '@/features/calendar/ui/calendar/RenderEventContent'
 import { useEffect, useMemo, useRef } from 'react'
 import { useSelectedDate } from '../../model/useSelectedDate'
 import { useShallow } from 'zustand/shallow'
-import { useCalendar } from '../../model/useCalendar'
+import type { CalendarEventType } from '../../model/type'
 
-export const Calendar = () => {
+interface Props {
+  setIsOpen: (isOpen: boolean) => void
+  getCalendarByDate: (date: Date) => void
+  calendarEvents: CalendarEventType[]
+}
+
+export const Calendar = ({
+  setIsOpen,
+  getCalendarByDate,
+  calendarEvents
+}: Props) => {
   const ref = useRef<FullCalendar>(null)
 
   const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
-
-  const { calendarEvents } = useCalendar()
 
   const isSameDate = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() &&
@@ -39,6 +47,12 @@ export const Calendar = () => {
     [calendarEvents]
   )
 
+  const handleDateClick = async (info: Date) => {
+    setDate(info)
+    await getCalendarByDate(info)
+    setIsOpen(true)
+  }
+
   return (
     <FullCalendar
       ref={ref}
@@ -50,7 +64,7 @@ export const Calendar = () => {
       height="auto"
       headerToolbar={false}
       eventContent={RenderEventContent}
-      dateClick={info => setDate(info.date)}
+      dateClick={arg => handleDateClick(arg.date)}
       dayCellClassNames={arg => {
         const base = [
           'ring-inset',

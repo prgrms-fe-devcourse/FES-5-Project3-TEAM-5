@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
-import { fetchCalendar } from '../service/calendar'
+import { fetchCalendar, fetchCalendarByDate } from '../service/calendar'
 import type { CalendarEventType } from './type'
 import { useSelectedDate } from './useSelectedDate'
 
 export const useCalendar = () => {
   const [calendarEvents, setCalendarEvents] = useState<CalendarEventType[]>([])
+  const [calendarEventsByDate, setCalendarEventsByDate] = useState<
+    CalendarEventType[]
+  >([])
   const date = useSelectedDate(d => d.date)
 
   const getCalendar = async () => {
@@ -12,9 +15,19 @@ export const useCalendar = () => {
     setCalendarEvents(data)
   }
 
+  const getCalendarByDate = async (date: Date) => {
+    const data = await fetchCalendarByDate(date)
+    setCalendarEventsByDate(data)
+  }
+
   useEffect(() => {
     getCalendar()
   }, [date])
 
-  return { calendarEvents, setCalendarEvents }
+  return {
+    calendarEvents,
+    calendarEventsByDate,
+    getCalendar,
+    getCalendarByDate
+  }
 }

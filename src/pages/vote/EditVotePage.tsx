@@ -1,6 +1,4 @@
-import VoteDeadLine from '@/features/vote/ui/form/VoteDeadLine'
-import VoteOption from '@/features/vote/ui/form/VoteOption'
-import VoteQuestion from '@/features/vote/ui/form/VoteQuestion'
+import { VoteDeadLine, VoteOption, VoteQuestion } from '@/features/vote'
 import SubmitButton from '@/shared/components/form/SubmitButton'
 
 function EditVotePage() {

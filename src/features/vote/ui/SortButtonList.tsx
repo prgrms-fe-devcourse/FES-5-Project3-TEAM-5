@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ButtonLayout from './form/ButtonLayout'
 
-function SortButtonList() {
+export function SortButtonList() {
   const [sortButtonData, setSortButtonData] = useState([
     { id: 1, text: '전체', status: 'inactive' },
     { id: 2, text: '내 투표', status: 'inactive' },
@@ -32,4 +32,3 @@ function SortButtonList() {
     </div>
   )
 }
-export default SortButtonList

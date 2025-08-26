@@ -1,6 +1,6 @@
-import TimeButtonList from './TimeButtonList'
+import { TimeButtonList } from './TimeButtonList'
 
-function VoteDeadLine() {
+export function VoteDeadLine() {
   return (
     <div>
       <h3 className="text-size-lg font-bold text-neutral-dark mb-3">
@@ -10,4 +10,3 @@ function VoteDeadLine() {
     </div>
   )
 }
-export default VoteDeadLine

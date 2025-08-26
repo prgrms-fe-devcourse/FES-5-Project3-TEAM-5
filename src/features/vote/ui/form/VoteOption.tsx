@@ -1,6 +1,6 @@
 import Input from '@/shared/components/form/Input'
 
-function VoteOption() {
+export function VoteOption() {
   return (
     <div>
       <h3 className="text-size-lg font-bold text-neutral-dark ">선택지</h3>
@@ -19,4 +19,3 @@ function VoteOption() {
     </div>
   )
 }
-export default VoteOption

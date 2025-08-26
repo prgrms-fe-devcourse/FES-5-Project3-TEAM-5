@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import ResultOption from './ResultOption'
+import { ResultOption } from './ResultOption'
 
 interface Props {
   people: number
@@ -8,7 +8,12 @@ interface Props {
   onDelete: () => void
 }
 
-function VoteCard({ people, isMine = false, question, onDelete }: Props) {
+export function VoteCard({
+  people,
+  isMine = false,
+  question,
+  onDelete
+}: Props) {
   return (
     <div className="flex flex-col w-full p-4 gap-4 rounded-lg border-2 border-primary-light ">
       <div className="flex justify-between text-neutral-dark text-size-md">
@@ -49,4 +54,3 @@ function VoteCard({ people, isMine = false, question, onDelete }: Props) {
     </div>
   )
 }
-export default VoteCard

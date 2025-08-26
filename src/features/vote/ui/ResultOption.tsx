@@ -8,7 +8,7 @@ interface Props {
   status: 'selected' | 'unselected'
 }
 
-function ResultOption({
+export function ResultOption({
   percent = 0,
   selectionText,
   status = 'unselected'
@@ -47,5 +47,3 @@ function ResultOption({
     </>
   )
 }
-
-export default ResultOption

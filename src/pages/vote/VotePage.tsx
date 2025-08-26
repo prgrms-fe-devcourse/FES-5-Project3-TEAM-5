@@ -1,6 +1,4 @@
-import SearchBar from '@/features/vote/ui/SearchBar'
-import SortButtonList from '@/features/vote/ui/SortButtonList'
-import VoteCard from '@/features/vote/ui/VoteCard'
+import { SearchBar, SortButtonList, VoteCard } from '@/features/vote'
 import AddButton from '@/shared/components/buttons/AddButton'
 import ConfirmModal from '@/shared/components/modal/ConfirmModal'
 import { useState } from 'react'
@@ -41,8 +39,7 @@ function VotePage() {
       )}
       <VoteCard
         people={45}
-        question="   치킨 먹는다 안 먹는다치킨 먹는다 안 먹는다치킨 먹는다 안 먹는다치킨
-          먹는다 안 먹는다 치킨 먹는다 안 먹는다"
+        question="dhjkahjkfdshsjkfhjksdhsgjksdh"
         isMine={false}
         onDelete={handleDeleteModal}
       />

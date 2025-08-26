@@ -1,6 +1,6 @@
 import searchIcon from '@/shared/assets/vote/searchIcon.svg'
 
-function SearchBar() {
+export function SearchBar() {
   return (
     <div className="flex gap-3 px-2.5 py-2 rounded-xl bg-neutral-light">
       <img
@@ -15,4 +15,3 @@ function SearchBar() {
     </div>
   )
 }
-export default SearchBar

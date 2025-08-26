@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ButtonLayout from './ButtonLayout'
 
-function TimeButtonList() {
+export function TimeButtonList() {
   const [sortButtonData, setSortButtonData] = useState([
     { id: 1, text: '1시간', status: 'inactive' },
     { id: 2, text: '12시간', status: 'inactive' },
@@ -31,4 +31,3 @@ function TimeButtonList() {
     </div>
   )
 }
-export default TimeButtonList

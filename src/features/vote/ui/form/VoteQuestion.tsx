@@ -1,4 +1,4 @@
-function VoteQuestion() {
+export function VoteQuestion() {
   return (
     <div>
       <h3 className="text-size-lg font-bold text-neutral-dark mb-3">
@@ -13,4 +13,3 @@ function VoteQuestion() {
     </div>
   )
 }
-export default VoteQuestion

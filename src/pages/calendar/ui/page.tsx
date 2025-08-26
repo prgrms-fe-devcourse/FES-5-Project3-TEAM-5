@@ -2,12 +2,12 @@ import { TotalReport } from './TotalReport'
 import { useEffect, useState } from 'react'
 import { Calendar, PickDate, DateListOverlay } from '../../../features/calendar'
 import { useLoaderData } from 'react-router'
-import type { CalendarEventType } from '@/features/calendar/model/type'
 import { useSelectedDate } from '@/features/calendar/model/useSelectedDate'
 import { useCalendar } from '@/features/calendar/model/useCalendar'
+import type { AccountItem } from '@/features/accountItem/index'
 
 interface LoaderData {
-  events: CalendarEventType[]
+  events: AccountItem[]
   initialDate: string
 }
 

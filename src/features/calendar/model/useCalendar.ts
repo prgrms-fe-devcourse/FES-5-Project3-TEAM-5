@@ -1,14 +1,14 @@
 import { useState } from 'react'
-import { fetchCalendarByDate } from '../service/calendar'
-import type { CalendarEventType } from './type'
+import { fetchByDate } from '@/features/accountItem/index'
+import type { AccountItem } from '@/features/accountItem/index'
 
 export const useCalendar = () => {
   const [calendarEventsByDate, setCalendarEventsByDate] = useState<
-    CalendarEventType[]
+    AccountItem[]
   >([])
 
   const getCalendarByDate = async (date: Date) => {
-    const data = await fetchCalendarByDate(date)
+    const data = await fetchByDate(date)
     setCalendarEventsByDate(data)
   }
 

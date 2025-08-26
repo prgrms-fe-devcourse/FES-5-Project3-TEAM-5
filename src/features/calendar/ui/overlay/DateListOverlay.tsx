@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from 'react'
 import { ListItem } from './ListItem'
 import { ListHeader } from './ListHeader'
 
-import type { CalendarEventType } from '../../model/type'
+import type { AccountItem } from '@/features/accountItem/index'
 
 interface Props {
   isOpen: boolean
   setIsOpen: (isOpen: boolean) => void
-  events: CalendarEventType[]
+  events: AccountItem[]
 }
 
 export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {

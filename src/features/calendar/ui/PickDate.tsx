@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { ChevronDownIcon } from 'lucide-react'
 
 import { Button } from '@/shared/components/shadcn/ui/button'
 import { Calendar } from '@/shared/components/shadcn/ui/calendar'

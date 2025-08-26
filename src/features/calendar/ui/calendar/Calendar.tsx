@@ -7,14 +7,14 @@ import { RenderEventContent } from '@/features/calendar/ui/calendar/RenderEventC
 import { useEffect, useMemo, useRef } from 'react'
 import { useSelectedDate } from '../../model/useSelectedDate'
 import { useShallow } from 'zustand/shallow'
-import type { CalendarEventType } from '../../model/type'
+import type { AccountItem } from '@/features/accountItem/index'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
 
 interface Props {
   setIsOpen: (isOpen: boolean) => void
   getCalendarByDate: (date: Date) => void
-  calendarEvents: CalendarEventType[]
+  calendarEvents: AccountItem[]
 }
 
 export const Calendar = ({

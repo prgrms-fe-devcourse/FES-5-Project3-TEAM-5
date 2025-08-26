@@ -1,8 +1,8 @@
 export type MoneyType = 'income' | 'expense'
 
-export interface CalendarEventType {
+export interface AccountItem {
   id: string
-  amount: string
+  amount: number
   type: MoneyType
   date: string
   paymentMethod?: string

@@ -8,6 +8,10 @@ import NotificationPage from '@/pages/notification/NotificationPage'
 import VotePage from '@/pages/vote/VotePage'
 import EditVotePage from '@/pages/vote/EditVotePage'
 import { Test } from '@/pages/Test'
+
+import dayjs from 'dayjs'
+import { fetchByMonth } from '@/features/accountItem/index'
+
 import AddVotePage from '@/pages/vote/AddVotePage'
 
 export const router = createBrowserRouter([
@@ -27,7 +31,14 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'calendar',
-        Component: CalendarPage
+        Component: CalendarPage,
+        loader: async ({ request }) => {
+          const url = new URL(request.url)
+          const dateParam = url.searchParams.get('date')
+          const base = dateParam ? dayjs(dateParam) : dayjs()
+          const events = await fetchByMonth(base.month())
+          return { initialDate: base.startOf('day').toISOString(), events }
+        }
       }
     ]
   },

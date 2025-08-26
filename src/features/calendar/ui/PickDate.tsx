@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { ChevronDownIcon } from 'lucide-react'
 
 import { Button } from '@/shared/components/shadcn/ui/button'
 import { Calendar } from '@/shared/components/shadcn/ui/calendar'
@@ -17,7 +16,25 @@ export function PickDate() {
   const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
 
   return (
-    <div className="flex flex-col gap-3 border-none">
+    <div className=" w-full px-6 flex justify-between border-none items-center">
+      <button
+        className="group text-3xl font-bold cursor-pointer"
+        onClick={() => {
+          setDate(new Date(date.setMonth(date.getMonth() - 1)))
+        }}>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M15 6L9 12L15 18"
+            className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
+            strokeWidth="2"
+          />
+        </svg>
+      </button>
       <Popover
         open={open}
         onOpenChange={setOpen}>
@@ -25,9 +42,8 @@ export function PickDate() {
           <Button
             variant="ghost"
             id="date"
-            className="w-32 text-size-lg font-bold justify-between">
+            className="w-32 text-size-lg font-bold justify-center">
             {date ? date.toLocaleDateString() : '날짜 선택'}
-            <ChevronDownIcon />
           </Button>
         </PopoverTrigger>
         <PopoverContent
@@ -45,6 +61,24 @@ export function PickDate() {
           />
         </PopoverContent>
       </Popover>
+      <button
+        className="group text-3xl font-bold cursor-pointer"
+        onClick={() => {
+          setDate(new Date(date.setMonth(date.getMonth() + 1)))
+        }}>
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M9 6L15 12L9 18"
+            className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
+            strokeWidth="2"
+          />
+        </svg>
+      </button>
     </div>
   )
 }

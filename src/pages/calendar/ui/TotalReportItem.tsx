@@ -1,6 +1,6 @@
 import React from 'react'
-import { tw } from '../../../shared/utils/tw'
-import { formatPriceNumber } from '../../../shared/utils/format'
+import { tw } from '@/shared/utils/tw'
+import { formatPriceNumber } from '@/shared/utils/format'
 
 interface Props {
   title: string

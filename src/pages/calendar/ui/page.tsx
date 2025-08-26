@@ -1,29 +1,46 @@
+import { useEffect, useState } from 'react'
+import { useLoaderData } from 'react-router'
 import { TotalReport } from './TotalReport'
-import type { CalendarEventType } from '../../../features/calendar/model/type'
-import { useState } from 'react'
-import { Calendar, PickDate, DateListOverlay } from '../../../features/calendar'
+import {
+  Calendar,
+  PickDate,
+  DateListOverlay,
+  useSelectedDate,
+  useCalendar
+} from '@/features/calendar/index'
+import type { AccountItem } from '@/features/accountItem/index'
 
-const events: CalendarEventType[] = [
-  { id: '1', date: '2025-08-23', type: 'income', amount: '12000' },
-  { id: '2', date: '2025-08-23', type: 'expense', amount: '4500' },
-  { id: '3', date: '2025-08-25', type: 'income', amount: '10000000' },
-  { id: '4', date: '2025-07-10', type: 'expense', amount: '10000000' }
-]
+interface LoaderData {
+  events: AccountItem[]
+  initialDate: string
+}
 
 export const CalendarPage = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const { initialDate, events } = useLoaderData() as LoaderData
+
+  const setData = useSelectedDate(s => s.setDate)
+  const { calendarEventsByDate, getCalendarByDate } = useCalendar()
+
+  useEffect(() => {
+    setData(new Date(initialDate))
+  }, [initialDate, setData])
 
   return (
     <div className="flex flex-col gap-2 items-center h-full">
       <PickDate />
       <TotalReport />
       <div className="relative ">
-        <Calendar events={events} />
+        <Calendar
+          setIsOpen={setIsOpen}
+          calendarEvents={events}
+          getCalendarByDate={getCalendarByDate}
+        />
         <DateListOverlay
           isOpen={isOpen}
           setIsOpen={setIsOpen}
+          events={calendarEventsByDate}
         />
-        <button onClick={() => setIsOpen(true)}>open</button>
       </div>
     </div>
   )

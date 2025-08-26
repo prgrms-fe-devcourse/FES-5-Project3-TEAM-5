@@ -7,6 +7,7 @@ import NotificationPage from '@/pages/notification/NotificationPage'
 import VotePage from '@/pages/vote/VotePage'
 import CreateVotePage from '@/pages/vote/CreateVotePage'
 import EditVotePage from '@/pages/vote/EditVotePage'
+import { Test } from '@/pages/Test'
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,20 @@ export const router = createBrowserRouter([
       {
         path: 'edit/:editId',
         Component: EditVotePage
+      }
+    ]
+  },
+  {
+    path: '/test',
+    Component: Layout,
+    handle: {
+      title: '테스트 페이지입니다',
+      hideNav: true
+    },
+    children: [
+      {
+        index: true,
+        Component: Test
       }
     ]
   },

@@ -2,7 +2,7 @@ import { NavLink } from 'react-router'
 import { BookIcon, HomeIcon, MoreIcon, VoteIcon } from './icons'
 import { tw } from '@/shared/utils/tw'
 
-function Navigatie() {
+function Nav() {
   const items = [
     { to: '/', label: '홈', Icon: HomeIcon },
     { to: '/accountBook', label: '가계부', Icon: BookIcon },
@@ -42,4 +42,4 @@ function Navigatie() {
     </nav>
   )
 }
-export default Navigatie
+export default Nav

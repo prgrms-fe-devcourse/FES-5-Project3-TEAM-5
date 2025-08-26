@@ -23,12 +23,26 @@ export const fetchByDate = async (date: Date) => {
   const start = dayjs(date).startOf('day').toISOString()
   const end = dayjs(date).endOf('day').toISOString()
 
-  const { data, error } = await supabase
+  const { data: items } = await supabase
     .from('account_items')
     .select('*')
     .gte('date', start)
     .lte('date', end)
 
-  if (error) throw error
-  return (data ?? []).map(mapDbToAccountItem)
+  const categoryIds = [...new Set(items?.map(item => item.category_id) ?? [])]
+
+  const { data: categories } = await supabase
+    .from('categories')
+    .select('*')
+    .in('id', categoryIds)
+
+  const categoryMap = Object.fromEntries(
+    categories?.map(c => [c.id, c.name]) ?? []
+  )
+  const itemsWithCategory = items?.map(item => ({
+    ...item,
+    categories: categoryMap[item.category_id]
+  }))
+
+  return (itemsWithCategory ?? []).map(mapDbToAccountItem)
 }

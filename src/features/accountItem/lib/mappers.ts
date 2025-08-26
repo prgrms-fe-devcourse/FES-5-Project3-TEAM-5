@@ -5,7 +5,8 @@ export const mapDbToAccountItem = (row: AccountItem): AccountItem => ({
   amount: Number(row.amount),
   type: row.type,
   date: row.date,
-  category: row.category,
+  category_id: row.category_id,
+  categories: row.categories,
   paymentMethod: row.paymentMethod,
   memo: row.memo,
   receipt: row.receipt

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { ListItem } from './ListItem'
+import { ListItem, type IconType } from './ListItem'
 import { ListHeader } from './ListHeader'
 
 import type { AccountItem } from '@/features/accountItem/index'
@@ -48,8 +48,10 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
           {events.map(item => (
             <ListItem
               key={item.id}
-              icon="clothes"
-              title="옷"
+              icon={item.categories as IconType}
+              title={item.categories}
+              amount={item.amount}
+              type={item.type}
             />
           ))}
         </div>

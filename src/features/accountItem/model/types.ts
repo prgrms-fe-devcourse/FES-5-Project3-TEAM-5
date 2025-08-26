@@ -6,7 +6,8 @@ export interface AccountItem {
   type: MoneyType
   date: string
   paymentMethod?: string
-  category?: string
+  category_id?: string
+  categories: string
   memo?: string
   receipt?: string
 }

@@ -5,8 +5,8 @@ import interactionPlugin from '@fullcalendar/interaction'
 
 import { RenderEventContent } from '@/features/calendar/ui/calendar/RenderEventContent'
 import { useEffect, useMemo, useRef } from 'react'
-import { useSelectedDate } from '../../model/useSelectedDate'
-import { useShallow } from 'zustand/shallow'
+import { useSelectedDate } from '@/features/calendar/model/useSelectedDate'
+
 import type { AccountItem } from '@/features/accountItem/index'
 import dayjs from 'dayjs'
 import { useNavigate } from 'react-router'
@@ -24,7 +24,7 @@ export const Calendar = ({
 }: Props) => {
   const ref = useRef<FullCalendar>(null)
 
-  const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
+  const date = useSelectedDate(s => s.date)
 
   const navigate = useNavigate()
 
@@ -42,7 +42,7 @@ export const Calendar = ({
   const fcEvent = useMemo(
     () =>
       calendarEvents.map(e => ({
-        title: e.amount,
+        title: String(e.amount),
         start: e.date,
         extendedProps: { type: e.type },
         backgroundColor: 'transparent',

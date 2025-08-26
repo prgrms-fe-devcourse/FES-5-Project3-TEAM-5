@@ -23,11 +23,13 @@ function Login() {
         <LoginCard
           iconSrc={googleIcon}
           text="구글"
+          provider="google"
           className="bg-[#F7F7F7]"
         />
         <LoginCard
           iconSrc={kakaoIcon}
           text="카카오"
+          provider="kakao"
           className="bg-primary-light"
         />
       </div>

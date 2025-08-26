@@ -1,15 +1,20 @@
 import { Outlet } from 'react-router'
 import Navigatie from '../navigatie/Nav'
 import Login from '@/pages/login/Login'
-import { useState } from 'react'
+import { useEffect } from 'react'
+import { useUserStore } from '@/shared/stores/useUserStore'
 
 export const Layout = () => {
-  const [isLogin, setIsLogin] = useState(true)
+  const { isAuth, initializeUser } = useUserStore()
+
+  useEffect(() => {
+    initializeUser()
+  }, [initializeUser])
 
   return (
     <div className="min-h-dvh bg-zinc-100">
       <div className="mx-auto w-full max-w-[420px] min-h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] overscroll-y-contain">
-        {isLogin ? (
+        {!isAuth ? (
           <Login />
         ) : (
           <>

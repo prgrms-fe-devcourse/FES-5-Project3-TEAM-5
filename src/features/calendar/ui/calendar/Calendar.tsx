@@ -2,20 +2,19 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import koLocale from '@fullcalendar/core/locales/ko'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { CalendarEventType } from '@/features/calendar/model/type'
+
 import { RenderEventContent } from '@/features/calendar/ui/calendar/RenderEventContent'
 import { useEffect, useMemo, useRef } from 'react'
 import { useSelectedDate } from '../../model/useSelectedDate'
 import { useShallow } from 'zustand/shallow'
+import { useCalendar } from '../../model/useCalendar'
 
-interface Props {
-  events: CalendarEventType[]
-}
-
-export const Calendar = ({ events }: Props) => {
+export const Calendar = () => {
   const ref = useRef<FullCalendar>(null)
 
   const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
+
+  const { calendarEvents } = useCalendar()
 
   const isSameDate = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() &&
@@ -30,14 +29,14 @@ export const Calendar = ({ events }: Props) => {
 
   const fcEvent = useMemo(
     () =>
-      events.map(e => ({
+      calendarEvents.map(e => ({
         title: e.amount,
         start: e.date,
         extendedProps: { type: e.type },
         backgroundColor: 'transparent',
         borderColor: 'transparent'
       })),
-    [events]
+    [calendarEvents]
   )
 
   return (

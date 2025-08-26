@@ -4,14 +4,15 @@ import NotificationButton from '../buttons/NotificationButton'
 import Header from '../header/Header'
 
 type RouteHandle = {
-  title?: string;
-  hideNav?: boolean;
-};
+  title?: string
+  hideNav?: boolean
+}
 
 export const Layout = () => {
-  const matches = useMatches() as Array<{ handle?: RouteHandle }>;
+  const matches = useMatches() as Array<{ handle?: RouteHandle }>
 
-  const headerTitle = [...matches].reverse().find(m => m.handle?.title)?.handle?.title as string | undefined
+  const headerTitle = [...matches].reverse().find(m => m.handle?.title)?.handle
+    ?.title as string | undefined
   const hideNav = matches.some(m => m.handle?.hideNav)
 
   return (

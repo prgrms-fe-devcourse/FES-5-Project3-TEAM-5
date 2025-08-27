@@ -10,7 +10,6 @@ interface SnackbarState {
     type: 'success' | 'error'
     duration?: number
   }) => void
-  hideSnackbar: () => void
 }
 
 export const useSnackbarStore = create<SnackbarState>(set => ({
@@ -21,6 +20,5 @@ export const useSnackbarStore = create<SnackbarState>(set => ({
   showSnackbar: ({ text, type, duration = 2000 }) => {
     set({ visible: true, text, type, duration })
     setTimeout(() => set({ visible: false }), duration)
-  },
-  hideSnackbar: () => set({ visible: false })
+  }
 }))

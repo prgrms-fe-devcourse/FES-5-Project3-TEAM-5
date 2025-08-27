@@ -2,14 +2,14 @@ import { Link } from 'react-router'
 import { ResultOption } from './ResultOption'
 import type { VoteOptions } from '../model/type'
 import { formatDate, getDeadline } from '../utils/Date'
-import { useUserStore } from '@/shared/stores/useUserStore'
 
 interface Props {
   people: number
+  vote_id: string
   question: string
   starts_at: string
-  ends_at: string
-  writer: string
+  deadline: string
+  isMine: boolean
   vote_options: VoteOptions[]
   onDelete: () => void
 }
@@ -18,15 +18,13 @@ export function VoteCard({
   people,
   question,
   vote_options,
-  ends_at,
+  deadline,
   starts_at,
-  writer,
+  isMine,
+  vote_id,
   onDelete
 }: Props) {
   const startedDate = formatDate(starts_at)
-  const deadline = getDeadline(ends_at)
-  const userId = useUserStore(state => state.user?.id)
-  const isMine = userId === writer
 
   return (
     <div className="flex flex-col w-full p-4 gap-4 rounded-lg border-2 border-primary-light ">
@@ -39,7 +37,7 @@ export function VoteCard({
         </p>
         {isMine && (
           <div className="flex gap-2">
-            <Link to={'/vote/edit/:editId'}>
+            <Link to={`/vote/edit/${vote_id}`}>
               <button className="hover:font-bold  cursor-pointer">수정</button>
             </Link>
             <button

@@ -12,6 +12,15 @@ export interface VoteSelections {
   created_at: string
 }
 
+export interface VoteSummary {
+  participant: number
+  deadline: {
+    text: string
+    value: number
+  }
+  isOwner: boolean
+}
+
 export interface Vote {
   created_at: string
   ends_at: string
@@ -19,7 +28,8 @@ export interface Vote {
   is_active: boolean
   starts_at: string
   title: string
-  user_id?: string
+  user_id: string
   vote_options: VoteOptions[]
   vote_selections?: VoteSelections[]
+  vote_summary?: VoteSummary
 }

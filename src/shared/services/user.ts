@@ -2,6 +2,7 @@ import supabase from '@/supabase/supabase'
 import type { User } from '@supabase/supabase-js'
 import type { StateCreator } from 'zustand'
 import type { UserStore } from '../stores/useUserStore'
+import { useSnackbarStore } from '../stores/useSnackbarStore'
 
 export const getUserData = async (user: User) => {
   const { error } = await supabase
@@ -77,6 +78,12 @@ export const initializeUser = async (
     }
 
     set({ isLoading: false })
+    if (!get().isLoading && get().isAuth) {
+      useSnackbarStore.getState().showSnackbar({
+        text: '로그인 되었습니다',
+        type: 'success'
+      })
+    }
   })
 }
 

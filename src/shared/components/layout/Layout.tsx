@@ -5,6 +5,7 @@ import Header from '../header/Header'
 import Login from '@/pages/login/Login'
 import { useEffect } from 'react'
 import { useUserStore } from '@/shared/stores/useUserStore'
+import Snackbar from '../snackbar/Snackbar'
 
 type RouteHandle = {
   title?: string
@@ -32,7 +33,7 @@ export const Layout = () => {
         ) : (
           <>
             {headerTitle && <Header title={headerTitle} />}
-            <main className={`p-4 ${hideNav ? '' : 'pb-[60px]'}`}>
+            <main className={` ${hideNav ? '' : 'pb-[60px]'}`}>
               <div className="flex justify-end">
                 <NotificationButton isActive={false} />
               </div>

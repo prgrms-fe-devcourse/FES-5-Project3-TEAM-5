@@ -1,15 +1,20 @@
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
 
 function LogoutBtn() {
   const { logout } = useUserStore()
+  const { showSnackbar } = useSnackbarStore()
+
+  const handleLogout = async () => {
+    await logout()
+    showSnackbar({ text: '로그아웃 되었습니다', type: 'success' })
+  }
 
   return (
     <button
       type="button"
       aria-label="로그아웃"
-      onClick={() => {
-        logout()
-      }}
+      onClick={handleLogout}
       className="cursor-pointer">
       로그아웃
     </button>

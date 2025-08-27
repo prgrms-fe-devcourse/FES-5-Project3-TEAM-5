@@ -1,5 +1,5 @@
 import { useUserStore } from '@/shared/stores/useUserStore'
-import moreBear from '@/shared/assets/morebear.png'
+import raiseBear from '@/shared/assets/momo/momo-raise.png'
 
 function NicknameCard() {
   const nickname = useUserStore(
@@ -25,10 +25,10 @@ function NicknameCard() {
   const formattedNickname = formatNickname(nickname)
 
   return (
-    <div className="flex items-center gap-4 p-4 shadow-xl rounded-xl">
+    <div className="flex items-center gap-4 p-4 shadow-xl rounded-xl bg-white">
       <div className="w-[100px] h-[100px] bg-primary-pale rounded-full flex justify-center items-center">
         <img
-          src={moreBear}
+          src={raiseBear}
           alt="profile Icon"
           className="w-[90%] h-[90%]"
         />

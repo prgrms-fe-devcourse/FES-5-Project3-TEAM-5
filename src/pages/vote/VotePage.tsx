@@ -1,33 +1,37 @@
-import { SearchBar, SortButtonList, VoteCard } from '@/features/vote'
+import { EmptyData, SearchBar, SortButtonList, VoteCard } from '@/features/vote'
 import type { Vote } from '@/features/vote/model/type'
-import { getVoteData } from '@/features/vote/service/getVoteData'
+import { getVoteData } from '@/features/vote/service/vote'
 import AddButton from '@/shared/components/buttons/AddButton'
 import ConfirmModal from '@/shared/components/modal/ConfirmModal'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 
 function VotePage() {
   const [isDelete, setIsDelete] = useState(false)
-  const [voteList, setVoteList] = useState<Vote[] | null>(null)
-  // TODO : utils로 빼기
-  const handleDeleteModal = () => {
-    if (isDelete) {
-      setIsDelete(false)
-    } else {
-      setIsDelete(true)
-    }
+  const voteListRef = useRef<Vote[] | null>(null)
+  const [filteredList, setFilteredList] = useState<Vote[] | null>(null)
+
+  const handleDeleteModal = () => setIsDelete(prev => !prev)
+
+  const fetchData = async () => {
+    const response = await getVoteData()
+    voteListRef.current = response
+    setFilteredList(response)
   }
+
   useEffect(() => {
-    const fetchData = async () => {
-      const response = await getVoteData()
-      setVoteList(response)
-    }
     fetchData()
-  }, [setVoteList])
+  }, [])
 
   return (
     <div className="flex flex-col gap-5 py-2.5 ">
-      <SearchBar />
+      {voteListRef.current && filteredList && (
+        <SearchBar
+          voteList={voteListRef.current}
+          setFilteredList={setFilteredList}
+        />
+      )}
+
       <SortButtonList />
 
       {isDelete && (
@@ -36,15 +40,16 @@ function VotePage() {
           lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
           onCancel={handleDeleteModal}
           onConfirm={() => {
-            //데이터 삭제 api 연동
             handleDeleteModal()
+            fetchData()
           }}
           cancelText="취소"
           confirmText="확인"
         />
       )}
-      {voteList &&
-        voteList.map(
+
+      {filteredList && filteredList.length > 0 ? (
+        filteredList.map(
           ({
             id,
             title,
@@ -63,7 +68,11 @@ function VotePage() {
               onDelete={handleDeleteModal}
             />
           )
-        )}
+        )
+      ) : (
+        <EmptyData label="검색 결과" />
+      )}
+
       <div className="flex justify-end items-end sticky z-50 bottom-18">
         <Link to="/vote/add">
           <AddButton />
@@ -72,4 +81,5 @@ function VotePage() {
     </div>
   )
 }
+
 export default VotePage

@@ -55,11 +55,13 @@ function VotePage() {
             title,
             starts_at,
             ends_at,
+            user_id,
             vote_selections,
             vote_options
           }) => (
             <VoteCard
               key={id}
+              writer={user_id}
               people={vote_selections!.length}
               question={title}
               starts_at={starts_at}

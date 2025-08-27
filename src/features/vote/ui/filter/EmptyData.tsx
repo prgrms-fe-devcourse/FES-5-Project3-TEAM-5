@@ -1,10 +1,6 @@
 import cryingMomo from '@/shared/assets/momo/momo-cry.png'
 
-interface Props {
-  label: string
-}
-
-export function EmptyData({ label }: Props) {
+export function EmptyData() {
   return (
     <div className="flex flex-col flex-1 justify-center items-center">
       <img
@@ -12,9 +8,7 @@ export function EmptyData({ label }: Props) {
         src={cryingMomo}
         alt="우는 모모"
       />
-      <p className=" text-neutral-dark text-lg font-bold">
-        {label}가 없습니다.
-      </p>
+      <p className=" text-neutral-dark text-lg font-bold">데이터가 없습니다.</p>
     </div>
   )
 }

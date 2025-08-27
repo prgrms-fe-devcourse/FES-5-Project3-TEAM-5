@@ -72,8 +72,8 @@ function VotePage() {
                   key={id}
                   isActive={is_active}
                   voteId={id}
-                  isMine={vote_summary?.isOwner!}
-                  participants={vote_summary?.participants!}
+                  isMine={vote_summary!.isOwner}
+                  participants={vote_summary!.participants}
                   question={title}
                   startsAt={starts_at}
                   deadline={vote_summary!.deadline.text!}

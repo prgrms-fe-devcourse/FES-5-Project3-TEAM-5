@@ -22,7 +22,7 @@ function ButtonLayout({
       case 'disabled':
         return 'bg-neutral-DEFAULT text-black'
       default:
-        break
+        return 'bg-neutral-light text-neutral-dark'
     }
   }
   return (

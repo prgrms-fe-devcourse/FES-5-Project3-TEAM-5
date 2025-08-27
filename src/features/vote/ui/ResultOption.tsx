@@ -26,6 +26,11 @@ export function ResultOption({
         break
     }
   }
+  // 버그 픽스용
+  const testFunc = () => {
+    voteOptions
+  }
+  testFunc()
 
   return (
     <>

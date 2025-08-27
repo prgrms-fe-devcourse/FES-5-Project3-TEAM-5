@@ -8,25 +8,16 @@ import { useEffect, useMemo, useRef } from 'react'
 import { useSelectedDate } from '@/features/calendar/model/useSelectedDate'
 
 import type { AccountItem } from '@/features/accountItem/index'
-import dayjs from 'dayjs'
-import { useNavigate } from 'react-router'
 
 interface Props {
-  setIsOpen: (isOpen: boolean) => void
-  getCalendarByDate: (date: Date) => void
+  handleDateClick: (date: Date) => void
   calendarEvents: AccountItem[]
 }
 
-export const Calendar = ({
-  setIsOpen,
-  getCalendarByDate,
-  calendarEvents
-}: Props) => {
+export const Calendar = ({ handleDateClick, calendarEvents }: Props) => {
   const ref = useRef<FullCalendar>(null)
 
   const date = useSelectedDate(s => s.date)
-
-  const navigate = useNavigate()
 
   const isSameDate = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() &&
@@ -50,15 +41,6 @@ export const Calendar = ({
       })),
     [calendarEvents]
   )
-
-  const handleDateClick = async (info: Date) => {
-    navigate(`/accountBook/calendar?date=${dayjs(info).format('YYYY-MM-DD')}`, {
-      replace: true
-    })
-    // 이후 일 데이터 로딩
-    await getCalendarByDate(info)
-    setIsOpen(true)
-  }
 
   return (
     <FullCalendar

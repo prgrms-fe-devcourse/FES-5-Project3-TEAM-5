@@ -5,6 +5,7 @@ import Header from '../header/Header'
 import Login from '@/pages/login/Login'
 import { useEffect } from 'react'
 import { useUserStore } from '@/shared/stores/useUserStore'
+import { useShallow } from 'zustand/shallow'
 
 type RouteHandle = {
   title?: string
@@ -12,7 +13,12 @@ type RouteHandle = {
 }
 
 export const Layout = () => {
-  const { isAuth, initializeUser } = useUserStore()
+  const { isAuth, initializeUser } = useUserStore(
+    useShallow(state => ({
+      isAuth: state.isAuth,
+      initializeUser: state.initializeUser
+    }))
+  )
 
   useEffect(() => {
     initializeUser()
@@ -32,7 +38,7 @@ export const Layout = () => {
         ) : (
           <>
             {headerTitle && <Header title={headerTitle} />}
-            <main className={`p-4 ${hideNav ? '' : 'pb-[60px]'}`}>
+            <main className={` ${hideNav ? '' : 'pb-[60px]'}`}>
               <div className="flex justify-end">
                 {hideNav ? '' : <NotificationButton isActive={false} />}
               </div>

@@ -1,5 +1,7 @@
 import supabase from '@/supabase/supabase'
 import type { User } from '@supabase/supabase-js'
+import type { StateCreator } from 'zustand'
+import type { UserStore } from '../stores/useUserStore'
 
 export const getUserData = async (user: User) => {
   const { error } = await supabase
@@ -41,7 +43,10 @@ export const insertUserIfNotExists = async (user: User) => {
   }
 }
 
-export const initializeUser = async (set: any, get: any) => {
+export const initializeUser = async (
+  set: Parameters<StateCreator<UserStore>>[0],
+  get: Parameters<StateCreator<UserStore>>[1]
+) => {
   set({ isLoading: true })
   const {
     data: { session }

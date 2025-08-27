@@ -8,7 +8,7 @@ import {
   logoutUser
 } from '@/shared/services/user'
 
-interface UserStore {
+export interface UserStore {
   user: User | null
   isLoading: boolean
   isAuth: boolean

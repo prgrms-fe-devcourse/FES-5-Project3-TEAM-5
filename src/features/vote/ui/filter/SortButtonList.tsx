@@ -30,7 +30,6 @@ export function SortButtonList({ voteList, setFilteredList }: Props) {
         setFilteredList(filterMyVote(voteList))
         break
       case 'hot':
-        sortByDeadlineAsc
         setFilteredList(sortByParticipantsDesc(voteList))
         break
       case 'deadline':

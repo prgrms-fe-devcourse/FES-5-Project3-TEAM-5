@@ -10,22 +10,22 @@ function More() {
       <div className="flex flex-col gap-4 px-4 py-6 bg-white rounded-xl">
         <h2 className="text-neutral-dark">또모 서비스</h2>
         <ul className="flex flex-col gap-4">
-          <li className="hover:text-neutral-dark transition ease-in-out">
-            공지사항
-          </li>
-          <li className="hover:text-neutral-dark transition ease-in-out">
-            FAQ
-          </li>
-          <li className="hover:text-neutral-dark transition ease-in-out">
-            개인정보처리방침
-          </li>
+          {['공지사항', 'FAQ', '개인정보처리방침'].map((text, i) => (
+            <li
+              key={i}
+              className="group">
+              <button className="group-hover:text-neutral-dark transition ease-in-out  cursor-pointer">
+                {text}
+              </button>
+            </li>
+          ))}
         </ul>
       </div>
       <div className="flex flex-col gap-4 px-4 py-6 bg-white rounded-xl">
         <h2 className="text-neutral-dark">계정관리</h2>
         <ul className="flex flex-col gap-4">
           <li className="hover:text-neutral-dark transition ease-in-out">
-            회원탈퇴
+            <button className="cursor-pointer">회원탈퇴</button>
           </li>
           <li className="hover:text-neutral-dark transition ease-in-out">
             <LogoutBtn />

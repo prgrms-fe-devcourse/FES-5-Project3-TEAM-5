@@ -3,7 +3,6 @@ import { useLoaderData } from 'react-router'
 import { TotalReport } from './TotalReport'
 import {
   Calendar,
-  PickDate,
   DateListOverlay,
   useSelectedDate,
   useCalendar
@@ -28,7 +27,6 @@ export const CalendarPage = () => {
 
   return (
     <div className="flex flex-col gap-2 items-center h-full">
-      <PickDate />
       <TotalReport />
       <div className="relative ">
         <Calendar

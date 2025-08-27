@@ -16,6 +16,8 @@ import dayjs from 'dayjs'
 import { fetchByMonth } from '@/features/accountItem/index'
 
 import AddVotePage from '@/pages/vote/AddVotePage'
+import { AccountBookLayout } from '@/shared/components/layout/AccountBookLayout'
+import StatisticsPage from '@/pages/statistics/page'
 
 export const router = createBrowserRouter([
   {
@@ -25,26 +27,37 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Home
-      }
-    ]
-  },
-  {
-    path: '/accountBook',
-    Component: Layout,
-    children: [
+      },
       {
-        path: 'calendar',
-        Component: CalendarPage,
-        loader: async ({ request }) => {
-          const url = new URL(request.url)
-          const dateParam = url.searchParams.get('date')
-          const base = dateParam ? dayjs(dateParam) : dayjs()
-          const events = await fetchByMonth(base.month())
-          return { initialDate: base.startOf('day').toISOString(), events }
-        }
+        path: 'accountBook',
+        Component: AccountBookLayout,
+        children: [
+          {
+            path: 'calendar',
+            Component: CalendarPage,
+            loader: async ({ request }) => {
+              const url = new URL(request.url)
+              const dateParam = url.searchParams.get('date')
+              const base = dateParam ? dayjs(dateParam) : dayjs()
+              const events = await fetchByMonth(base.month())
+              return { initialDate: base.startOf('day').toISOString(), events }
+            }
+          },
+          {
+            path: 'statistics',
+            Component: StatisticsPage
+          },
+          {
+            path: 'settings',
+            Component: () => {
+              return <div>settings</div>
+            }
+          }
+        ]
       }
     ]
   },
+
   {
     path: '/notification',
     Component: Layout,

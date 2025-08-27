@@ -1,7 +1,7 @@
 import loginBear from '@/shared/assets/loginbear.png'
 import LoginCard from '@/features/login/LoginCard'
-import googleIcon from '@/shared/assets/google.svg'
-import kakaoIcon from '@/shared/assets/kakao.svg'
+import googleIcon from '@/shared/assets/icons/google.svg'
+import kakaoIcon from '@/shared/assets/icons/kakao.svg'
 
 function Login() {
   return (
@@ -19,7 +19,7 @@ function Login() {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         <LoginCard
           iconSrc={googleIcon}
           text="구글"

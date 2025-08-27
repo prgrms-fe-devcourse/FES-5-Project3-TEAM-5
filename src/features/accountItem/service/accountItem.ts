@@ -25,24 +25,3 @@ export const fetchByMonth = async (month: number) => {
   if (error) throw error
   return data
 }
-
-// 캘린더 일 데이터 조회
-export const fetchByDate = async (date: Date) => {
-  const { data, error } = await supabase
-    .from('account_items')
-    .select(
-      `
-      id, amount, type, date, memo,
-      category_id, recurring_rule_id, payment_method_id, installment_plan_id,
-      categories(name),
-      recurring_rules(frequency, end_date),
-      payment_methods(type),
-      installment_plans(months, start_date, end_date)
-    `
-    )
-    .eq('date', dayjs(date).format('YYYY-MM-DD'))
-
-  if (error) throw error
-
-  return data
-}

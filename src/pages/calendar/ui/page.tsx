@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
-import { useLoaderData } from 'react-router'
+import { useLoaderData, useNavigate } from 'react-router'
 import { TotalReport } from './TotalReport'
 import {
   Calendar,
   PickDate,
   DateListOverlay,
-  useSelectedDate,
-  useCalendar
+  useSelectedDate
 } from '@/features/calendar/index'
 import type { AccountItem } from '@/features/accountItem/index'
 import { useShallow } from 'zustand/shallow'
+import dayjs from 'dayjs'
 
 interface LoaderData {
   events: AccountItem[]
@@ -20,11 +20,15 @@ export const CalendarPage = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { initialDate, events } = useLoaderData() as LoaderData
 
+  const [calendarEventsByDate, setCalendarEventsByDate] = useState<
+    AccountItem[]
+  >([])
+
   const [setData, setAmountList] = useSelectedDate(
     useShallow(s => [s.setDate, s.setAmountList])
   )
 
-  const { calendarEventsByDate, getCalendarByDate } = useCalendar()
+  const navigate = useNavigate()
 
   const calc = (events: AccountItem[]) =>
     events.reduce(
@@ -45,15 +49,25 @@ export const CalendarPage = () => {
     setAmountList(calc(events))
   }, [initialDate, setData, setAmountList, events])
 
+  const handleDateClick = async (info: Date) => {
+    navigate(`/accountBook/calendar?date=${dayjs(info).format('YYYY-MM-DD')}`, {
+      replace: true
+    })
+
+    setCalendarEventsByDate(
+      events.filter(e => e.date === dayjs(info).format('YYYY-MM-DD'))
+    )
+    setIsOpen(true)
+  }
+
   return (
     <div className="flex flex-col gap-2 items-center h-full">
       <PickDate />
       <TotalReport />
       <div className="relative ">
         <Calendar
-          setIsOpen={setIsOpen}
           calendarEvents={events}
-          getCalendarByDate={getCalendarByDate}
+          handleDateClick={handleDateClick}
         />
         <DateListOverlay
           isOpen={isOpen}

@@ -3,8 +3,8 @@ import { tw } from '@/shared/utils/tw'
 interface Props {
   text: string
   status?: string
-  id: number
-  onStatusChange: (clickedId: number) => void
+  id: string
+  onStatusChange: (clickedId: string) => void
 }
 
 function ButtonLayout({

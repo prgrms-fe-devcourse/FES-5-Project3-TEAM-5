@@ -1,6 +1,7 @@
 import { EmptyData, SearchBar, SortButtonList, VoteCard } from '@/features/vote'
 import type { Vote } from '@/features/vote/model/type'
 import { fetchVoteData } from '@/features/vote/service/fetchVoteData'
+import { sortByDeadlineDesc } from '@/features/vote/utils/filterVoteList'
 import AddButton from '@/shared/components/buttons/AddButton'
 import Loading from '@/shared/components/loading/Loading'
 import ConfirmModal from '@/shared/components/modal/ConfirmModal'
@@ -18,8 +19,9 @@ function VotePage() {
   const loadVotes = async () => {
     setIsLoading(true)
     const votes = await fetchVoteData()
+
     voteListRef.current = votes
-    setFilteredList(votes)
+    setFilteredList(sortByDeadlineDesc(votes))
     setIsLoading(false)
   }
 
@@ -29,59 +31,53 @@ function VotePage() {
 
   return (
     <>
+      {isDelete && (
+        <ConfirmModal
+          title="투표 삭제"
+          lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
+          onCancel={handleDeleteModal}
+          onConfirm={() => {
+            handleDeleteModal()
+            fetchVoteData()
+          }}
+          cancelText="취소"
+          confirmText="확인"
+        />
+      )}
+
       {isLoading ? (
         <Loading />
       ) : (
         <div className="flex flex-col gap-5 py-2.5 ">
-          {voteListRef.current && filteredList && (
-            <>
-              <SearchBar
-                voteList={voteListRef.current}
-                setFilteredList={setFilteredList}
-              />
-              <SortButtonList
-                voteList={voteListRef.current}
-                setFilteredList={setFilteredList}
-              />
-            </>
-          )}
+          <SearchBar
+            voteList={voteListRef.current!}
+            setFilteredList={setFilteredList}
+          />
+          <SortButtonList
+            voteList={voteListRef.current!}
+            setFilteredList={setFilteredList}
+          />
 
-          {isDelete && (
-            <ConfirmModal
-              title="투표 삭제"
-              lines={[
-                '삭제 후에는 복구가 어려워요.',
-                '그래도 진행하시겠습니까?'
-              ]}
-              onCancel={handleDeleteModal}
-              onConfirm={() => {
-                handleDeleteModal()
-                fetchVoteData()
-              }}
-              cancelText="취소"
-              confirmText="확인"
-            />
-          )}
-
-          {!isLoading && filteredList && filteredList.length > 0 ? (
+          {filteredList && filteredList.length > 0 ? (
             filteredList.map(
               ({
                 id,
                 title,
                 starts_at,
                 vote_summary,
-                vote_selections,
-                vote_options
+                vote_options,
+                is_active
               }) => (
                 <VoteCard
                   key={id}
-                  vote_id={id}
+                  isActive={is_active}
+                  voteId={id}
                   isMine={vote_summary?.isOwner!}
-                  people={vote_selections!.length}
+                  participants={vote_summary?.participants!}
                   question={title}
-                  starts_at={starts_at}
-                  deadline={vote_summary?.deadline.text!}
-                  vote_options={vote_options}
+                  startsAt={starts_at}
+                  deadline={vote_summary!.deadline.text!}
+                  voteOptions={vote_options}
                   onDelete={handleDeleteModal}
                 />
               )

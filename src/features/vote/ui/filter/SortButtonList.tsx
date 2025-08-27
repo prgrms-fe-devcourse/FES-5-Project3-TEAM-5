@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import ButtonLayout from '../form/ButtonLayout'
 import type { Vote } from '../../model/type'
-import { filterDeadline, filterHotVote, filterMyVote } from '../../utils/filter'
+import {
+  sortByParticipantsDesc,
+  sortByDeadlineAsc,
+  sortByDeadlineDesc,
+  filterMyVote
+} from '../../utils/filterVoteList'
 
 interface Props {
   voteList: Vote[]
@@ -10,38 +15,41 @@ interface Props {
 
 export function SortButtonList({ voteList, setFilteredList }: Props) {
   const [sortButtonData, setSortButtonData] = useState([
-    { id: 1, text: '전체', status: 'active' },
-    { id: 2, text: '내 투표', status: 'inactive' },
-    { id: 3, text: 'HOT', status: 'inactive' },
-    { id: 4, text: '종료임박', status: 'inactive' }
+    { id: 'total', text: '전체', status: 'active' },
+    { id: 'myVote', text: '내 투표', status: 'inactive' },
+    { id: 'hot', text: 'HOT', status: 'inactive' },
+    { id: 'deadline', text: '종료임박', status: 'inactive' }
   ])
 
-  const onChangeVoteList = (clickedId: number) => {
+  const onChangeVoteList = (clickedId: string) => {
     switch (clickedId) {
-      case 1:
-        setFilteredList(voteList)
+      case 'total':
+        setFilteredList(sortByDeadlineDesc(voteList))
         break
-      case 2:
+      case 'myVote':
         setFilteredList(filterMyVote(voteList))
         break
-      case 3:
-        setFilteredList(filterHotVote(voteList))
+      case 'hot':
+        sortByDeadlineAsc
+        setFilteredList(sortByParticipantsDesc(voteList))
         break
-      case 4:
-        setFilteredList(filterDeadline(voteList))
+      case 'deadline':
+        setFilteredList(sortByDeadlineAsc(voteList))
         break
       default:
+        setFilteredList(sortByDeadlineDesc(voteList))
         break
     }
   }
 
-  const onStatusChange = (clickedId: number) => {
+  const onStatusChange = (clickedId: string) => {
+    onChangeVoteList(clickedId)
+
     const updated = sortButtonData.map(item =>
       item.id === clickedId
         ? { ...item, status: 'active' }
         : { ...item, status: 'inactive' }
     )
-    onChangeVoteList(clickedId)
     setSortButtonData(updated)
   }
 

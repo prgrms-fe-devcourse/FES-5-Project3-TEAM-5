@@ -40,7 +40,7 @@ export const Layout = () => {
             {headerTitle && <Header title={headerTitle} />}
             <main className={` ${hideNav ? '' : 'pb-[60px]'}`}>
               <div className="flex justify-end">
-                <NotificationButton isActive={false} />
+                {hideNav ? '' : <NotificationButton isActive={false} />}
               </div>
               <Outlet />
             </main>

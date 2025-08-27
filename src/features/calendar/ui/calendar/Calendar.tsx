@@ -2,20 +2,22 @@ import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import koLocale from '@fullcalendar/core/locales/ko'
 import interactionPlugin from '@fullcalendar/interaction'
-import type { CalendarEventType } from '@/features/calendar/model/type'
+
 import { RenderEventContent } from '@/features/calendar/ui/calendar/RenderEventContent'
 import { useEffect, useMemo, useRef } from 'react'
-import { useSelectedDate } from '../../model/useSelectedDate'
-import { useShallow } from 'zustand/shallow'
+import { useSelectedDate } from '@/features/calendar/model/useSelectedDate'
+
+import type { AccountItem } from '@/features/accountItem/index'
 
 interface Props {
-  events: CalendarEventType[]
+  handleDateClick: (date: Date) => void
+  calendarEvents: AccountItem[]
 }
 
-export const Calendar = ({ events }: Props) => {
+export const Calendar = ({ handleDateClick, calendarEvents }: Props) => {
   const ref = useRef<FullCalendar>(null)
 
-  const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
+  const date = useSelectedDate(s => s.date)
 
   const isSameDate = (a: Date, b: Date) =>
     a.getFullYear() === b.getFullYear() &&
@@ -30,14 +32,14 @@ export const Calendar = ({ events }: Props) => {
 
   const fcEvent = useMemo(
     () =>
-      events.map(e => ({
-        title: e.amount,
+      calendarEvents.map(e => ({
+        title: String(e.amount),
         start: e.date,
         extendedProps: { type: e.type },
         backgroundColor: 'transparent',
         borderColor: 'transparent'
       })),
-    [events]
+    [calendarEvents]
   )
 
   return (
@@ -51,7 +53,7 @@ export const Calendar = ({ events }: Props) => {
       height="auto"
       headerToolbar={false}
       eventContent={RenderEventContent}
-      dateClick={info => setDate(info.date)}
+      dateClick={arg => handleDateClick(arg.date)}
       dayCellClassNames={arg => {
         const base = [
           'ring-inset',

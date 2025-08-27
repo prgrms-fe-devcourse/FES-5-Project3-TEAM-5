@@ -9,7 +9,7 @@ const Input = forwardRef<HTMLInputElement, Props>(({ label }, ref) => {
     <input
       ref={ref}
       type="text"
-      className="bg-white rounded-lg border-2 border-neutral-light w-full py-2 px-1 text-black focus:border-secondary-blue focus:outline focus:outline-secondary-blue"
+      className="bg-white rounded-lg border-2 border-neutral-light w-full py-2 px-1 text-black focus:border-primary-light focus:outline focus:outline-primary-light"
       placeholder={`${label}를 입력해 주세요`}
     />
   )

@@ -13,7 +13,7 @@ export interface VoteSelections {
 }
 
 export interface VoteSummary {
-  participant: number
+  participants: number
   deadline: {
     text: string
     value: number

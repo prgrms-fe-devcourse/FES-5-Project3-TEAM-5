@@ -9,18 +9,16 @@ export function formatDate(date: string) {
   return `${month}월 ${day}일 ${dayOfWeek}`
 }
 
-export function getDeadline(end: string) {
-  const now = new Date()
-  const endDate = new Date(end)
+export function getDeadline(ends_at: string) {
+  const end = new Date(ends_at).getTime()
+  const now = Date.now()
+  const diff = end - now
 
-  const diffMs = endDate.getTime() - now.getTime()
+  const hours = Math.floor(diff / (1000 * 60 * 60))
+  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
 
-  if (diffMs <= 0) return '종료됨'
-
-  const diffSec = Math.floor(diffMs / 1000)
-  const diffMin = Math.floor(diffSec / 60)
-  const hours = Math.floor(diffMin / 60)
-  const minutes = diffMin % 60
-
-  return `${hours}시간 ${minutes}분`
+  return {
+    text: `${hours}시간 ${minutes}분`,
+    value: hours * 60 + minutes
+  }
 }

@@ -1,6 +1,7 @@
 import { formatPriceInput, formatPriceNumber } from '@/shared/utils/format'
 import { tw } from '@/shared/utils/tw'
 import { useState } from 'react'
+import RepeatButton from './RepeatButton'
 
 type Props = {
   value: string
@@ -9,6 +10,8 @@ type Props = {
   placeholder?: string
   label?: string
   name?: string
+  onButtonClick: () => void // 반복|할부 버튼 클릭 이벤트
+  activeOption?: 'none' | 'repeat' | 'installment'; // 반복|할부 상태
 }
 
 function AmountInput({
@@ -17,7 +20,9 @@ function AmountInput({
   maxDigits,
   placeholder = '금액을 입력해 주세요',
   label = '금액',
-  name = 'amount'
+  name = 'amount',
+  onButtonClick,
+  activeOption
 }: Props) {
   const [focused, setFocused] = useState(false) // 포커스 여부에 따라 숫자 포맷을 다르게 보여줌
   const displayText =
@@ -33,30 +38,45 @@ function AmountInput({
       <span className="text-base text-neutral-dark font-bold">{label}</span>
 
       <div className="relative flex-1">
-        <input
-          type="text"
-          inputMode="numeric"
-          aria-label={label}
-          name={name}
-          placeholder={placeholder}
-          value={value}
-          onChange={handleChange}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          className={tw(
-            'px-2.5 w-full bg-transparent z-10 relative text-black border-b-2 border-primary-light focus:outline-none placeholder:text-neutral-dark',
-            focused ? 'opacity-100' : 'opacity-0'
-          )}
-        />
-
         <div
-          aria-hidden
-          className="px-2.5 absolute inset-0 flex items-center pointer-events-none border-b-2 border-neutral-light">
-          {displayText ? (
-            <span className="text-black">{displayText}</span>
-          ) : (
-            <span className="text-neutral-dark">{!focused && placeholder}</span>
-          )}
+          className={tw(
+            'flex items-center h-full',
+            'border-b-2',
+            focused ? 'border-primary-light' : 'border-neutral-light'
+          )}>
+          <div className="relative flex-1 h-full">
+            <input
+              type="text"
+              inputMode="numeric"
+              aria-label={label}
+              name={name}
+              placeholder={placeholder}
+              value={value}
+              onChange={handleChange}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              className={tw(
+                'px-2.5 w-full bg-transparent z-10 relative text-black focus:outline-none placeholder:text-neutral-dark',
+                focused ? 'opacity-100' : 'opacity-0'
+              )}
+            />
+
+            <div
+              aria-hidden
+              className="px-2.5 absolute inset-0 flex items-center pointer-events-none">
+              {displayText ? (
+                <span className="text-black">{displayText}</span>
+              ) : (
+                <span className="text-neutral-dark">
+                  {!focused && placeholder}
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="ml-2 z-10">
+            <RepeatButton onClick={onButtonClick} activeOption={activeOption} />
+          </div>
         </div>
       </div>
     </div>

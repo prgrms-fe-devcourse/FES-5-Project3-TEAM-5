@@ -6,6 +6,7 @@ import { CalendarPage } from '../pages/calendar'
 import NotFound from '@/shared/components/notFound/NotFound'
 import NotificationPage from '@/pages/notification/NotificationPage'
 import { Test } from '@/pages/Test'
+import AddItem from '@/pages/item/add/AddItem'
 
 export const router = createBrowserRouter([
   {
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: Test
+        Component: AddItem
       }
     ]
   },

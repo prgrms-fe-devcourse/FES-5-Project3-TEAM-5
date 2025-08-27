@@ -2,7 +2,6 @@ import Input from '@/shared/components/form/Input'
 import SubmitButton from '@/shared/components/form/SubmitButton'
 import AddButton from '@/shared/components/buttons/AddButton'
 import { useRef } from 'react'
-import Snackbar from '@/shared/components/snackbar/Snackbar'
 
 export const Home = () => {
   const nameRef = useRef<HTMLInputElement>(null)

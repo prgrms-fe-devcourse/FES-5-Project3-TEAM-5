@@ -5,7 +5,6 @@ import Header from '../header/Header'
 import Login from '@/pages/login/Login'
 import { useEffect } from 'react'
 import { useUserStore } from '@/shared/stores/useUserStore'
-import Snackbar from '../snackbar/Snackbar'
 
 type RouteHandle = {
   title?: string

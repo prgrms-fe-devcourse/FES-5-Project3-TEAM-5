@@ -1,7 +1,6 @@
 import supabase from '@/supabase/supabase'
 
 import dayjs from 'dayjs'
-import { mapDbToAccountItem } from '../lib/mappers'
 
 // 캘린더 월 데이터 조회
 export const fetchByMonth = async (month: number) => {
@@ -10,35 +9,40 @@ export const fetchByMonth = async (month: number) => {
 
   const { data, error } = await supabase
     .from('account_items')
-    .select('*')
+    .select(
+      `
+      id, amount, type, date, memo,
+      category_id, recurring_rule_id, payment_method_id, installment_plan_id,
+      categories(name),
+      recurring_rules(frequency, end_date),
+      payment_methods(type),
+      installment_plans(months, start_date, end_date)
+    `
+    )
     .gte('date', startDate)
     .lte('date', endDate)
 
   if (error) throw error
-  return (data ?? []).map(mapDbToAccountItem)
+  return data
 }
 
 // 캘린더 일 데이터 조회
 export const fetchByDate = async (date: Date) => {
-  const { data: items } = await supabase
+  const { data, error } = await supabase
     .from('account_items')
-    .select('*')
+    .select(
+      `
+      id, amount, type, date, memo,
+      category_id, recurring_rule_id, payment_method_id, installment_plan_id,
+      categories(name),
+      recurring_rules(frequency, end_date),
+      payment_methods(type),
+      installment_plans(months, start_date, end_date)
+    `
+    )
     .eq('date', dayjs(date).format('YYYY-MM-DD'))
 
-  const categoryIds = [...new Set(items?.map(item => item.category_id) ?? [])]
+  if (error) throw error
 
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('*')
-    .in('id', categoryIds)
-
-  const categoryMap = Object.fromEntries(
-    categories?.map(c => [c.id, c.name]) ?? []
-  )
-  const itemsWithCategory = items?.map(item => ({
-    ...item,
-    categories: categoryMap[item.category_id]
-  }))
-
-  return (itemsWithCategory ?? []).map(mapDbToAccountItem)
+  return data
 }

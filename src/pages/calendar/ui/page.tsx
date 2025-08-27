@@ -30,9 +30,9 @@ export const CalendarPage = () => {
     events.reduce(
       (a, c) => {
         if (c.type === 'income') {
-          a.income += c.amount
+          a.income += Number(c.amount)
         } else {
-          a.expense += c.amount
+          a.expense += Number(c.amount)
         }
         a.balance = a.income - a.expense
         return a

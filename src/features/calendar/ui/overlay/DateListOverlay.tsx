@@ -23,9 +23,9 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
     return events.reduce(
       (acc, item) => {
         if (item.type === 'income') {
-          acc.income += item.amount
+          acc.income += Number(item.amount)
         } else {
-          acc.expense += item.amount
+          acc.expense += Number(item.amount)
         }
         return acc
       },
@@ -68,8 +68,8 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
           {events.map(item => (
             <ListItem
               key={item.id}
-              icon={item.categories as IconType}
-              amount={item.amount}
+              icon={item.categories?.name as IconType}
+              amount={Number(item.amount)}
               type={item.type}
             />
           ))}

@@ -2,9 +2,16 @@ import cryingBear from '@/shared/assets/momo/momo-cry.png'
 import raiseBear from '@/shared/assets/momo/momo-raise.png'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useShallow } from 'zustand/shallow'
 
 export const Snackbar = () => {
-  const { visible, text, type } = useSnackbarStore()
+  const { visible, text, type } = useSnackbarStore(
+    useShallow(state => ({
+      visible: state.visible,
+      text: state.text,
+      type: state.type
+    }))
+  )
 
   return (
     <AnimatePresence>

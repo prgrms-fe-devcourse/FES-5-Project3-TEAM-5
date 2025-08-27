@@ -5,6 +5,7 @@ import Header from '../header/Header'
 import Login from '@/pages/login/Login'
 import { useEffect } from 'react'
 import { useUserStore } from '@/shared/stores/useUserStore'
+import { useShallow } from 'zustand/shallow'
 
 type RouteHandle = {
   title?: string
@@ -12,7 +13,12 @@ type RouteHandle = {
 }
 
 export const Layout = () => {
-  const { isAuth, initializeUser } = useUserStore()
+  const { isAuth, initializeUser } = useUserStore(
+    useShallow(state => ({
+      isAuth: state.isAuth,
+      initializeUser: state.initializeUser
+    }))
+  )
 
   useEffect(() => {
     initializeUser()

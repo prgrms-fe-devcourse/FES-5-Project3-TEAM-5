@@ -2,8 +2,8 @@ import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
 
 function LogoutBtn() {
-  const { logout } = useUserStore()
-  const { showSnackbar } = useSnackbarStore()
+  const logout = useUserStore(state => state.logout)
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   const handleLogout = async () => {
     await logout()

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ButtonLayout from './form/ButtonLayout'
+import ButtonLayout from '../form/ButtonLayout'
 
 export function SortButtonList() {
   const [sortButtonData, setSortButtonData] = useState([

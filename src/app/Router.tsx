@@ -1,6 +1,9 @@
 import { createBrowserRouter } from 'react-router'
 import { Layout } from '../shared/components/layout/Layout'
 import { Home } from '../pages/Home'
+
+import Login from '@/pages/login/Login'
+import More from '@/pages/more/More'
 import { CalendarPage } from '../pages/calendar'
 
 import NotFound from '@/shared/components/notFound/NotFound'
@@ -95,6 +98,26 @@ export const router = createBrowserRouter([
           title: '404',
           hideNav: true
         }
+      }
+    ]
+  },
+  {
+    path: '/login',
+    Component: Layout,
+    children: [
+      {
+        index: true,
+        Component: Login
+      }
+    ]
+  },
+  {
+    path: '/more',
+    Component: Layout,
+    children: [
+      {
+        index: true,
+        Component: More
       }
     ]
   }

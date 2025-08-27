@@ -1,7 +1,6 @@
 import supabase from '@/supabase/supabase'
 
 import dayjs from 'dayjs'
-import { mapDbToAccountItem } from '../lib/mappers'
 
 // 캘린더 월 데이터 조회
 export const fetchByMonth = async (month: number) => {
@@ -10,25 +9,19 @@ export const fetchByMonth = async (month: number) => {
 
   const { data, error } = await supabase
     .from('account_items')
-    .select('*')
+    .select(
+      `
+      id, amount, type, date, memo,
+      category_id, recurring_rule_id, payment_method_id, installment_plan_id,
+      categories(name),
+      recurring_rules(frequency, end_date),
+      payment_methods(type),
+      installment_plans(months, start_date, end_date)
+    `
+    )
     .gte('date', startDate)
     .lte('date', endDate)
 
   if (error) throw error
-  return (data ?? []).map(mapDbToAccountItem)
-}
-
-// 캘린더 일 데이터 조회
-export const fetchByDate = async (date: Date) => {
-  const start = dayjs(date).startOf('day').toISOString()
-  const end = dayjs(date).endOf('day').toISOString()
-
-  const { data, error } = await supabase
-    .from('account_items')
-    .select('*')
-    .gte('date', start)
-    .lte('date', end)
-
-  if (error) throw error
-  return (data ?? []).map(mapDbToAccountItem)
+  return data
 }

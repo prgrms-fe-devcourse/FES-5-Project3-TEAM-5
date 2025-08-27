@@ -1,28 +1,50 @@
 import { ExpenseButton } from '@/shared/components/expenseButton/expenseButton'
+import { formatPriceNumber } from '@/shared/utils/format'
+import { tw } from '@/shared/utils/tw'
 
+export type IconType =
+  | 'beauty'
+  | 'cafe'
+  | 'clothes'
+  | 'cultural'
+  | 'dailyNecessities'
+  | 'dwelling'
+  | 'education'
+  | 'etc'
+  | 'events'
+  | 'food'
+  | 'insurance'
+  | 'medical'
+  | 'phone'
+  | 'savings'
+  | 'transport'
+
+const iconMap: Record<IconType, string> = {
+  beauty: '미용',
+  cafe: '카페',
+  clothes: '의류',
+  cultural: ' 문화생활',
+  dailyNecessities: '생필품',
+  dwelling: '주거',
+  education: '교육',
+  etc: '기타',
+  events: '경조사',
+  food: '식비',
+  insurance: '보험',
+  medical: '의료/건강',
+  phone: '통신비',
+  savings: '저축',
+  transport: '교통비'
+}
 interface Props {
-  icon:
-    | 'beauty'
-    | 'cafe'
-    | 'clothes'
-    | 'cultural'
-    | 'dailyNecessities'
-    | 'dwelling'
-    | 'education'
-    | 'etc'
-    | 'events'
-    | 'food'
-    | 'insurance'
-    | 'medical'
-    | 'phone'
-    | 'savings'
-    | 'transport'
-  title: string
+  icon: IconType
+  amount: number
+  type: 'income' | 'expense'
 }
 
-export const ListItem = ({ icon, title }: Props) => {
+export const ListItem = ({ icon, amount, type }: Props) => {
   return (
-    <div className="w-full border-b border-neutral-light p-2.5 flex justify-between">
+    <div className="w-full border-b border-neutral-light p-2.5 flex justify-between items-center">
       <div className="flex items-center gap-2.5 text-size-md">
         <div className="w-[30px] h-[30px] rounded-full bg-gray-50">
           <ExpenseButton
@@ -30,9 +52,15 @@ export const ListItem = ({ icon, title }: Props) => {
             icon={icon}
           />
         </div>
-        <div>{title}</div>
+        <div>{iconMap[icon]}</div>
       </div>
-      <div>+123,234,123원</div>
+      <div
+        className={tw(
+          'font-bold',
+          type === 'income' ? 'text-secondary-blue' : 'text-secondary-red'
+        )}>
+        {type === 'income' ? '+' : '-'} {formatPriceNumber(amount)} 원
+      </div>
     </div>
   )
 }

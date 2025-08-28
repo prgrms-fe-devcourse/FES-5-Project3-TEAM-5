@@ -3,8 +3,8 @@ import { tw } from '@/shared/utils/tw'
 interface Props {
   text: string
   status?: string
-  id: number
-  onStatusChange: (clickedId: number) => void
+  id: string
+  onStatusChange: (clickedId: string) => void
 }
 
 function ButtonLayout({
@@ -22,7 +22,7 @@ function ButtonLayout({
       case 'disabled':
         return 'bg-neutral-DEFAULT text-black'
       default:
-        break
+        return 'bg-neutral-light text-neutral-dark'
     }
   }
   return (

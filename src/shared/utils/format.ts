@@ -1,5 +1,5 @@
 const formatPriceNumber = (number: number) => {
-  const sign = number > 0 ? '' : '-'
+  const sign = number >= 0 ? '' : '-'
   const absNum = Math.abs(number)
 
   const formatted = [...absNum.toString()]

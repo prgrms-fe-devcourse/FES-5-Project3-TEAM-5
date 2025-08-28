@@ -19,6 +19,15 @@ import AddVotePage from '@/pages/vote/AddVotePage'
 import { AccountBookLayout } from '@/shared/components/layout/AccountBookLayout'
 import StatisticsPage from '@/pages/statistics/StatisticsPage'
 import StatisticsDetailPage from '@/pages/statistics/StatisticsDetailPage'
+import { useSelectedDate } from '@/features/calendar'
+
+const getInitialDateForCalendar = (dateParam: string | null) => {
+  if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
+  const selected = useSelectedDate.getState().date
+  return dayjs(selected ?? new Date())
+    .startOf('day')
+    .toISOString()
+}
 
 export const router = createBrowserRouter([
   {
@@ -39,9 +48,9 @@ export const router = createBrowserRouter([
             loader: async ({ request }) => {
               const url = new URL(request.url)
               const dateParam = url.searchParams.get('date')
-              const base = dateParam ? dayjs(dateParam) : dayjs()
-              const events = await fetchByMonth(base.month())
-              return { initialDate: base.startOf('day').toISOString(), events }
+              const initialDate = getInitialDateForCalendar(dateParam)
+              const events = await fetchByMonth(dayjs(initialDate).month())
+              return { initialDate, events }
             }
           },
           {
@@ -54,8 +63,8 @@ export const router = createBrowserRouter([
                 loader: async ({ request }) => {
                   const url = new URL(request.url)
                   const dateParam = url.searchParams.get('date')
-                  const base = dateParam ? dayjs(dateParam) : dayjs()
-                  const events = await fetchByMonth(base.month())
+                  const initialDate = getInitialDateForCalendar(dateParam)
+                  const events = await fetchByMonth(dayjs(initialDate).month())
                   return { events }
                 }
               },
@@ -65,8 +74,8 @@ export const router = createBrowserRouter([
                 loader: async ({ request }) => {
                   const url = new URL(request.url)
                   const dateParam = url.searchParams.get('date')
-                  const base = dateParam ? dayjs(dateParam) : dayjs()
-                  const events = await fetchByMonth(base.month())
+                  const initialDate = getInitialDateForCalendar(dateParam)
+                  const events = await fetchByMonth(dayjs(initialDate).month())
                   return { events }
                 }
               }

@@ -1,5 +1,6 @@
 import { EmptyData, SearchBar, SortButtonList, VoteCard } from '@/features/vote'
-import type { Vote } from '@/features/vote/model/type'
+import type { Vote } from '@/features/vote/model/responseBody'
+import { deleteVote } from '@/features/vote/service/deleteVote'
 import { fetchVoteData } from '@/features/vote/service/fetchVoteData'
 import { sortByDeadlineDesc } from '@/features/vote/utils/filterVoteList'
 import AddButton from '@/shared/components/buttons/AddButton'
@@ -11,10 +12,22 @@ import { Link } from 'react-router'
 function VotePage() {
   const [isDelete, setIsDelete] = useState(false)
   const voteListRef = useRef<Vote[] | null>(null)
+  const deleteIdRef = useRef<string | null>(null)
   const [filteredList, setFilteredList] = useState<Vote[] | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleDeleteModal = () => setIsDelete(prev => !prev)
+  const openDeleteModal = (id?: string) => {
+    if (id) deleteIdRef.current = id
+    setIsDelete(prev => !prev)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!deleteIdRef.current) return
+
+    await deleteVote(deleteIdRef.current)
+    await loadVotes()
+    setIsDelete(false)
+  }
 
   const loadVotes = async () => {
     setIsLoading(true)
@@ -35,10 +48,9 @@ function VotePage() {
         <ConfirmModal
           title="투표 삭제"
           lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
-          onCancel={handleDeleteModal}
+          onCancel={openDeleteModal}
           onConfirm={() => {
-            handleDeleteModal()
-            fetchVoteData()
+            handleConfirmDelete()
           }}
           cancelText="취소"
           confirmText="확인"
@@ -78,7 +90,7 @@ function VotePage() {
                   startsAt={starts_at}
                   deadline={vote_summary!.deadline.text!}
                   voteOptions={vote_options}
-                  onDelete={handleDeleteModal}
+                  onDelete={openDeleteModal}
                 />
               )
             )

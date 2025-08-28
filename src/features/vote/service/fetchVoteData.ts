@@ -1,5 +1,5 @@
 import supabase from '@/supabase/supabase'
-import type { Vote } from '@/features/vote/model/type'
+import type { Vote } from '@/features/vote/model/responseBody'
 import { getDeadline } from '../utils/Date'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { countParticipants } from '../utils/dataFormat'
@@ -12,7 +12,7 @@ async function getVoteData() {
         `
   )
   if (error) {
-    alert(error)
+    alert(`데이터 불러오기 실패: ${error.message}`)
   }
   return data
 }

@@ -1,5 +1,5 @@
 import { useUserStore } from '@/shared/stores/useUserStore'
-import type { Vote } from '../model/type'
+import type { Vote } from '../model/responseBody'
 
 export function filterMyVote(selections?: Vote[]) {
   if (!selections) return []

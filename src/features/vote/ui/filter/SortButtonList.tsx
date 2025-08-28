@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ButtonLayout from '../form/ButtonLayout'
-import type { Vote } from '../../model/type'
+import type { Vote } from '../../model/responseBody'
 import {
   sortByParticipantsDesc,
   sortByDeadlineAsc,

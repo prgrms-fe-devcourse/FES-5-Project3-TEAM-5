@@ -1,4 +1,4 @@
-import type { VoteSelections } from '../model/type'
+import type { VoteSelections } from '../model/responseBody'
 
 export function countParticipants(
   vote_id: string,

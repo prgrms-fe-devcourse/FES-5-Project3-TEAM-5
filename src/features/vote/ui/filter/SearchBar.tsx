@@ -1,6 +1,6 @@
 import searchIcon from '@/shared/assets/vote/searchIcon.svg'
 import { useRef } from 'react'
-import type { Vote } from '../../model/type'
+import type { Vote } from '../../model/responseBody'
 
 interface Props {
   voteList: Vote[]

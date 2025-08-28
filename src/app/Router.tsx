@@ -20,6 +20,7 @@ import { AccountBookLayout } from '@/shared/components/layout/AccountBookLayout'
 import StatisticsPage from '@/pages/statistics/StatisticsPage'
 import StatisticsDetailPage from '@/pages/statistics/StatisticsDetailPage'
 import { useSelectedDate } from '@/features/calendar'
+import FAQPage from '@/pages/faq/Page'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -165,6 +166,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: More
+      },
+      {
+        path: 'faq',
+        Component: FAQPage,
+        handle: {
+          title: '자주 묻는 질문',
+          hideNav: false
+        }
       }
     ]
   }

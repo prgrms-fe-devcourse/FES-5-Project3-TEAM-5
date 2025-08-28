@@ -46,6 +46,7 @@ export const router = createBrowserRouter([
           },
           {
             path: 'statistics',
+
             children: [
               {
                 index: true,
@@ -60,7 +61,14 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'detail/:type',
-                Component: StatisticsDetailPage
+                Component: StatisticsDetailPage,
+                loader: async ({ request }) => {
+                  const url = new URL(request.url)
+                  const dateParam = url.searchParams.get('date')
+                  const base = dateParam ? dayjs(dateParam) : dayjs()
+                  const events = await fetchByMonth(base.month())
+                  return { events }
+                }
               }
             ]
           },

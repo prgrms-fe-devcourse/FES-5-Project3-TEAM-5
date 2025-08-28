@@ -4,6 +4,7 @@ import { PieChartItem } from './PieChartItem'
 import dayjs from 'dayjs'
 import { useLoaderData, useNavigate } from 'react-router'
 import type { AccountItem } from '@/features/accountItem'
+import { formatPriceNumber } from '@/shared/utils/format'
 
 export default function StatisticsPage() {
   const date = useSelectedDate(s => s.date)
@@ -28,7 +29,14 @@ export default function StatisticsPage() {
       <div>
         <div className="flex justify-between text-size-lg font-bold">
           <p>수입 카테고리</p>
-          <p className="text-secondary-blue">111.111.111</p>
+          <p className="text-secondary-blue">
+            {formatPriceNumber(
+              incomeCategories.reduce(
+                (acc, curr) => acc + Number(curr.amount),
+                0
+              )
+            )}
+          </p>
         </div>
         <PieChartItem
           type="income"
@@ -40,7 +48,14 @@ export default function StatisticsPage() {
       <div>
         <div className="flex justify-between text-size-lg font-bold">
           <p>지출 카테고리</p>
-          <p className="text-secondary-red">111.111.111</p>
+          <p className="text-secondary-red">
+            {formatPriceNumber(
+              expenseCategories.reduce(
+                (acc, curr) => acc + Number(curr.amount),
+                0
+              )
+            )}
+          </p>
         </div>
         <PieChartItem
           type="expense"

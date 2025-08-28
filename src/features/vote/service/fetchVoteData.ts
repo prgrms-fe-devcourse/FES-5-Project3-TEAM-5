@@ -2,7 +2,7 @@ import supabase from '@/supabase/supabase'
 import type { TotalVote } from '@/features/vote/model/responseBody'
 import { getDeadline } from '../utils/Date'
 import { useUserStore } from '@/shared/stores/useUserStore'
-import { countParticipants } from '../utils/dataFormat'
+import { countParticipants } from '../utils/calcData'
 
 async function getTotalVoteData() {
   const { data, error } = await supabase.from('votes').select(

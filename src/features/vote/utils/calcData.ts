@@ -8,3 +8,8 @@ export function countParticipants(
 
   return selections.filter(selection => selection.vote_id === vote_id).length
 }
+
+export const calculateHoursDiff = (start: string, end: string) => {
+  const diffMs = new Date(end).getTime() - new Date(start).getTime()
+  return Math.floor(diffMs / (1000 * 60 * 60))
+}

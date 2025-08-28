@@ -14,7 +14,7 @@ function More() {
             <li
               key={i}
               className="group">
-              <button className="group-hover:text-neutral-dark transition ease-in-out  cursor-pointer">
+              <button className="group-hover:text-neutral-dark transition ease-in-out  cursor-pointer z-2">
                 {text}
               </button>
             </li>

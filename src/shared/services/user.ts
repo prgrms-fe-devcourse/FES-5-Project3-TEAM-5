@@ -53,6 +53,7 @@ export const initializeUser = async (
     data: { session }
   } = await supabase.auth.getSession()
 
+  // 지금 로그인된 유저
   const currentUser = session?.user ?? null
 
   set({
@@ -63,11 +64,21 @@ export const initializeUser = async (
 
   if (currentUser) {
     await get().getUserData(currentUser)
+    console.log('currentUser' + currentUser)
   }
 
+  // 세션 변경 감지
   supabase.auth.onAuthStateChange(async (event, session) => {
     const newUser = session?.user ?? null
     set({ user: newUser, isAuth: !!newUser })
+
+    if (newUser && event === 'SIGNED_IN') {
+      await get().insertUserIfNotExists(newUser)
+      useSnackbarStore.getState().showSnackbar({
+        text: '로그인 되었습니다',
+        type: 'success'
+      })
+    }
 
     if (newUser && event === 'INITIAL_SESSION') {
       await get().insertUserIfNotExists(newUser)

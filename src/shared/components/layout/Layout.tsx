@@ -13,10 +13,11 @@ type RouteHandle = {
 }
 
 export const Layout = () => {
-  const { isAuth, initializeUser } = useUserStore(
+  const { isAuth, isLoading, initializeUser } = useUserStore(
     useShallow(state => ({
       isAuth: state.isAuth,
-      initializeUser: state.initializeUser
+      initializeUser: state.initializeUser,
+      isLoading: state.isLoading
     }))
   )
 
@@ -38,7 +39,7 @@ export const Layout = () => {
         ) : (
           <>
             {headerTitle && <Header title={headerTitle} />}
-            <main className={` ${hideNav ? '' : ''} relative`}>
+            <main className={` ${hideNav ? '' : ''}`}>
               <div className="absolute right-4 top-6">
                 <NotificationButton isActive={false} />
               </div>

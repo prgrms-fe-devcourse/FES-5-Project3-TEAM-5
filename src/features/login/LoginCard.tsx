@@ -20,7 +20,13 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
     e.preventDefault()
 
     try {
-      const { error } = await supabase.auth.signInWithOAuth({ provider })
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo:
+            'https://wxkbepmrtbryptydvlrd.supabase.co/auth/v1/callback'
+        }
+      })
       if (error) throw error
 
       showSnackbar({

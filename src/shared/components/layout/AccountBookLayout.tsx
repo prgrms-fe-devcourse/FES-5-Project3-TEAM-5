@@ -44,7 +44,7 @@ export const AccountBookLayout = () => {
         </div>
       </div>
 
-      <div>
+      <div className="flex-1 p-2.5">
         <Outlet />
       </div>
     </div>

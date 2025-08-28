@@ -13,7 +13,7 @@ export const fetchByMonth = async (month: number) => {
       `
       id, amount, type, date, memo,
       category_id, recurring_rule_id, payment_method_id, installment_plan_id,
-      categories(name),
+      categories(name , korean_name),
       recurring_rules(frequency, end_date),
       payment_methods(type),
       installment_plans(months, start_date, end_date)

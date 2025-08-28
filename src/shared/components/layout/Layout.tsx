@@ -33,9 +33,9 @@ export const Layout = () => {
   return (
     <div className="min-h-dvh bg-zinc-100">
       <div className="mx-auto w-full max-w-[420px] min-h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] overscroll-y-contain">
-        {!isAuth ? (
-          <Login />
-        ) : (
+{/*         {!isAuth ? (
+          <Login />  임시 로그인 검증 삭제 => 만약 로그인 유저 정보가 필요하면 /login 으로 로그인 하시면 됩니다.
+        ) : ( */}
           <>
             {headerTitle && <Header title={headerTitle} />}
             <main className={` ${hideNav ? '' : 'pb-[60px]'}`}>
@@ -47,7 +47,7 @@ export const Layout = () => {
 
             {!hideNav && <Nav />}
           </>
-        )}
+{/*         )} */}
       </div>
     </div>
   )

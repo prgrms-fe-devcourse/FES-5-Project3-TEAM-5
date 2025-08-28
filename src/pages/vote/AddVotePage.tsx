@@ -1,7 +1,7 @@
 import { VoteOption, VoteQuestion } from '@/features/vote'
 import type { VoteTime } from '@/features/vote/model/requestBody'
-import { insertVoteWithOptions } from '@/features/vote/service/insertVote'
-import { TimeButtonList } from '@/features/vote/ui/form/TimeButtonList'
+import { addVote } from '@/features/vote/service/addVote'
+import { AddTimeButtonList } from '@/features/vote/ui/form/AddTimeButtonList'
 import SubmitButton from '@/shared/components/form/SubmitButton'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { useRef } from 'react'
@@ -30,7 +30,7 @@ function AddVotePage() {
       secondOptionRef.current!.value
     ]
 
-    await insertVoteWithOptions(newVote, newOptions)
+    await addVote(newVote, newOptions)
     navigate('/vote')
   }
 
@@ -42,7 +42,7 @@ function AddVotePage() {
         <h3 className="text-size-lg font-bold text-neutral-dark mb-3">
           투표 종료 시간
         </h3>
-        <TimeButtonList voteTimeRef={voteTimeRef} />
+        <AddTimeButtonList voteTimeRef={voteTimeRef} />
       </div>
       <VoteQuestion questionRef={questionRef} />
       <VoteOption

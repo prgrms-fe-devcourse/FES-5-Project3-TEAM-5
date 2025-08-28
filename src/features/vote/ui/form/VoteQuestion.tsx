@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 interface Props {
   questionRef: React.RefObject<HTMLTextAreaElement | null>
@@ -6,6 +6,14 @@ interface Props {
 
 export function VoteQuestion({ questionRef }: Props) {
   const [textLength, setTextLength] = useState(0)
+
+  useEffect(() => {
+    if (questionRef.current) {
+      const val = questionRef.current.value
+      setTextLength(val.length)
+    }
+  }, [questionRef.current?.value])
+
   const handleChange = () => {
     if (!questionRef.current) return
     let value = questionRef.current.value

@@ -6,7 +6,7 @@ interface Props {
   voteTimeRef: React.RefObject<VoteTime | null>
 }
 
-export function TimeButtonList({ voteTimeRef }: Props) {
+export function AddTimeButtonList({ voteTimeRef }: Props) {
   const [sortButtonData, setSortButtonData] = useState([
     { id: '1', text: '1시간', status: 'inactive' },
     { id: '12', text: '12시간', status: 'inactive' },

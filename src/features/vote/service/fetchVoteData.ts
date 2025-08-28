@@ -1,10 +1,10 @@
 import supabase from '@/supabase/supabase'
-import type { Vote } from '@/features/vote/model/responseBody'
+import type { TotalVote } from '@/features/vote/model/responseBody'
 import { getDeadline } from '../utils/Date'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { countParticipants } from '../utils/dataFormat'
 
-async function getVoteData() {
+async function getTotalVoteData() {
   const { data, error } = await supabase.from('votes').select(
     `*,
         vote_options(*),
@@ -17,10 +17,10 @@ async function getVoteData() {
   return data
 }
 
-export async function fetchVoteData(): Promise<Vote[]> {
-  const response = await getVoteData()
+export async function fetchVoteData(): Promise<TotalVote[]> {
+  const response = await getTotalVoteData()
   const userId = useUserStore.getState().user?.id
-  const data: Vote[] = response!.map(vote => ({
+  const data: TotalVote[] = response!.map(vote => ({
     ...vote,
     vote_summary: {
       participants: countParticipants(vote.id, vote.vote_selections),

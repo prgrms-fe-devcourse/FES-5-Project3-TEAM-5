@@ -1,10 +1,7 @@
 import supabase from '@/supabase/supabase'
 import type { VotesTable, VoteOptionsTable } from '../model/requestBody'
 
-export async function insertVoteWithOptions(
-  vote: VotesTable,
-  options: string[]
-) {
+export async function addVote(vote: VotesTable, options: string[]) {
   const { data: newVote, error: voteError } = await supabase
     .from('votes')
     .insert(vote)

@@ -17,7 +17,8 @@ import { fetchByMonth } from '@/features/accountItem/index'
 
 import AddVotePage from '@/pages/vote/AddVotePage'
 import { AccountBookLayout } from '@/shared/components/layout/AccountBookLayout'
-import StatisticsPage from '@/pages/statistics/page'
+import StatisticsPage from '@/pages/statistics/StatisticsPage'
+import StatisticsDetailPage from '@/pages/statistics/StatisticsDetailPage'
 
 export const router = createBrowserRouter([
   {
@@ -45,14 +46,23 @@ export const router = createBrowserRouter([
           },
           {
             path: 'statistics',
-            Component: StatisticsPage,
-            loader: async ({ request }) => {
-              const url = new URL(request.url)
-              const dateParam = url.searchParams.get('date')
-              const base = dateParam ? dayjs(dateParam) : dayjs()
-              const events = await fetchByMonth(base.month())
-              return { events }
-            }
+            children: [
+              {
+                index: true,
+                Component: StatisticsPage,
+                loader: async ({ request }) => {
+                  const url = new URL(request.url)
+                  const dateParam = url.searchParams.get('date')
+                  const base = dateParam ? dayjs(dateParam) : dayjs()
+                  const events = await fetchByMonth(base.month())
+                  return { events }
+                }
+              },
+              {
+                path: 'detail/:type',
+                Component: StatisticsDetailPage
+              }
+            ]
           },
           {
             path: 'settings',

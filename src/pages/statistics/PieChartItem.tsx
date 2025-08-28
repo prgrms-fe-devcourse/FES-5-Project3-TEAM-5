@@ -31,9 +31,10 @@ const expenseColors = [
 interface Props {
   type: 'income' | 'expense'
   data: AccountItem[]
+  onClick: () => void
 }
 
-export const PieChartItem = ({ type, data }: Props) => {
+export const PieChartItem = ({ type, data, onClick }: Props) => {
   let pieData: { name: string; uv: number; fill: string }[] = []
 
   if (type === 'income') {
@@ -57,14 +58,17 @@ export const PieChartItem = ({ type, data }: Props) => {
 
   return (
     <PieChart
-      width={400}
-      height={400}>
+      width={300}
+      height={300}
+      onClick={onClick}>
       <Pie
         data={pieData}
         dataKey="uv"
         stroke="none"
+        innerRadius={90}
+        outerRadius={110}
       />
-      <Tooltip defaultIndex={2} />
+      <Tooltip />
     </PieChart>
   )
 }

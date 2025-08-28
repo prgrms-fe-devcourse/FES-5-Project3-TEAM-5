@@ -10,12 +10,13 @@ import NotFound from '@/shared/components/notFound/NotFound'
 import NotificationPage from '@/pages/notification/NotificationPage'
 import VotePage from '@/pages/vote/VotePage'
 import EditVotePage from '@/pages/vote/EditVotePage'
-import AddItem from '@/pages/item/add/AddItem'
+// import AddItem from '@/pages/item/add/AddItem'
 
 import dayjs from 'dayjs'
 import { fetchByMonth } from '@/features/accountItem/index'
 
 import AddVotePage from '@/pages/vote/AddVotePage'
+import { Test } from '@/pages/Test'
 
 export const router = createBrowserRouter([
   {
@@ -83,7 +84,8 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: AddItem
+        // Component: AddItem
+        Component: Test
       }
     ]
   },

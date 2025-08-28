@@ -3,11 +3,16 @@ import type { AccountItem } from '@/features/accountItem'
 import { formatPriceNumber } from '@/shared/utils/format'
 import { PieChartItem } from './PieChartItem'
 import { expenseColors, incomeColors } from './constant'
+import { useSelectedDate } from '@/features/calendar'
+import dayjs from 'dayjs'
 
 export default function StatisticsDetailPage() {
   const { type } = useParams<{ type: 'income' | 'expense' }>()
   const navigate = useNavigate()
   const { events } = useLoaderData() as { events: AccountItem[] }
+  const date = useSelectedDate(s => s.date)
+  const startDate = dayjs(date).startOf('month').format('MM-DD')
+  const endDate = dayjs(date).endOf('month').format('MM-DD')
 
   const categories = events.filter(event => event.type === type)
 
@@ -17,14 +22,18 @@ export default function StatisticsDetailPage() {
 
   return (
     <div className="w-full min-h-[618px] px-5 py-2.5 flex flex-col gap-8 ">
-      <button onClick={handleBack}>뒤로가기</button>
+      <div className="flex justify-between">
+        <p className="text-size-xl font-bold">
+          {startDate} ~ {endDate}
+        </p>
+        <button onClick={handleBack}>뒤로가기</button>
+      </div>
       <div>
-        <p className="text-size-lg font-bold">카테고리별 지출</p>
         <div className="flex justify-between text-size-2xl font-bold">
           <p>{type === 'income' ? '수입' : '지출'} 카테고리</p>
           <p
             className={
-              type === 'income' ? 'text-secondary-blue' : 'text-secondary-red'
+              type === 'income' ? 'text-secondary-green' : 'text-secondary-red'
             }>
             {formatPriceNumber(
               categories.reduce((acc, curr) => acc + Number(curr.amount), 0)

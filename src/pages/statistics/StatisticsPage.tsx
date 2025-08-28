@@ -22,14 +22,14 @@ export default function StatisticsPage() {
   }
 
   return (
-    <div className="w-full min-h-[618px] px-5 py-2.5 flex flex-col gap-8 justify-center items-center">
+    <div className="w-full min-h-[618px] px-5 py-2.5 flex flex-col gap-8">
       <p className="text-size-xl font-bold">
         {startDate} ~ {endDate}
       </p>
       <div>
-        <div className="flex justify-between text-size-lg font-bold">
+        <div className="flex justify-between text-size-2xl font-bold">
           <p>수입 카테고리</p>
-          <p className="text-secondary-blue">
+          <p className="text-secondary-green">
             {formatPriceNumber(
               incomeCategories.reduce(
                 (acc, curr) => acc + Number(curr.amount),
@@ -38,15 +38,17 @@ export default function StatisticsPage() {
             )}
           </p>
         </div>
-        <PieChartItem
-          type="income"
-          data={incomeCategories}
-          onClick={() => handleDetail('income')}
-        />
+        <div className="flex justify-center">
+          <PieChartItem
+            type="income"
+            data={incomeCategories}
+            onClick={() => handleDetail('income')}
+          />
+        </div>
       </div>
 
       <div>
-        <div className="flex justify-between text-size-lg font-bold">
+        <div className="flex justify-between text-size-2xl font-bold">
           <p>지출 카테고리</p>
           <p className="text-secondary-red">
             {formatPriceNumber(
@@ -57,11 +59,13 @@ export default function StatisticsPage() {
             )}
           </p>
         </div>
-        <PieChartItem
-          type="expense"
-          data={expenseCategories}
-          onClick={() => handleDetail('expense')}
-        />
+        <div className="flex justify-center">
+          <PieChartItem
+            type="expense"
+            data={expenseCategories}
+            onClick={() => handleDetail('expense')}
+          />
+        </div>
       </div>
     </div>
   )

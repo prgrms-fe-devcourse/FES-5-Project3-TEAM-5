@@ -39,8 +39,8 @@ export const PieChartItem = ({ type, data, onClick }: Props) => {
         data={pieData}
         dataKey="uv"
         stroke="none"
-        innerRadius={90}
-        outerRadius={110}
+        innerRadius={80}
+        outerRadius={130}
       />
       <Tooltip />
     </PieChart>

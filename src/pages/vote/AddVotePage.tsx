@@ -36,7 +36,7 @@ function AddVotePage() {
 
   return (
     <form
-      className="flex flex-col "
+      className="flex flex-col p-5 "
       style={{ gap: 'clamp(8px, 5vh, 50px)' }}>
       <div>
         <h3 className="text-size-lg font-bold text-neutral-dark mb-3">

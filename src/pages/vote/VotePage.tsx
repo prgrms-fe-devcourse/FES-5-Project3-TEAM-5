@@ -60,7 +60,7 @@ function VotePage() {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="flex flex-col gap-5 py-2.5 ">
+        <div className="flex flex-col gap-5 p-4 ">
           <SearchBar
             voteList={voteListRef.current!}
             setFilteredList={setFilteredList}

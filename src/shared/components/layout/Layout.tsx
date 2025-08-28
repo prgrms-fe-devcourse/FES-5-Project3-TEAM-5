@@ -32,15 +32,15 @@ export const Layout = () => {
 
   return (
     <div className="min-h-dvh bg-zinc-100">
-      <div className="mx-auto w-full max-w-[420px] min-h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] overscroll-y-contain">
+      <div className="mx-auto w-full max-w-[420px] shadow-2xl min-h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] overscroll-y-contain">
         {!isAuth ? (
           <Login />
         ) : (
           <>
             {headerTitle && <Header title={headerTitle} />}
-            <main className={` ${hideNav ? '' : 'pb-[60px]'}`}>
-              <div className="flex justify-end">
-                {hideNav ? '' : <NotificationButton isActive={false} />}
+            <main className={` ${hideNav ? '' : ''} relative`}>
+              <div className="absolute right-4 top-6">
+                <NotificationButton isActive={false} />
               </div>
               <Outlet />
             </main>

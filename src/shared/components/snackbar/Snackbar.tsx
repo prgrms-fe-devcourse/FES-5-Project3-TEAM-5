@@ -24,7 +24,7 @@ export const Snackbar = () => {
           className={`
                     ${type === 'error' ? 'bg-[#df5448]' : 'bg-[#20a773]'} 
                     text-white px-4 py-2 rounded-tl-2xl rounded-tr-2xl fixed bottom-0 left-1/2 transform -translate-x-1/2 shadow-lg
-                    w-full h-25 z-2 flex items-center gap-2
+                    w-full max-w-[420px] h-25 z-2 flex items-center gap-2
                 `}>
           <img
             src={type === 'error' ? cryingBear : raiseBear}

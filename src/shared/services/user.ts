@@ -78,12 +78,6 @@ export const initializeUser = async (
     }
 
     set({ isLoading: false })
-    if (!get().isLoading && get().isAuth) {
-      useSnackbarStore.getState().showSnackbar({
-        text: '로그인 되었습니다',
-        type: 'success'
-      })
-    }
   })
 }
 

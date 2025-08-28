@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import { Layout } from '../shared/components/layout/Layout'
 import Home from '@/pages/group/Home'
+import CreateGroup from '@/pages/group/CreateGroup'
 
 import Login from '@/pages/login/Login'
 import More from '@/pages/more/More'
@@ -25,6 +26,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Home
+      },
+      {
+        path: 'add',
+        Component: CreateGroup,
+        handle: {
+          title: '가계부 생성',
+          hideNav: true
+        }
       }
     ]
   },

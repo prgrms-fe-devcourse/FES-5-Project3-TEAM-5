@@ -21,6 +21,7 @@ import StatisticsPage from '@/pages/statistics/StatisticsPage'
 import StatisticsDetailPage from '@/pages/statistics/StatisticsDetailPage'
 import { useSelectedDate } from '@/features/calendar'
 import FAQPage from '@/pages/faq/page'
+import NoticePage from '@/pages/notice/page'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -180,6 +181,14 @@ export const router = createBrowserRouter([
         Component: PrivacyPage,
         handle: {
           title: '개인정보처리방침',
+          hideNav: false
+        }
+      },
+      {
+        path: 'notice',
+        Component: NoticePage,
+        handle: {
+          title: '공지사항',
           hideNav: false
         }
       }

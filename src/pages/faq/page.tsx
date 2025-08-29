@@ -1,4 +1,3 @@
-// src/pages/faq/Page.tsx
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import momoStudy from '@/shared/assets/momo/momo-study.png'

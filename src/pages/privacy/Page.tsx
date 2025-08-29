@@ -1,4 +1,3 @@
-// src/pages/privacy/Page.tsx
 import momoBook from '@/shared/assets/momo/momo-book.png'
 
 export default function PrivacyPage() {

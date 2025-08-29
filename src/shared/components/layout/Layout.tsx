@@ -6,6 +6,7 @@ import Header from '../header/Header'
 import { useEffect } from 'react'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { useShallow } from 'zustand/shallow'
+import Login from '@/pages/login/Login'
 
 type RouteHandle = {
   title?: string
@@ -13,7 +14,7 @@ type RouteHandle = {
 }
 
 export const Layout = () => {
-  const { initializeUser } = useUserStore(
+  const { isAuth, initializeUser, isLoading } = useUserStore(
     useShallow(state => ({
       isAuth: state.isAuth,
       initializeUser: state.initializeUser,
@@ -34,21 +35,25 @@ export const Layout = () => {
   return (
     <div className="min-h-dvh bg-zinc-100">
       <div className="mx-auto w-full max-w-[420px] min-h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] overscroll-y-contain">
-        {/*         {!isAuth ? (
-          <Login />  임시 로그인 검증 삭제 => 만약 로그인 유저 정보가 필요하면 /login 으로 로그인 하시면 됩니다.
-        ) : ( */}
-        <>
-          {headerTitle && <Header title={headerTitle} />}
-          <main className={` ${hideNav ? '' : 'pb-[60px]'}`}>
-            <div className="flex justify-end">
-              {hideNav ? '' : <NotificationButton isActive={false} />}
-            </div>
-            <Outlet />
-          </main>
+        {isLoading ? (
+          <div className="flex justify-center items-center h-full">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+          </div>
+        ) : !isAuth ? (
+          <Login />
+        ) : (
+          <>
+            {headerTitle && <Header title={headerTitle} />}
+            <main className={` ${hideNav ? '' : 'pb-[60px]'}`}>
+              <div className="flex justify-end">
+                {hideNav ? '' : <NotificationButton isActive={false} />}
+              </div>
+              <Outlet />
+            </main>
 
-          {!hideNav && <Nav />}
-        </>
-        {/*         )} */}
+            {!hideNav && <Nav />}
+          </>
+        )}
       </div>
     </div>
   )

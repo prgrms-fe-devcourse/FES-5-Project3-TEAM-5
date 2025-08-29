@@ -25,6 +25,7 @@ import NoticePage from '@/pages/notice/page'
 import { fetchByMonth } from '@/features/accountItem'
 import { useSelectedDate } from '@/features/calendar'
 import PrivacyPage from '@/pages/privacy/Page'
+import SettingPage from '@/pages/accountbook/SettingPage'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -54,6 +55,7 @@ export const router = createBrowserRouter([
         Component: AccountBookLayout,
         children: [
           { path: 'calendar', Component: CalendarPage, loader: eventsLoader },
+
           {
             path: 'statistics',
             children: [
@@ -65,7 +67,10 @@ export const router = createBrowserRouter([
               }
             ]
           },
-          { path: 'settings', Component: () => <div>settings</div> }
+          {
+            path: 'settings',
+            Component: SettingPage
+          }
         ]
       }
     ]

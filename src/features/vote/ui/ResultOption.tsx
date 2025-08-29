@@ -1,7 +1,7 @@
 import inactiveCharacter from '@/shared/assets/vote/inactiveCharacter.png'
 import activeCharacter from '@/shared/assets/vote/activeCharacter.png'
 import { motion } from 'framer-motion'
-import type { VoteOptions } from '../model/type'
+import type { VoteOptions } from '../model/responseBody'
 
 interface Props {
   selectionText: string
@@ -13,7 +13,6 @@ interface Props {
 export function ResultOption({
   selectionText,
   status = 'unselected',
-  voteOptions,
   participants
 }: Props) {
   const getClass = () => {
@@ -26,8 +25,6 @@ export function ResultOption({
         break
     }
   }
-  // eslint-disable-next-line no-console
-  console.log(voteOptions)
 
   return (
     <>

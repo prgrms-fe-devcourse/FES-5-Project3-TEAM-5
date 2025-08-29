@@ -1,10 +1,10 @@
 import supabase from '@/supabase/supabase'
-import type { Vote } from '@/features/vote/model/type'
+import type { TotalVote } from '@/features/vote/model/responseBody'
 import { getDeadline } from '../utils/Date'
 import { useUserStore } from '@/shared/stores/useUserStore'
-import { countParticipants } from '../utils/dataFormat'
+import { countParticipants } from '../utils/calcData'
 
-async function getVoteData() {
+async function getTotalVoteData() {
   const { data, error } = await supabase.from('votes').select(
     `*,
         vote_options(*),
@@ -12,15 +12,15 @@ async function getVoteData() {
         `
   )
   if (error) {
-    alert(error)
+    alert(`데이터 불러오기 실패: ${error.message}`)
   }
   return data
 }
 
-export async function fetchVoteData(): Promise<Vote[]> {
-  const response = await getVoteData()
+export async function fetchVoteData(): Promise<TotalVote[]> {
+  const response = await getTotalVoteData()
   const userId = useUserStore.getState().user?.id
-  const data: Vote[] = response!.map(vote => ({
+  const data: TotalVote[] = response!.map(vote => ({
     ...vote,
     vote_summary: {
       participants: countParticipants(vote.id, vote.vote_selections),

@@ -1,19 +1,19 @@
 import { useUserStore } from '@/shared/stores/useUserStore'
-import type { Vote } from '../model/type'
+import type { TotalVote } from '../model/responseBody'
 
-export function filterMyVote(selections?: Vote[]) {
+export function filterMyVote(selections?: TotalVote[]) {
   if (!selections) return []
   const userId = useUserStore.getState().user?.id
   return selections.filter(selection => selection.user_id === userId)
 }
 
-function removeOverVote(selections: Vote[]) {
+function removeOverVote(selections: TotalVote[]) {
   return selections.filter(
     vote => vote.vote_summary!.deadline.text !== '투표 마감'
   )
 }
 
-export function sortByParticipantsDesc(selections?: Vote[]) {
+export function sortByParticipantsDesc(selections?: TotalVote[]) {
   if (!selections) return []
   return removeOverVote(
     selections.sort(
@@ -21,7 +21,7 @@ export function sortByParticipantsDesc(selections?: Vote[]) {
     )
   )
 }
-export function sortByDeadlineAsc(selections?: Vote[]) {
+export function sortByDeadlineAsc(selections?: TotalVote[]) {
   if (!selections) return []
   const voteList = removeOverVote(selections)
 
@@ -32,7 +32,7 @@ export function sortByDeadlineAsc(selections?: Vote[]) {
   })
 }
 
-export function sortByDeadlineDesc(selections?: Vote[]) {
+export function sortByDeadlineDesc(selections?: TotalVote[]) {
   if (!selections) return []
 
   return [...selections].sort((a, b) => {

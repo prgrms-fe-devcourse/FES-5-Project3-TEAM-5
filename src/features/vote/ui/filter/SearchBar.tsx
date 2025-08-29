@@ -1,10 +1,10 @@
 import searchIcon from '@/shared/assets/vote/searchIcon.svg'
 import { useRef } from 'react'
-import type { Vote } from '../../model/type'
+import type { TotalVote } from '../../model/responseBody'
 
 interface Props {
-  voteList: Vote[]
-  setFilteredList: (list: Vote[]) => void
+  voteList: TotalVote[]
+  setFilteredList: (list: TotalVote[]) => void
 }
 
 export function SearchBar({ voteList, setFilteredList }: Props) {

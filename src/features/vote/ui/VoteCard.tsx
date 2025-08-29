@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import { ResultOption } from './ResultOption'
-import type { VoteOptions } from '../model/type'
+import type { VoteOptions } from '../model/responseBody'
 import { formatDate } from '../utils/Date'
 import { tw } from '@/shared/utils/tw'
 
@@ -13,7 +13,7 @@ interface Props {
   isActive: boolean
   voteOptions: VoteOptions[]
   participants: number
-  onDelete: () => void
+  openDeleteModal: (deleteId: string) => void
 }
 
 export function VoteCard({
@@ -25,7 +25,7 @@ export function VoteCard({
   voteId,
   isActive,
   participants,
-  onDelete
+  openDeleteModal
 }: Props) {
   const startedDate = formatDate(startsAt)
   const divClassName = () => {
@@ -66,7 +66,7 @@ export function VoteCard({
             </Link>
             <button
               className="hover:font-bold  cursor-pointer"
-              onClick={onDelete}>
+              onClick={() => openDeleteModal(voteId)}>
               삭제
             </button>
           </div>

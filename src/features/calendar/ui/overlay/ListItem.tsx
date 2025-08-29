@@ -18,6 +18,11 @@ export type IconType =
   | 'phone'
   | 'savings'
   | 'transport'
+  | 'salary'
+  | 'additional'
+  | 'allowance'
+  | 'bonus'
+  | 'financial'
 
 const iconMap: Record<IconType, string> = {
   beauty: '미용',
@@ -34,7 +39,12 @@ const iconMap: Record<IconType, string> = {
   medical: '의료/건강',
   phone: '통신비',
   savings: '저축',
-  transport: '교통비'
+  transport: '교통비',
+  salary: '월급',
+  additional: '부수입',
+  allowance: '용돈',
+  bonus: '상여',
+  financial: '금융소득'
 }
 interface Props {
   icon: IconType

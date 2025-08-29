@@ -18,9 +18,13 @@ import AddItem from '@/pages/item/add/AddItem'
 import StatisticsPage from '@/pages/statistics/StatisticsPage'
 import StatisticsDetailPage from '@/pages/statistics/StatisticsDetailPage'
 import NotFound from '@/shared/components/notFound/NotFound'
+import FAQPage from '@/pages/faq/page'
+import NoticePage from '@/pages/notice/page'
 
+// features & utils
 import { fetchByMonth } from '@/features/accountItem'
 import { useSelectedDate } from '@/features/calendar'
+import PrivacyPage from '@/pages/privacy/Page'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -49,19 +53,11 @@ export const router = createBrowserRouter([
         path: 'accountBook',
         Component: AccountBookLayout,
         children: [
-          {
-            path: 'calendar',
-            Component: CalendarPage,
-            loader: eventsLoader
-          },
+          { path: 'calendar', Component: CalendarPage, loader: eventsLoader },
           {
             path: 'statistics',
             children: [
-              {
-                index: true,
-                Component: StatisticsPage,
-                loader: eventsLoader
-              },
+              { index: true, Component: StatisticsPage, loader: eventsLoader },
               {
                 path: 'detail/:type',
                 Component: StatisticsDetailPage,
@@ -69,10 +65,7 @@ export const router = createBrowserRouter([
               }
             ]
           },
-          {
-            path: 'settings',
-            Component: () => <div>settings</div>
-          }
+          { path: 'settings', Component: () => <div>settings</div> }
         ]
       }
     ]
@@ -118,7 +111,27 @@ export const router = createBrowserRouter([
   {
     path: '/more',
     Component: Layout,
-    children: [{ index: true, Component: More }]
+    children: [
+      { index: true, Component: More },
+      {
+        path: 'faq',
+        handle: { title: '자주 묻는 질문', hideNav: true },
+
+        children: [{ index: true, Component: FAQPage }]
+      },
+
+      {
+        path: 'notice',
+        handle: { title: '공지사항', hideNav: true },
+
+        children: [{ index: true, Component: NoticePage }]
+      },
+      {
+        path: 'privacy',
+        handle: { title: '개인정보 처리방침', hideNav: true },
+        children: [{ index: true, Component: PrivacyPage }]
+      }
+    ]
   },
 
   {

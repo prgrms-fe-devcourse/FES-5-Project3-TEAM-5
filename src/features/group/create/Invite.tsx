@@ -4,17 +4,15 @@ import supabase from '@/supabase/supabase'
 import { useEffect, useRef, useState } from 'react'
 import InviteList from './InviteList'
 import type { Users } from './type/type'
-import type { UUID } from 'crypto'
 import { debounce } from '@/shared/utils/debounce'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 
 interface Props {
-  groupId: UUID
   selectedUserList: Users[]
   setSelectedUserList: React.Dispatch<React.SetStateAction<Users[]>>
 }
 
-function Invite({ groupId, selectedUserList, setSelectedUserList }: Props) {
+function Invite({ selectedUserList, setSelectedUserList }: Props) {
   const [userList, setUserList] = useState<Users[]>([])
   const [inputValue, setInputValue] = useState('')
   const [drop, setDrop] = useState(false)

@@ -39,17 +39,6 @@ function CreateGroup() {
     if (!user) return
 
     try {
-      const formData = {
-        groupId: groupIdRef.current,
-        groupName,
-        mascot,
-        isMain,
-        isGroup,
-        invitedUsers
-      }
-
-      console.log(formData)
-
       if (!groupName || mascot === null || isMain === null) {
         showSnackbar({ text: '모든 필드를 입력해주세요', type: 'error' })
         return
@@ -139,7 +128,6 @@ function CreateGroup() {
           />
           {!isGroup && (
             <Invite
-              groupId={groupIdRef.current}
               selectedUserList={invitedUsers}
               setSelectedUserList={setInvitedUsers}
             />

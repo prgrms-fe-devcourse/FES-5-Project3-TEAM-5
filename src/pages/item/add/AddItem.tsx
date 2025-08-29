@@ -51,8 +51,8 @@ function AddItem() {
   const filterType = tab === '수입' ? 'income' : 'expense'
 
 
+  // 테스트용 -> 나중에 모달 띄우게 수정
   const handleButtonClick = () => {
-    // 테스트용 -> 나중에 모달 띄우게 수정
     // eslint-disable-next-line no-console
     console.log('버튼이 눌렸습니다.')
     setActiveOption('repeat')
@@ -79,7 +79,8 @@ function AddItem() {
     (async () => {
       const { data, error } = await supabase
         .from('categories')
-        .select('id, name, korean_name, type')
+        .select('id, name, korean_name, type, index')
+        .order('index', { ascending: true })
 
       if (error) {
         console.error('카테고리 불러오기 실패:', error)
@@ -239,8 +240,8 @@ function AddItem() {
           filterType={filterType}
           onClose={() => setIsCategoryModalOpen(false)}
           onSelect={(id) => {
-            console.warn("선택한 카테고리 uuid:", id)
-            setSelectedCategoryId(id)
+            console.warn("선택한 카테고리 uuid:", id) // 제대로 보이는지 콘솔에서 확인
+            setSelectedCategoryId(id) // 선택한 카테고리 uuid 저장
             setIsCategoryModalOpen(false)
           }}
         />

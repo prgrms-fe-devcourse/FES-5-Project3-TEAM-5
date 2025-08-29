@@ -88,15 +88,19 @@ export const router = createBrowserRouter([
             Component: () => {
               return <div>settings</div>
             }
-          },
+          }
+        ]
+      },
+      {
+        path: '/accountBook/item',
+        children: [
           {
-            path: 'item',
-            children: [
-              {
-                path: 'add',
-                Component: AddItem
-              }
-            ]
+            path: 'add',
+            Component: AddItem,
+            handle: {
+              title: '가계부 작성',
+              hideNav: true
+            }
           }
         ]
       }

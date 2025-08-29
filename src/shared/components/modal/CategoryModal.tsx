@@ -30,12 +30,12 @@ function CategoryModal({ onClose, onSelect, categories, filterType }: Props) {
               onSelect(id)
               onClose()
             }}
-            className="flex flex-col items-center justify-center gap-1"
+            className="flex flex-col items-center justify-center gap-1 hover:cursor-pointer"
           >
             {/* 아이콘 */}
             <ExpenseButton size="lg" icon={name as Parameters<typeof ExpenseButton>[0]['icon']} />
             {/* 텍스트 */}
-            <span className="text-sm">{korean_name}</span>
+            <span className="text-size-md text-black">{korean_name}</span>
           </button>
         ))}
       </div>

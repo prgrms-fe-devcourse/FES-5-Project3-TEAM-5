@@ -48,6 +48,7 @@ function AmountInput({
             <input
               type="text"
               inputMode="numeric"
+              autoComplete="off"
               aria-label={label}
               name={name}
               placeholder={placeholder}

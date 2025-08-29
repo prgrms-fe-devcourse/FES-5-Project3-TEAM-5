@@ -17,20 +17,30 @@ export const Snackbar = () => {
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ opacity: 0, y: 100 }}
+          initial={{ opacity: 0, y: -100 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 100 }}
-          transition={{ duration: 0.5 }}
+          exit={{ opacity: 0, y: -100 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
           className={`
-                    ${type === 'error' ? 'bg-[#df5448]' : 'bg-[#20a773]'} 
-                    text-white px-4 py-2 rounded-tl-2xl rounded-tr-2xl fixed bottom-0 left-1/2 transform -translate-x-1/2 shadow-lg
-                    w-full h-25 z-2 flex items-center gap-2
-                `}>
+            fixed top-10 left-1/2 transform -translate-x-1/2 z-50
+            max-w-[320px] w-full px-6 py-3
+            flex items-center gap-4
+            rounded-xl border
+            bg-gradient-to-r
+            ${
+              type === 'error'
+                ? 'from-[#f8d7da] via-[#f5c6cb] to-[#f44336] border-[#d32f2f]' // 은은한 빨강 그라데이션 + 진한 테두리
+                : 'from-[#d0f0d8] via-[#a5d6a7] to-[#4caf50] border-[#388e3c]'
+            }
+            shadow-lg
+            backdrop-blur-sm
+            text-neutral-900
+          `}>
           <img
             src={type === 'error' ? cryingBear : raiseBear}
-            className={`${type === 'error' ? 'w-[63px] h-[90px]' : 'w-[70px] h-[80px] mt-1'} ml-4`}
+            className={`${type === 'error' ? 'w-[28px] h-[34px]' : 'w-[30px] h-[30px]'} ml-4`}
           />
-          <p className="ml-4 text-lg font-semibold flex items-center">{text}</p>
+          <p className="ml-4 text-sm font-semibold flex items-center">{text}</p>
         </motion.div>
       )}
     </AnimatePresence>

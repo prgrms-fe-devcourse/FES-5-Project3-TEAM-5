@@ -26,6 +26,7 @@ import { fetchByMonth } from '@/features/accountItem'
 import { useSelectedDate } from '@/features/calendar'
 import PrivacyPage from '@/pages/privacy/Page'
 import SettingPage from '@/pages/accountbook/SettingPage'
+import CreateGroup from '@/pages/group/CreateGroup'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -48,30 +49,40 @@ export const router = createBrowserRouter([
     path: '/',
     Component: Layout,
     children: [
-      { index: true, Component: Home },
+      {
+        index: true,
+        Component: Home
+      },
+      {
+        path: 'add',
+        Component: CreateGroup,
+        handle: {
+          title: '가계부 생성',
+          hideNav: true
+        }
+      }
+    ]
+  },
+  {
+    path: 'accountBook',
+    Component: AccountBookLayout,
+    children: [
+      { path: 'calendar', Component: CalendarPage, loader: eventsLoader },
 
       {
-        path: 'accountBook',
-        Component: AccountBookLayout,
+        path: 'statistics',
         children: [
-          { path: 'calendar', Component: CalendarPage, loader: eventsLoader },
-
+          { index: true, Component: StatisticsPage, loader: eventsLoader },
           {
-            path: 'statistics',
-            children: [
-              { index: true, Component: StatisticsPage, loader: eventsLoader },
-              {
-                path: 'detail/:type',
-                Component: StatisticsDetailPage,
-                loader: eventsLoader
-              }
-            ]
-          },
-          {
-            path: 'settings',
-            Component: SettingPage
+            path: 'detail/:type',
+            Component: StatisticsDetailPage,
+            loader: eventsLoader
           }
         ]
+      },
+      {
+        path: 'settings',
+        Component: SettingPage
       }
     ]
   },

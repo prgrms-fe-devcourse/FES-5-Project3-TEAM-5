@@ -15,7 +15,9 @@ type RouteHandle = {
 export const Layout = () => {
   const { initializeUser } = useUserStore(
     useShallow(state => ({
-      initializeUser: state.initializeUser
+      isAuth: state.isAuth,
+      initializeUser: state.initializeUser,
+      isLoading: state.isLoading
     }))
   )
 

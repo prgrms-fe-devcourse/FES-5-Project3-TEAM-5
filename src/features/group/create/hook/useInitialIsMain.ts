@@ -3,7 +3,7 @@ import supabase from '@/supabase/supabase'
 import { useUserStore } from '@/shared/stores/useUserStore'
 
 export function useInitialIsMain() {
-  const user = useUserStore(state => state.user) // ✅ Store에서 유저 가져오기
+  const user = useUserStore(state => state.user)
   const [isMain, setIsMain] = useState<boolean | null>(null)
 
   useEffect(() => {
@@ -16,7 +16,7 @@ export function useInitialIsMain() {
       try {
         const { data, error } = await supabase
           .from('groups')
-          .select('id') // 필드 최소화
+          .select('id')
           .eq('user_id', user.id)
 
         if (error) {
@@ -24,7 +24,7 @@ export function useInitialIsMain() {
           setIsMain(false)
           return
         }
-        setIsMain((data?.length ?? 0) === 0) // ✅ 그룹 없으면 true, 있으면 false
+        setIsMain((data?.length ?? 0) === 0)
       } catch (err) {
         console.error('오류:', err)
         setIsMain(false)

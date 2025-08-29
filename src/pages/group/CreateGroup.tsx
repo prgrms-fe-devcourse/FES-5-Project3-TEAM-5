@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router'
 
 function CreateGroup() {
   const [groupName, setGroupName] = useState('')
-  const [mascot, setMascot] = useState<number | null>(null)
+  const [mascot, setMascot] = useState<number | null>(1)
   const [isMain, setIsMain] = useState<boolean | null>(null)
   const [isGroup, setIsGroup] = useState(true)
   const [invitedUsers, setInvitedUsers] = useState<Users[]>([])
@@ -48,9 +48,9 @@ function CreateGroup() {
         invitedUsers
       }
 
-      console.log('폼 데이터:', formData)
+      console.log(formData)
 
-      if (!groupName || mascot === null || isMain === null || !user) {
+      if (!groupName || mascot === null || isMain === null) {
         showSnackbar({ text: '모든 필드를 입력해주세요', type: 'error' })
         return
       }
@@ -98,7 +98,7 @@ function CreateGroup() {
     }
 
     setGroupName('')
-    setMascot(null)
+    setMascot(1)
     setIsMain(null)
     setIsGroup(true)
     setInvitedUsers([])

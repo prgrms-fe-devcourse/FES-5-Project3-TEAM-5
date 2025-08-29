@@ -32,6 +32,7 @@ function VotePage() {
 
   const handleSelectOptions = async (vote_id: string, option_id: string) => {
     await insertSelectVote(vote_id, option_id)
+    await loadVotes()
   }
 
   const loadVotes = async () => {

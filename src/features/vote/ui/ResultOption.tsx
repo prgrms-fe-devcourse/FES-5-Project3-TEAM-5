@@ -30,7 +30,7 @@ export function ResultOption({
           <img
             onClick={() => handleSelect(voteId, optionId)}
             className="w-8"
-            src={status === 'selected' ? activeCharacter : inactiveCharacter}
+            src={isSelected ? activeCharacter : inactiveCharacter}
             alt="선택 아이콘"
           />
           <p className="flex-1">{selectionText}</p>

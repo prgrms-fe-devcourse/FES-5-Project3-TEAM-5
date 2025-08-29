@@ -22,10 +22,7 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: {
-          redirectTo:
-            'https://wxkbepmrtbryptydvlrd.supabase.co/auth/v1/callback'
-        }
+        options: { redirectTo: `${window.location.origin}` }
       })
       if (error) throw error
 

@@ -83,18 +83,18 @@ function VotePage() {
                 starts_at,
                 vote_summary,
                 vote_options,
-                is_active
+                vote_selections
               }) => (
                 <VoteCard
                   key={id}
-                  isActive={is_active}
                   voteId={id}
                   isMine={vote_summary!.isOwner}
-                  participants={vote_summary!.participants}
+                  totalParticipants={vote_summary!.participants}
                   question={title}
                   startsAt={starts_at}
                   deadline={vote_summary!.deadline.text!}
                   voteOptions={vote_options}
+                  voteSelections={vote_selections!}
                   mySelect={vote_summary?.mySelect ?? []}
                   openDeleteModal={openDeleteModal}
                   onSelect={handleSelectOptions}

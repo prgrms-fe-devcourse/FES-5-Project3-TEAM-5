@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 import { Layout } from '../shared/components/layout/Layout'
 import Home from '@/pages/group/Home'
-
+import PrivacyPage from '@/pages/privacy/Page'
 import Login from '@/pages/login/Login'
 import More from '@/pages/more/More'
 import { CalendarPage } from '../pages/calendar'
@@ -20,6 +20,8 @@ import { AccountBookLayout } from '@/shared/components/layout/AccountBookLayout'
 import StatisticsPage from '@/pages/statistics/StatisticsPage'
 import StatisticsDetailPage from '@/pages/statistics/StatisticsDetailPage'
 import { useSelectedDate } from '@/features/calendar'
+import FAQPage from '@/pages/faq/page'
+import NoticePage from '@/pages/notice/page'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -165,6 +167,30 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: More
+      },
+      {
+        path: 'faq',
+        Component: FAQPage,
+        handle: {
+          title: '자주 묻는 질문',
+          hideNav: false
+        }
+      },
+      {
+        path: 'privacy',
+        Component: PrivacyPage,
+        handle: {
+          title: '개인정보처리방침',
+          hideNav: false
+        }
+      },
+      {
+        path: 'notice',
+        Component: NoticePage,
+        handle: {
+          title: '공지사항',
+          hideNav: false
+        }
       }
     ]
   }

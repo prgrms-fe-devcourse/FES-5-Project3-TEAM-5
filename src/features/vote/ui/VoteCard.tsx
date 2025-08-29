@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import { ResultOption } from './ResultOption'
-import type { VoteOptions } from '../model/responseBody'
+import type { VoteOptions, VoteSelections } from '../model/responseBody'
 import { formatDate } from '../utils/Date'
 import { tw } from '@/shared/utils/tw'
 
@@ -10,10 +10,12 @@ interface Props {
   startsAt: string
   deadline: string
   isMine: boolean
-  isActive: boolean
   voteOptions: VoteOptions[]
-  participants: number
+  voteSelections: VoteSelections[]
+  totalParticipants: number
+  mySelect: VoteSelections[]
   openDeleteModal: (deleteId: string) => void
+  onSelect: (vote_id: string, option_id: string) => void
 }
 
 export function VoteCard({
@@ -23,13 +25,15 @@ export function VoteCard({
   startsAt,
   isMine,
   voteId,
-  isActive,
-  participants,
-  openDeleteModal
+  totalParticipants,
+  voteSelections,
+  openDeleteModal,
+  mySelect,
+  onSelect
 }: Props) {
   const startedDate = formatDate(startsAt)
   const divClassName = () => {
-    switch (isActive) {
+    switch (deadline !== '투표 마감') {
       case true:
         return 'border-primary-light '
       case false:
@@ -39,7 +43,7 @@ export function VoteCard({
     }
   }
   const deadlineClassName = () => {
-    if (isActive) {
+    if (deadline !== '투표 마감') {
       return 'text-black'
     } else {
       return 'text-neutral-dark '
@@ -78,15 +82,34 @@ wrap-break-word">
         <p>{question}</p>
       </div>
       {voteOptions &&
-        voteOptions.map(({ content, id }) => (
-          <ResultOption
-            key={id}
-            voteOptions={voteOptions}
-            participants={participants}
-            selectionText={content}
-          />
-        ))}
-      <p className="text-size-md text-neutral-dark">{participants}명 참여</p>
+        voteOptions.map(({ content, id }) => {
+          const isSelected = mySelect?.some(sel => sel.option_id === id)
+          const optionParticipants =
+            voteSelections?.filter(sel => sel.option_id === id).length ?? 0
+          const isDisabled = deadline === '투표 마감'
+          const isParticipant =
+            mySelect?.some(sel =>
+              voteSelections?.some(vs => vs.vote_id === sel.vote_id)
+            ) ?? false
+
+          return (
+            <ResultOption
+              key={id}
+              isDisabled={isDisabled}
+              onSelect={onSelect}
+              optionId={id}
+              voteId={voteId}
+              totalParticipants={totalParticipants}
+              selectionText={content}
+              optionParticipants={optionParticipants}
+              isSelected={isSelected}
+              isParticipant={isParticipant}
+            />
+          )
+        })}
+      <p className="text-size-md text-neutral-dark">
+        {totalParticipants}명 참여
+      </p>
     </div>
   )
 }

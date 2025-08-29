@@ -1,5 +1,5 @@
 import { EditTimeButtonList, VoteOption, VoteQuestion } from '@/features/vote'
-import { getUserVoteData, updateVote } from '@/features/vote/service/editVote'
+import { getUserVoteData, updateVote } from '@/features/vote/service/updateVote'
 import { calculateHoursDiff } from '@/features/vote/utils/calcData'
 import SubmitButton from '@/shared/components/form/SubmitButton'
 import { useEffect, useRef, useState } from 'react'
@@ -26,7 +26,6 @@ function EditVotePage() {
       firstOptionRef.current!.value = item.vote_options[0].content
       secondOptionRef.current!.value = item.vote_options[1].content
       setDeadline(calculateHoursDiff(item.starts_at, item.ends_at))
-
       setOptionIds({
         first: item.vote_options[0].id,
         second: item.vote_options[1].id

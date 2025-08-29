@@ -1,36 +1,34 @@
 import inactiveCharacter from '@/shared/assets/vote/inactiveCharacter.png'
 import activeCharacter from '@/shared/assets/vote/activeCharacter.png'
 import { motion } from 'framer-motion'
-import type { VoteOptions } from '../model/responseBody'
 
 interface Props {
   selectionText: string
   participants: number
-  voteOptions: VoteOptions[]
-  status?: 'selected' | 'unselected'
+  optionId: string
+  voteId: string
+  isSelected: boolean
+  onSelect: (vote_id: string, option_id: string) => void
 }
 
 export function ResultOption({
   selectionText,
-  status = 'unselected',
-  participants
+  participants,
+  voteId,
+  optionId,
+  isSelected,
+  onSelect
 }: Props) {
-  const getClass = () => {
-    switch (status) {
-      case 'selected':
-        return 'bg-primary-pale p-2 rounded-md'
-      case 'unselected':
-        return 'p-2'
-      default:
-        break
-    }
+  const handleSelect = (voteId: string, optionId: string) => {
+    onSelect(voteId, optionId)
   }
 
   return (
     <>
-      <div className={getClass()}>
+      <div className={isSelected ? 'bg-primary-pale p-2 rounded-md' : 'p-2'}>
         <div className="flex items-center gap-x-2 mb-1">
           <img
+            onClick={() => handleSelect(voteId, optionId)}
             className="w-8"
             src={status === 'selected' ? activeCharacter : inactiveCharacter}
             alt="선택 아이콘"

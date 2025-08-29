@@ -2,6 +2,7 @@ import { EmptyData, SearchBar, SortButtonList, VoteCard } from '@/features/vote'
 import type { TotalVote } from '@/features/vote/model/responseBody'
 import { deleteVote } from '@/features/vote/service/deleteVote'
 import { fetchVoteData } from '@/features/vote/service/fetchVoteData'
+import { insertSelectVote } from '@/features/vote/service/selectVote'
 import { sortByDeadlineDesc } from '@/features/vote/utils/filterVoteList'
 import AddButton from '@/shared/components/buttons/AddButton'
 import Loading from '@/shared/components/loading/Loading'
@@ -14,6 +15,7 @@ function VotePage() {
   const voteListRef = useRef<TotalVote[] | null>(null)
   const deleteIdRef = useRef<string | null>(null)
   const [filteredList, setFilteredList] = useState<TotalVote[] | null>(null)
+
   const [isLoading, setIsLoading] = useState(false)
 
   const openDeleteModal = (id?: string) => {
@@ -23,16 +25,18 @@ function VotePage() {
 
   const handleConfirmDelete = async () => {
     if (!deleteIdRef.current) return
-
     await deleteVote(deleteIdRef.current)
     await loadVotes()
     setIsDelete(false)
   }
 
+  const handleSelectOptions = async (vote_id: string, option_id: string) => {
+    await insertSelectVote(vote_id, option_id)
+  }
+
   const loadVotes = async () => {
     setIsLoading(true)
     const votes = await fetchVoteData()
-
     voteListRef.current = votes
     setFilteredList(sortByDeadlineDesc(votes))
     setIsLoading(false)
@@ -90,7 +94,9 @@ function VotePage() {
                   startsAt={starts_at}
                   deadline={vote_summary!.deadline.text!}
                   voteOptions={vote_options}
+                  mySelect={vote_summary?.mySelect ?? []}
                   openDeleteModal={openDeleteModal}
+                  onSelect={handleSelectOptions}
                 />
               )
             )

@@ -1,6 +1,6 @@
 import { Link } from 'react-router'
 import { ResultOption } from './ResultOption'
-import type { VoteOptions } from '../model/responseBody'
+import type { VoteOptions, VoteSelections } from '../model/responseBody'
 import { formatDate } from '../utils/Date'
 import { tw } from '@/shared/utils/tw'
 
@@ -13,7 +13,9 @@ interface Props {
   isActive: boolean
   voteOptions: VoteOptions[]
   participants: number
+  mySelect: VoteSelections[]
   openDeleteModal: (deleteId: string) => void
+  onSelect: (vote_id: string, option_id: string) => void
 }
 
 export function VoteCard({
@@ -25,7 +27,9 @@ export function VoteCard({
   voteId,
   isActive,
   participants,
-  openDeleteModal
+  openDeleteModal,
+  mySelect,
+  onSelect
 }: Props) {
   const startedDate = formatDate(startsAt)
   const divClassName = () => {
@@ -78,14 +82,20 @@ wrap-break-word">
         <p>{question}</p>
       </div>
       {voteOptions &&
-        voteOptions.map(({ content, id }) => (
-          <ResultOption
-            key={id}
-            voteOptions={voteOptions}
-            participants={participants}
-            selectionText={content}
-          />
-        ))}
+        voteOptions.map(({ content, id }) => {
+          const isSelected = mySelect?.some(sel => sel.option_id === id)
+          return (
+            <ResultOption
+              key={id}
+              onSelect={onSelect}
+              optionId={id}
+              voteId={voteId}
+              participants={participants}
+              selectionText={content}
+              isSelected={isSelected}
+            />
+          )
+        })}
       <p className="text-size-md text-neutral-dark">{participants}명 참여</p>
     </div>
   )

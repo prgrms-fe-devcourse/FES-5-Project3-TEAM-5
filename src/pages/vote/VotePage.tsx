@@ -25,22 +25,38 @@ function VotePage() {
 
   const handleConfirmDelete = async () => {
     if (!deleteIdRef.current) return
-    await deleteVote(deleteIdRef.current)
-    await loadVotes()
-    setIsDelete(false)
+    try {
+      await deleteVote(deleteIdRef.current)
+      await loadVotes()
+      setIsDelete(false)
+    } catch (error) {
+      console.error('투표 삭제 실패:', error)
+      alert('투표 삭제 중 오류가 발생했습니다.')
+    }
   }
 
   const handleSelectOptions = async (vote_id: string, option_id: string) => {
-    await insertSelectVote(vote_id, option_id)
-    await loadVotes()
+    try {
+      await insertSelectVote(vote_id, option_id)
+      await loadVotes()
+    } catch (error) {
+      console.error('투표 선택 실패:', error)
+      alert('투표 선택 중 오류가 발생했습니다.')
+    }
   }
 
   const loadVotes = async () => {
     setIsLoading(true)
-    const votes = await fetchVoteData()
-    voteListRef.current = votes
-    setFilteredList(sortByDeadlineDesc(votes))
-    setIsLoading(false)
+    try {
+      const votes = await fetchVoteData()
+      voteListRef.current = votes
+      setFilteredList(sortByDeadlineDesc(votes))
+    } catch (error) {
+      console.error('투표 데이터 불러오기 실패:', error)
+      alert('투표 데이터를 불러오는 중 오류가 발생했습니다.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {

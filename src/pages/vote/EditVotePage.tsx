@@ -18,19 +18,28 @@ function EditVotePage() {
   const navigate = useNavigate()
 
   const loadUserVote = async () => {
-    const votes = await getUserVoteData(params.editId!)
+    try {
+      const votes = await getUserVoteData(params.editId!)
+      if (!votes || votes.length === 0) {
+        alert('불러올 투표가 없습니다.')
+        return
+      }
 
-    votes?.forEach(item => {
-      voteIdRef.current = item.id
-      questionRef.current!.value = item.title
-      firstOptionRef.current!.value = item.vote_options[0].content
-      secondOptionRef.current!.value = item.vote_options[1].content
-      setDeadline(calculateHoursDiff(item.starts_at, item.ends_at))
-      setOptionIds({
-        first: item.vote_options[0].id,
-        second: item.vote_options[1].id
+      votes.forEach(item => {
+        voteIdRef.current = item.id
+        questionRef.current!.value = item.title
+        firstOptionRef.current!.value = item.vote_options[0].content
+        secondOptionRef.current!.value = item.vote_options[1].content
+        setDeadline(calculateHoursDiff(item.starts_at, item.ends_at))
+        setOptionIds({
+          first: item.vote_options[0].id,
+          second: item.vote_options[1].id
+        })
       })
-    })
+    } catch (error) {
+      console.error('투표 데이터 불러오기 실패:', error)
+      alert('투표 데이터를 불러오는 중 오류가 발생했습니다.')
+    }
   }
 
   const handleSubmit = async () => {
@@ -42,15 +51,18 @@ function EditVotePage() {
       { id: optionIds.second, content: secondOptionRef.current!.value }
     ]
 
-    await updateVote({
-      voteId,
-      title: questionRef.current!.value,
-      options: newOptions
-    })
-
-    navigate('/vote')
+    try {
+      await updateVote({
+        voteId,
+        title: questionRef.current!.value,
+        options: newOptions
+      })
+      navigate('/vote')
+    } catch (error) {
+      console.error('투표 수정 실패:', error)
+      alert('투표 수정 중 오류가 발생했습니다. 다시 시도해주세요.')
+    }
   }
-
   useEffect(() => {
     loadUserVote()
   }, [])

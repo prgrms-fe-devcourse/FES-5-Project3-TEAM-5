@@ -1,51 +1,67 @@
 import inactiveCharacter from '@/shared/assets/vote/inactiveCharacter.png'
 import activeCharacter from '@/shared/assets/vote/activeCharacter.png'
 import { motion } from 'framer-motion'
-import type { VoteOptions } from '../model/type'
 
 interface Props {
   selectionText: string
-  participants: number
-  voteOptions: VoteOptions[]
-  status?: 'selected' | 'unselected'
+  totalParticipants: number
+  optionId: string
+  voteId: string
+  isSelected: boolean
+  isDisabled: boolean
+  isParticipant: boolean
+  optionParticipants: number
+  onSelect: (vote_id: string, option_id: string) => void
 }
 
 export function ResultOption({
   selectionText,
-  status = 'unselected',
-  voteOptions,
-  participants
+  totalParticipants,
+  voteId,
+  optionId,
+  isSelected,
+  isDisabled,
+  isParticipant,
+  optionParticipants,
+  onSelect
 }: Props) {
-  const getClass = () => {
-    switch (status) {
-      case 'selected':
-        return 'bg-primary-pale p-2 rounded-md'
-      case 'unselected':
-        return 'p-2'
-      default:
-        break
+  const handleSelect = (voteId: string, optionId: string) => {
+    if (!isDisabled) {
+      onSelect(voteId, optionId)
+    } else {
+      alert('투표 기간이 종료되어 현재는 참여가 불가능합니다.')
     }
   }
-  // eslint-disable-next-line no-console
-  console.log(voteOptions)
+  const percentage =
+    totalParticipants === 0 ? 0 : (optionParticipants / totalParticipants) * 100
 
   return (
     <>
-      <div className={getClass()}>
+      <div
+        className={
+          isSelected && !isDisabled ? 'bg-primary-pale p-2 rounded-md' : 'p-2'
+        }>
         <div className="flex items-center gap-x-2 mb-1">
           <img
+            onClick={() => handleSelect(voteId, optionId)}
             className="w-8"
-            src={status === 'selected' ? activeCharacter : inactiveCharacter}
+            src={
+              isSelected && !isDisabled ? activeCharacter : inactiveCharacter
+            }
             alt="선택 아이콘"
           />
           <p className="flex-1">{selectionText}</p>
-          <p>{participants}%</p>
+          <p>{isParticipant || isDisabled ? percentage : '??'}%</p>
         </div>
         <div className="w-full h-2 bg-neutral-200 rounded-md">
           <motion.div
-            className="h-2 bg-primary-light rounded-md"
+            className={
+              (isSelected || !isParticipant) && !isDisabled
+                ? 'h-2 bg-primary-light rounded-md'
+                : 'h-2 bg-neutral-dark rounded-md'
+            }
             initial={{ width: '0%' }}
-            animate={{ width: `${participants}%` }}
+            animate={{ width: `${isParticipant ? percentage : 100}%` }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           />
         </div>

@@ -1,7 +1,9 @@
 import LogoutBtn from '@/features/more/LogoutBtn'
 import NicknameCard from '@/features/more/NicknameCard'
+import { useNavigate } from 'react-router'
 
 function More() {
+  const nav = useNavigate()
   return (
     <div className="flex flex-col gap-4 bg-[#F5F5F5] py-3 h-screen">
       <div className="mx-2 mt-15">
@@ -14,7 +16,17 @@ function More() {
             <li
               key={i}
               className="group">
-              <button className="group-hover:text-neutral-dark transition ease-in-out  cursor-pointer z-2">
+              <button
+                className="group-hover:text-neutral-dark transition ease-in-out  cursor-pointer"
+                onClick={() => {
+                  if (text === '공지사항') {
+                    nav('notice')
+                  } else if (text === 'FAQ') {
+                    nav('faq')
+                  } else if (text === '개인정보처리방침') {
+                    nav('privacy')
+                  }
+                }}>
                 {text}
               </button>
             </li>

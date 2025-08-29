@@ -15,6 +15,11 @@ import medical from '@/shared/assets/expenseIcon/medical.svg'
 import phone from '@/shared/assets/expenseIcon/phone.svg'
 import savings from '@/shared/assets/expenseIcon/savings.svg'
 import transport from '@/shared/assets/expenseIcon/transportation.svg'
+import salary from '@/shared/assets/incomeIcon/salary.svg'
+import additional from '@/shared/assets/incomeIcon/additional.svg'
+import allowance from '@/shared/assets/incomeIcon/allowance.svg'
+import bonus from '@/shared/assets/incomeIcon/bonus.svg'
+import financial from '@/shared/assets/incomeIcon/financial.svg'
 
 interface Props {
   size: 'md' | 'lg'
@@ -36,7 +41,12 @@ const expenseIcon = {
   medical: medical,
   phone: phone,
   savings: savings,
-  transport: transport
+  transport: transport,
+  salary: salary,
+  additional: additional,
+  allowance: allowance,
+  bonus: bonus,
+  financial: financial
 }
 
 export const ExpenseButton = ({ size, icon }: Props) => {

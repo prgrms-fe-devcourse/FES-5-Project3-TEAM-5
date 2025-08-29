@@ -13,7 +13,7 @@ export interface AccountItem {
   installment_plan_id?: string | null
 
   // 조인된 관계들 (테이블 명 기준 키)
-  categories?: { name: string } | null
+  categories?: { name: string; korean_name: string } | null
   recurring_rules?: { frequency: string; end_date: string } | null
   payment_methods?: { type: string } | null
   installment_plans?: {

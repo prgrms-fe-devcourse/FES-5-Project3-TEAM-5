@@ -5,13 +5,15 @@ interface Props {
   status?: string
   id: string
   onStatusChange: (clickedId: string) => void
+  disabled?: boolean
 }
 
 function ButtonLayout({
   id,
   text,
   status = 'inactive',
-  onStatusChange
+  onStatusChange,
+  disabled = false
 }: Props) {
   const className = () => {
     switch (status) {
@@ -28,6 +30,7 @@ function ButtonLayout({
   return (
     <button
       type="button"
+      disabled={disabled}
       onClick={() => onStatusChange(id)}
       className={tw(
         'px-4 py-2 rounded-2xl text-size-md hover:brightness-90 cursor-pointer ',

@@ -1,6 +1,8 @@
 import { EmptyData, SearchBar, SortButtonList, VoteCard } from '@/features/vote'
-import type { Vote } from '@/features/vote/model/type'
+import type { TotalVote } from '@/features/vote/model/responseBody'
+import { deleteVote } from '@/features/vote/service/deleteVote'
 import { fetchVoteData } from '@/features/vote/service/fetchVoteData'
+import { insertSelectVote } from '@/features/vote/service/selectVote'
 import { sortByDeadlineDesc } from '@/features/vote/utils/filterVoteList'
 import AddButton from '@/shared/components/buttons/AddButton'
 import Loading from '@/shared/components/loading/Loading'
@@ -10,19 +12,51 @@ import { Link } from 'react-router'
 
 function VotePage() {
   const [isDelete, setIsDelete] = useState(false)
-  const voteListRef = useRef<Vote[] | null>(null)
-  const [filteredList, setFilteredList] = useState<Vote[] | null>(null)
+  const voteListRef = useRef<TotalVote[] | null>(null)
+  const deleteIdRef = useRef<string | null>(null)
+  const [filteredList, setFilteredList] = useState<TotalVote[] | null>(null)
+
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleDeleteModal = () => setIsDelete(prev => !prev)
+  const openDeleteModal = (id?: string) => {
+    if (id) deleteIdRef.current = id
+    setIsDelete(prev => !prev)
+  }
+
+  const handleConfirmDelete = async () => {
+    if (!deleteIdRef.current) return
+    try {
+      await deleteVote(deleteIdRef.current)
+      await loadVotes()
+      setIsDelete(false)
+    } catch (error) {
+      console.error('투표 삭제 실패:', error)
+      alert('투표 삭제 중 오류가 발생했습니다.')
+    }
+  }
+
+  const handleSelectOptions = async (vote_id: string, option_id: string) => {
+    try {
+      await insertSelectVote(vote_id, option_id)
+      await loadVotes()
+    } catch (error) {
+      console.error('투표 선택 실패:', error)
+      alert('투표 선택 중 오류가 발생했습니다.')
+    }
+  }
 
   const loadVotes = async () => {
     setIsLoading(true)
-    const votes = await fetchVoteData()
-
-    voteListRef.current = votes
-    setFilteredList(sortByDeadlineDesc(votes))
-    setIsLoading(false)
+    try {
+      const votes = await fetchVoteData()
+      voteListRef.current = votes
+      setFilteredList(sortByDeadlineDesc(votes))
+    } catch (error) {
+      console.error('투표 데이터 불러오기 실패:', error)
+      alert('투표 데이터를 불러오는 중 오류가 발생했습니다.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -35,10 +69,9 @@ function VotePage() {
         <ConfirmModal
           title="투표 삭제"
           lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
-          onCancel={handleDeleteModal}
+          onCancel={openDeleteModal}
           onConfirm={() => {
-            handleDeleteModal()
-            fetchVoteData()
+            handleConfirmDelete()
           }}
           cancelText="취소"
           confirmText="확인"
@@ -48,7 +81,7 @@ function VotePage() {
       {isLoading ? (
         <Loading />
       ) : (
-        <div className="flex flex-col gap-5 py-2.5 ">
+        <div className="flex flex-col gap-5 p-4 ">
           <SearchBar
             voteList={voteListRef.current!}
             setFilteredList={setFilteredList}
@@ -66,19 +99,21 @@ function VotePage() {
                 starts_at,
                 vote_summary,
                 vote_options,
-                is_active
+                vote_selections
               }) => (
                 <VoteCard
                   key={id}
-                  isActive={is_active}
                   voteId={id}
                   isMine={vote_summary!.isOwner}
-                  participants={vote_summary!.participants}
+                  totalParticipants={vote_summary!.participants}
                   question={title}
                   startsAt={starts_at}
                   deadline={vote_summary!.deadline.text!}
                   voteOptions={vote_options}
-                  onDelete={handleDeleteModal}
+                  voteSelections={vote_selections!}
+                  mySelect={vote_summary?.mySelect ?? []}
+                  openDeleteModal={openDeleteModal}
+                  onSelect={handleSelectOptions}
                 />
               )
             )

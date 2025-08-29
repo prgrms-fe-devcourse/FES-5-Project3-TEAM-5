@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import ButtonLayout from '../form/ButtonLayout'
-import type { Vote } from '../../model/type'
+import type { TotalVote } from '../../model/responseBody'
 import {
   sortByParticipantsDesc,
   sortByDeadlineAsc,
@@ -9,8 +9,8 @@ import {
 } from '../../utils/filterVoteList'
 
 interface Props {
-  voteList: Vote[]
-  setFilteredList: (list: Vote[]) => void
+  voteList: TotalVote[]
+  setFilteredList: (list: TotalVote[]) => void
 }
 
 export function SortButtonList({ voteList, setFilteredList }: Props) {

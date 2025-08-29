@@ -60,29 +60,29 @@ export const router = createBrowserRouter([
           title: '가계부 생성',
           hideNav: true
         }
-      }
-    ]
-  },
-  {
-    path: 'accountBook',
-    Component: AccountBookLayout,
-    children: [
-      { path: 'calendar', Component: CalendarPage, loader: eventsLoader },
-
-      {
-        path: 'statistics',
-        children: [
-          { index: true, Component: StatisticsPage, loader: eventsLoader },
-          {
-            path: 'detail/:type',
-            Component: StatisticsDetailPage,
-            loader: eventsLoader
-          }
-        ]
       },
       {
-        path: 'settings',
-        Component: SettingPage
+        path: 'accountBook',
+        Component: AccountBookLayout,
+        children: [
+          { path: 'calendar', Component: CalendarPage, loader: eventsLoader },
+
+          {
+            path: 'statistics',
+            children: [
+              { index: true, Component: StatisticsPage, loader: eventsLoader },
+              {
+                path: 'detail/:type',
+                Component: StatisticsDetailPage,
+                loader: eventsLoader
+              }
+            ]
+          },
+          {
+            path: 'settings',
+            Component: SettingPage
+          }
+        ]
       }
     ]
   },

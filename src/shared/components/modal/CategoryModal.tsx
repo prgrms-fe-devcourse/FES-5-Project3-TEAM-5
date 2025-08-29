@@ -22,7 +22,7 @@ function CategoryModal({ onClose, onSelect, categories, filterType }: Props) {
     <BaseModal onClose={onClose}>
       <h2 className="text-center text-[22px] font-bold text-black">카테고리 설정</h2>
 
-      <div className="mt-6 grid grid-cols-4 gap-4">
+      <div className="mt-6 grid grid-cols-4 gap-2">
         {filtered.map(({ id, name, korean_name }) => (
           <button
             key={id}
@@ -30,7 +30,7 @@ function CategoryModal({ onClose, onSelect, categories, filterType }: Props) {
               onSelect(id)
               onClose()
             }}
-            className="flex flex-col items-center justify-center gap-1 hover:cursor-pointer"
+            className="flex flex-col items-center justify-center gap-1 pt-3 pb-2 rounded-[10px] hover:cursor-pointer hover:bg-primary-light/30 transition-colors duration-150"
           >
             {/* 아이콘 */}
             <ExpenseButton size="lg" icon={name as Parameters<typeof ExpenseButton>[0]['icon']} />

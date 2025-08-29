@@ -24,7 +24,7 @@ function PaymentModal({ onClose, onSelect, methods }:Props) {
           <button
             key={id}
             onClick={() => onSelect(id)}
-            className="w-full py-2 rounded-lg text-black bg-gray-100 hover:bg-gray-200 hover:cursor-pointer "
+            className="w-full py-2 rounded-lg text-black bg-gray-100 hover:bg-gray-200 hover:cursor-pointer transition-colors duration-150 "
           >
             {type}
           </button>

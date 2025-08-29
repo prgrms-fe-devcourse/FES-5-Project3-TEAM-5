@@ -22,7 +22,10 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: { redirectTo: `${window.location.origin}` }
+        options: {
+          redirectTo: import.meta.env.VITE_REDIRECT_URL,
+          skipBrowserRedirect: false
+        }
       })
       if (error) throw error
 

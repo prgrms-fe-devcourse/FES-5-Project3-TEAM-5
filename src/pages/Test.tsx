@@ -2,16 +2,22 @@ import { useState } from 'react'
 import AddButton from '@/shared/components/buttons/AddButton'
 import ConfirmModal from '@/shared/components/modal/ConfirmModal'
 import RepeatInstallmentModal from '@/shared/components/modal/RepeatInstallmentModal'
+import PaymentModal from '@/shared/components/modal/PaymentModal'
 
 export const Test = () => {
   const [isOpen, setIsOpen] = useState(false)
-
   const handleOpenModal = () => setIsOpen(true)
   const handleCloseModal = () => setIsOpen(false)
 
   const [isOpen_2, setIsOpen_2] = useState(false)
   const handleOpenModal_2 = () => setIsOpen_2(true)
   const handleCloseModal_2 = () => setIsOpen_2(false)
+
+  const [isOpen_3, setIsOpen_3] = useState(false)
+  const handleOpenModal_3 = () => setIsOpen_3(true)
+  const handleCloseModal_3 = () => setIsOpen_3(false)
+
+
 
 
   return (
@@ -25,6 +31,9 @@ export const Test = () => {
 
       <p>반복|할부 모달</p>
       <AddButton size="lg" onClick={handleOpenModal_2} />
+
+      <p>결제 수단 모달</p>
+      <AddButton size="lg" onClick={handleOpenModal_3} />
 
       {/* 모달 */}
       {isOpen && (
@@ -43,6 +52,7 @@ export const Test = () => {
       {isOpen_2 && (
         <RepeatInstallmentModal onClose={handleCloseModal_2}/>
       )}
+
     </>
   )
 }

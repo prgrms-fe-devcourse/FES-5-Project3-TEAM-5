@@ -1,13 +1,29 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import BinaryTabs from './components/BinaryTabs'
 import SubmitButton from '@/shared/components/form/SubmitButton'
 import AmountInput from './components/AmountInput'
 import SelectField from './components/SelectField'
+import PaymentModal from '@/shared/components/modal/PaymentModal'
+import supabase from '@/supabase/supabase'
+import CategoryModal from '@/shared/components/modal/CategoryModal'
+
+type PaymentMethod = { // 결제 수단 타입
+  id: string;
+  type: string;
+  index: number;
+};
+
+type Category = { // 카테고리 타입
+  id: string
+  name: string
+  korean_name: string
+  type: "income" | "expense"
+};
 
 function AddItem() {
   const [tab, setTab] = useState<'수입' | '지출'>('수입') // 탭 상태
   const [amount, setAmount] = useState('') // 금액
-  const [memo, setMemo] = useState('') // 메모 내용
+  const memoRef = useRef<HTMLTextAreaElement>(null) // 메모 내용
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null) // 업로드한 사진 객체
   const [imageUrl, setImageUrl] = useState<string | null>(null) // 미리보기 사진 url
@@ -17,6 +33,24 @@ function AddItem() {
     'none' | 'repeat' | 'installment'
   >('none')
 
+  // 모달 열림 상태
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); // 결제 수단 설정 모달
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false) // 분류 설정 모달
+
+  // 결제 수단
+  const [methods, setMethods] = useState<PaymentMethod[]>([]); // 결제 수단
+  const [selectedMethodId, setSelectedMethodId] = useState<string | null>(null); // 결제 수단 id
+  const selectedMethodType = methods.find(m => m.id === selectedMethodId)?.type ?? '' // 결제 수단 uuid → type 변환
+
+  // 카테고리
+  const [categories, setCategories] = useState<Category[]>([])
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
+  const selectedCategoryName = categories.find(c => c.id === selectedCategoryId)?.korean_name ?? ''
+
+  // 현재 탭 상태 필터
+  const filterType = tab === '수입' ? 'income' : 'expense'
+
+
   const handleButtonClick = () => {
     // 테스트용 -> 나중에 모달 띄우게 수정
     // eslint-disable-next-line no-console
@@ -24,9 +58,37 @@ function AddItem() {
     setActiveOption('repeat')
   }
 
-  const test = () => {
-    alert('test')
-  }
+  // 결제 수단 데이터 패칭
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase
+        .from('payment_methods')
+        .select('id, type, index')
+        .order('index', { ascending: true })
+
+      if (error) {
+        console.error('결제수단 불러오기 실패:', error)
+      } else {
+        setMethods((data as PaymentMethod[]) ?? [])
+      }
+    })()
+  }, [])
+
+    // 카테고리 데이터 패칭
+    useEffect(() => {
+    (async () => {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('id, name, korean_name, type')
+
+      if (error) {
+        console.error('카테고리 불러오기 실패:', error)
+      } else {
+        setCategories((data as Category[]) ?? [])
+      }
+    })()
+  }, [])
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 파일 선택
@@ -72,9 +134,9 @@ function AddItem() {
         <div>
           <SelectField
             label="분류"
-            value={''}
+            value={selectedCategoryName}
             placeholder="분류를 선택해 주세요"
-            onClick={test}
+            onClick={() => setIsCategoryModalOpen(true)}
           />
         </div>
 
@@ -83,9 +145,9 @@ function AddItem() {
           <div>
             <SelectField
               label="수단"
-              value={''}
+              value={selectedMethodType}
               placeholder="결제수단을 선택해 주세요"
-              onClick={test}
+              onClick={() => setIsPaymentModalOpen(true)}
             />
           </div>
         )}
@@ -146,17 +208,43 @@ function AddItem() {
         <div className="flex flex-col gap-2">
           <span className="text-base text-neutral-dark font-bold">메모</span>
           <textarea
+            ref={memoRef}
             name="memo"
             id="memo"
             placeholder="메모를 입력해 주세요"
-            value={memo}
-            onChange={e => setMemo(e.target.value)}
             className="px-2.5 py-2 border-2 border-neutral-light rounded-lg focus:outline-none focus:border-primary-light placeholder:text-neutral-dark resize-none"
             rows={4}></textarea>
         </div>
 
         <SubmitButton text="작성 완료" />
       </form>
+
+      {/* 결제수단 모달 */}
+      {isPaymentModalOpen && (
+        <PaymentModal
+          methods={methods}
+          onClose={() => setIsPaymentModalOpen(false)}
+          onSelect={(id) => {
+            console.warn("선택한 결제수단 uuid:", id) // 제대로 보이는지 콘솔에서 확인
+            setSelectedMethodId(id); // 선택한 결제 수단 uuid 저장
+            setIsPaymentModalOpen(false);
+          }}
+        />
+      )}
+
+      {/* 카테고리 모달 */}
+      {isCategoryModalOpen && (
+        <CategoryModal
+          categories={categories}
+          filterType={filterType}
+          onClose={() => setIsCategoryModalOpen(false)}
+          onSelect={(id) => {
+            console.warn("선택한 카테고리 uuid:", id)
+            setSelectedCategoryId(id)
+            setIsCategoryModalOpen(false)
+          }}
+        />
+      )}
     </>
   )
 }

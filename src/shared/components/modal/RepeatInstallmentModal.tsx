@@ -137,3 +137,5 @@ function RepeatInstallmentModal({ onClose }: Props) {
   )
 }
 export default RepeatInstallmentModal
+
+// 반복 설정이나 할부 설정을 누른 순간 다른 탭에 있는 데이터 날리기

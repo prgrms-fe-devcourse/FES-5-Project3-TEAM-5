@@ -10,13 +10,13 @@ import NotFound from '@/shared/components/notFound/NotFound'
 import NotificationPage from '@/pages/notification/NotificationPage'
 import VotePage from '@/pages/vote/VotePage'
 import EditVotePage from '@/pages/vote/EditVotePage'
-// import AddItem from '@/pages/item/add/AddItem'
 
 import dayjs from 'dayjs'
 import { fetchByMonth } from '@/features/accountItem/index'
 
 import AddVotePage from '@/pages/vote/AddVotePage'
 import { Test } from '@/pages/Test'
+import AddItem from '@/pages/item/add/AddItem'
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +43,15 @@ export const router = createBrowserRouter([
           const events = await fetchByMonth(base.month())
           return { initialDate: base.startOf('day').toISOString(), events }
         }
+      },
+      {
+        path: 'item',
+        children: [
+          {
+            path: 'add',
+            Component: AddItem
+          }
+        ]
       }
     ]
   },

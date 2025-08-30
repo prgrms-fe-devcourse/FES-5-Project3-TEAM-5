@@ -8,25 +8,27 @@ import supabase from '@/supabase/supabase'
 import CategoryModal from '@/shared/components/modal/CategoryModal'
 import RepeatInstallmentModal from '@/shared/components/modal/RepeatInstallmentModal'
 
-import dayjs from "dayjs"
-import "dayjs/locale/ko"
-dayjs.locale("ko")
+import dayjs from 'dayjs'
+import 'dayjs/locale/ko'
+import { saveAccountItem } from './saveAccountItem'
+import type { RepeatInstallmentData } from './saveAccountItem'
+dayjs.locale('ko')
 
 type PaymentMethod = { // 결제 수단 타입
-  id: string;
-  type: string;
-  index: number;
-};
+  id: string
+  type: string
+  index: number
+}
 
 type Category = { // 카테고리 타입
   id: string
   name: string
   korean_name: string
-  type: "income" | "expense"
-};
+  type: 'income' | 'expense'
+}
 
 function AddItem() {
-  const formattedDate = dayjs().format("M월 D일 ddd") // 오늘 날짜 포맷
+  const formattedDate = dayjs().format('M월 D일 ddd') // 오늘 날짜 포맷
 
   const [tab, setTab] = useState<'수입' | '지출'>('수입') // 탭 상태
   const [amount, setAmount] = useState('') // 금액
@@ -36,37 +38,75 @@ function AddItem() {
   const [imageUrl, setImageUrl] = useState<string | null>(null) // 미리보기 사진 url
   const fileInputRef = useRef<HTMLInputElement>(null) // hidden 처리된 file input 클릭하기 위한 ref
 
-  const [activeOption, setActiveOption] = useState<
-    'none' | 'repeat' | 'installment'
-  >('none')
+  // 할부|반복 결제 설정하면 색깔 바뀌게 하려고 해서 남겨뒀습니다.
+  // const [activeOption, setActiveOption] = useState<
+  //   'none' | 'repeat' | 'installment'
+  // >('none')
 
   // 모달 열림 상태
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); // 결제 수단 설정 모달
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false) // 결제 수단 설정 모달
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false) // 분류 설정 모달
-  const [isRepeatInstallmentModalOpen, setIsRepeatInstallmentModalOpen] = useState(false) // 반복|할부 설정 모달
+  const [isRepeatInstallmentModalOpen, setIsRepeatInstallmentModalOpen] =
+    useState(false) // 반복|할부 설정 모달
 
   // 결제 수단
-  const [methods, setMethods] = useState<PaymentMethod[]>([]); // 결제 수단
-  const [selectedMethodId, setSelectedMethodId] = useState<string | null>(null); // 결제 수단 id
-  const selectedMethodType = methods.find(m => m.id === selectedMethodId)?.type ?? '' // 결제 수단 uuid → type 변환
+  const [methods, setMethods] = useState<PaymentMethod[]>([]) // 결제 수단
+  const [selectedMethodId, setSelectedMethodId] = useState<string | null>(null) // 결제 수단 id
+  const selectedMethodType =
+    methods.find(m => m.id === selectedMethodId)?.type ?? '' // 결제 수단 uuid → type 변환
 
   // 카테고리
   const [categories, setCategories] = useState<Category[]>([])
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
-  const selectedCategoryName = categories.find(c => c.id === selectedCategoryId)?.korean_name ?? ''
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null
+  )
+  const selectedCategoryName =
+    categories.find(c => c.id === selectedCategoryId)?.korean_name ?? ''
 
   // 현재 탭 상태 필터
   const filterType = tab === '수입' ? 'income' : 'expense'
 
   // 반복|할부 모달 데이터
-  const [repeatInstallmentData, setRepeatInstallmentData] = useState<{
-    mode: '반복' | '할부'
-    selectedPeriod: string
-    isBiMonthly: boolean
-    endDate: Date | null
-    installment: string
-  } | null>(null)
+  const [repeatInstallmentData, setRepeatInstallmentData] = useState<
+    RepeatInstallmentData | undefined
+  >(undefined)
 
+  // DB 저장
+  const handleSubmit = async () => {
+    try {
+      const { data: userData } = await supabase.auth.getUser()
+      if (!userData.user) throw new Error('로그인이 필요합니다.')
+
+      const userId = userData.user.id
+
+      const result = await saveAccountItem({
+        amount: Number(amount),
+        type: tab === '수입' ? 'income' : 'expense',
+        date: dayjs().format('YYYY-MM-DD'), // 임시로 오늘 날짜. 나중에 바꿔야됨!!!!!!!!!!!!!
+        userId,
+        groupId: '192a90cc-ca5f-48f0-a88b-dd600f618513', // 로그인 한 계정으로 만든 그룹 uuid 임시로 넣어놨음. 나중에 바꿔야됨!!!!!!!!!!!!!
+        categoryId: selectedCategoryId,
+        paymentMethodId: tab === '지출' ? selectedMethodId : null,
+        memo: memoRef.current?.value ?? null,
+        file: selectedFile,
+        repeatInstallmentData
+      })
+
+      console.warn('저장 성공:', result)
+    } catch (err) {
+      const e = err as {
+        message?: string
+        details?: string
+        hint?: string
+        code?: string
+      }
+      console.error('저장 실패 전체 에러:', e)
+      console.error('message:', e.message)
+      console.error('details:', e.details)
+      console.error('hint:', e.hint)
+      console.error('code:', e.code)
+    }
+  }
 
   // 결제 수단 데이터 패칭
   useEffect(() => {
@@ -84,8 +124,8 @@ function AddItem() {
     })()
   }, [])
 
-    // 카테고리 데이터 패칭
-    useEffect(() => {
+  // 카테고리 데이터 패칭
+  useEffect(() => {
     (async () => {
       const { data, error } = await supabase
         .from('categories')
@@ -100,12 +140,10 @@ function AddItem() {
     })()
   }, [])
 
-
   // 탭 전환 시 선택된 카테고리 초기화
   useEffect(() => {
     setSelectedCategoryId(null)
   }, [tab])
-
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 파일 선택
@@ -129,10 +167,10 @@ function AddItem() {
           options={['수입', '지출']}
         />
       </div>
-      <div className='p-4'>
+      <div className="p-4">
         {/* 날짜 */}
         <div className="mb-3">
-          <span className="text-neutral-dark font-bold">{ formattedDate }</span>
+          <span className="text-neutral-dark font-bold">{formattedDate}</span>
         </div>
 
         {/* 폼 */}
@@ -143,7 +181,6 @@ function AddItem() {
               value={amount}
               onChange={setAmount}
               onButtonClick={() => setIsRepeatInstallmentModalOpen(true)}
-              activeOption={activeOption}
               tab={tab}
             />
           </div>
@@ -234,7 +271,10 @@ function AddItem() {
               rows={4}></textarea>
           </div>
 
-          <SubmitButton text="작성 완료" />
+          <SubmitButton
+            text="작성 완료"
+            onClick={handleSubmit}
+          />
         </form>
       </div>
 
@@ -243,10 +283,10 @@ function AddItem() {
         <PaymentModal
           methods={methods}
           onClose={() => setIsPaymentModalOpen(false)}
-          onSelect={(id) => {
-            console.warn("선택한 결제수단 uuid:", id) // 제대로 보이는지 콘솔에서 확인
-            setSelectedMethodId(id); // 선택한 결제 수단 uuid 저장
-            setIsPaymentModalOpen(false);
+          onSelect={id => {
+            console.warn('선택한 결제수단 uuid:', id) // 제대로 보이는지 콘솔에서 확인
+            setSelectedMethodId(id) // 선택한 결제 수단 uuid 저장
+            setIsPaymentModalOpen(false)
           }}
         />
       )}
@@ -257,20 +297,21 @@ function AddItem() {
           categories={categories}
           filterType={filterType}
           onClose={() => setIsCategoryModalOpen(false)}
-          onSelect={(id) => {
-            console.warn("선택한 카테고리 uuid:", id) // 제대로 보이는지 콘솔에서 확인
+          onSelect={id => {
+            console.warn('선택한 카테고리 uuid:', id) // 제대로 보이는지 콘솔에서 확인
             setSelectedCategoryId(id) // 선택한 카테고리 uuid 저장
             setIsCategoryModalOpen(false)
           }}
         />
       )}
 
+      {/* 반복|할부 모달 */}
       {isRepeatInstallmentModalOpen && (
         <RepeatInstallmentModal
           onClose={() => setIsRepeatInstallmentModalOpen(false)}
           tab={tab}
-          onSave={(data) => {
-            console.warn("반복/할부 데이터:", data)
+          onSave={data => {
+            console.warn('반복/할부 데이터:', data)
             setRepeatInstallmentData(data)
             setIsRepeatInstallmentModalOpen(false)
           }}

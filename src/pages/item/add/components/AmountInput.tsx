@@ -23,7 +23,7 @@ function AmountInput({
   label = '금액',
   name = 'amount',
   onButtonClick,
-  activeOption,
+  activeOption = 'none',
   tab
 }: Props) {
   const [focused, setFocused] = useState(false) // 포커스 여부에 따라 숫자 포맷을 다르게 보여줌

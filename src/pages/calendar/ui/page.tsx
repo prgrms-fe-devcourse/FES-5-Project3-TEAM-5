@@ -10,6 +10,10 @@ import type { AccountItem } from '@/features/accountItem/index'
 import { useShallow } from 'zustand/shallow'
 import dayjs from 'dayjs'
 import { useRecurringItem } from '@/features/accountItem/service/useRecurringItem'
+import {
+  createRecurringItem,
+  fetchAllItems
+} from '@/features/accountItem/service/accountItem'
 
 interface LoaderData {
   events: AccountItem[]
@@ -20,7 +24,7 @@ export const CalendarPage = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { initialDate, events } = useLoaderData() as LoaderData
 
-  const { createRecurringItem } = useRecurringItem()
+  const { searchRecurringItem } = useRecurringItem()
 
   const [calendarEventsByDate, setCalendarEventsByDate] = useState<
     AccountItem[]
@@ -33,10 +37,32 @@ export const CalendarPage = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    events.forEach(recurringItem => {
-      createRecurringItem(recurringItem)
-    })
-  }, [events])
+    const run = async () => {
+      const all = await fetchAllItems()
+
+      const existingKeys = new Set(
+        all.map(i => {
+          const parentKey = i.recurring_parent_id ?? i.id
+          return `${parentKey}-${dayjs(i.date).format('YYYY-MM-DD')}`
+        })
+      )
+
+      const parents = all.filter(
+        i => i.recurring_rules && !i.recurring_parent_id
+      )
+      const toCreate: AccountItem[] = []
+
+      for (const parent of parents) {
+        const generated = searchRecurringItem(parent, existingKeys)
+        if (generated.length) toCreate.push(...generated)
+      }
+
+      if (toCreate.length) {
+        await createRecurringItem(toCreate)
+      }
+    }
+    run()
+  }, [])
 
   const calc = (events: AccountItem[]) =>
     events.reduce(

@@ -1,6 +1,7 @@
 import inactiveCharacter from '@/shared/assets/vote/inactiveCharacter.png'
 import activeCharacter from '@/shared/assets/vote/activeCharacter.png'
 import { motion } from 'framer-motion'
+import { tw } from '@/shared/utils/tw'
 
 interface Props {
   selectionText: string
@@ -39,12 +40,15 @@ export function ResultOption({
   return (
     <>
       <div
-        className={
-          isSelected && !isDisabled ? 'bg-primary-pale p-2 rounded-md' : 'p-2'
-        }>
+        onClick={() => handleSelect(voteId, optionId)}
+        className={tw(
+          !isDisabled
+            ? 'cursor-pointer p-2 rounded-md hover:translate-0.5 hover:shadow-md'
+            : '',
+          isSelected && !isDisabled ? 'bg-primary-pale' : 'p-2'
+        )}>
         <div className="flex items-center gap-x-2 mb-1">
           <img
-            onClick={() => handleSelect(voteId, optionId)}
             className="w-8"
             src={
               isSelected && !isDisabled ? activeCharacter : inactiveCharacter

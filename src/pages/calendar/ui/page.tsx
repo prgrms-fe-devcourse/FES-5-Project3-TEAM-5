@@ -9,6 +9,7 @@ import {
 import type { AccountItem } from '@/features/accountItem/index'
 import { useShallow } from 'zustand/shallow'
 import dayjs from 'dayjs'
+import { useRecurringItem } from '@/features/accountItem/service/useRecurringItem'
 
 interface LoaderData {
   events: AccountItem[]
@@ -19,6 +20,8 @@ export const CalendarPage = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { initialDate, events } = useLoaderData() as LoaderData
 
+  const { createRecurringItem } = useRecurringItem()
+
   const [calendarEventsByDate, setCalendarEventsByDate] = useState<
     AccountItem[]
   >([])
@@ -28,6 +31,12 @@ export const CalendarPage = () => {
   )
 
   const navigate = useNavigate()
+
+  useEffect(() => {
+    events.forEach(recurringItem => {
+      createRecurringItem(recurringItem)
+    })
+  }, [events])
 
   const calc = (events: AccountItem[]) =>
     events.reduce(

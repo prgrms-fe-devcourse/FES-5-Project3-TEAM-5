@@ -5,10 +5,19 @@ import Toggle from '../toggle/Toggle'
 import { tw } from '@/shared/utils/tw'
 import SubmitButton from '../form/SubmitButton'
 import SingleTab from '@/pages/item/add/components/SingleTab'
+import EndDateModal from './EndDateModal'
+import dayjs from 'dayjs'
 
 interface Props {
   onClose: () => void
   tab: '수입' | '지출'
+  onSave: (data: {
+    mode: '반복' | '할부'
+    selectedPeriod: string
+    isBiMonthly: boolean
+    endDate: Date | null
+    installment: string
+  }) => void
 }
 
 // 매핑 테이블
@@ -23,11 +32,14 @@ const mapping: Record<string, string> = {
   격년: '매년'
 }
 
-function RepeatInstallmentModal({ onClose, tab }: Props) {
+function RepeatInstallmentModal({ onClose, tab, onSave }: Props) {
   const [mode, setMode] = useState<'반복' | '할부'>('반복') // 탭 상태
   const [isBiMonthly, setIsBiMonthly] = useState(false) // 토글 상태
   const [selectedPeriod, setSelectedPeriod] = useState('매일') // 주기 상태
   const [installment, setInstallment] = useState('') // 할부 상태
+
+  const [endDate, setEndDate] = useState<Date | null>(null) // 종료일 상태
+  const [isEndDateModalOpen, setIsEndDateModalOpen] = useState(false) // 종료일 모달 열림 상태
 
   // 토글 상태에 따라 값 변경
   const periods = isBiMonthly
@@ -68,6 +80,7 @@ function RepeatInstallmentModal({ onClose, tab }: Props) {
             <div className="flex justify-between mt-2">
               <button
                 type="button"
+                onClick={() => setIsEndDateModalOpen(true)} // 종료일 모달 열기
                 className="flex items-center justify-center gap-2 hover:cursor-pointer">
                 <svg
                   width="18"
@@ -80,7 +93,7 @@ function RepeatInstallmentModal({ onClose, tab }: Props) {
                     fill="#BBBBBB"
                   />
                 </svg>
-                <span className="text-neutral-dark">종료일 미설정</span>
+                {endDate ? dayjs(endDate).format('YYYY.MM.DD') : '종료일 미설정'}
               </button>
 
               <div>
@@ -133,8 +146,23 @@ function RepeatInstallmentModal({ onClose, tab }: Props) {
       </div>
         {/* 완료 버튼 */}
         <div className="mt-9">
-          <SubmitButton text={mode === '반복' ? '반복 설정' : '할부 설정'} />
+          <SubmitButton
+            text={mode === '반복' ? '반복 설정' : '할부 설정'}
+            onClick={() => {
+              onSave({ mode, selectedPeriod, isBiMonthly, endDate, installment })
+            }}
+          />
         </div>
+
+        {/* 종료일 모달 */}
+        {isEndDateModalOpen && (
+          <EndDateModal
+            onClose={() => setIsEndDateModalOpen(false)}
+            onSelect={date => setEndDate(date)}
+            selectedDate={endDate}   // 이미 선택된 날짜를 넘김
+          />
+        )}
+
     </BaseModal>
   )
 }

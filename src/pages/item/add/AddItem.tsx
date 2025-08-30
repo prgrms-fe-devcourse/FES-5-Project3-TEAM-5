@@ -52,6 +52,15 @@ function AddItem() {
   // 현재 탭 상태 필터
   const filterType = tab === '수입' ? 'income' : 'expense'
 
+  // 반복|할부 모달 데이터
+  const [repeatInstallmentData, setRepeatInstallmentData] = useState<{
+    mode: '반복' | '할부'
+    selectedPeriod: string
+    isBiMonthly: boolean
+    endDate: Date | null
+    installment: string
+  } | null>(null)
+
 
   // 결제 수단 데이터 패칭
   useEffect(() => {
@@ -254,6 +263,11 @@ function AddItem() {
         <RepeatInstallmentModal
           onClose={() => setIsRepeatInstallmentModalOpen(false)}
           tab={tab}
+          onSave={(data) => {
+            console.warn("반복/할부 데이터:", data)
+            setRepeatInstallmentData(data)
+            setIsRepeatInstallmentModalOpen(false)
+          }}
         />
       )}
     </>

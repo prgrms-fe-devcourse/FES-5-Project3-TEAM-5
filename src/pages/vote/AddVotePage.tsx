@@ -1,7 +1,8 @@
 import { VoteOption, VoteQuestion } from '@/features/vote'
-import type { VoteTime } from '@/features/vote/model/requestBody'
+import type { VotesTable, VoteTime } from '@/features/vote/model/requestBody'
 import { addVote } from '@/features/vote/service/addVote'
 import { AddTimeButtonList } from '@/features/vote/ui/form/AddTimeButtonList'
+import { validateAddVote } from '@/features/vote/utils/validation'
 import SubmitButton from '@/shared/components/form/SubmitButton'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { useRef } from 'react'
@@ -13,25 +14,41 @@ function AddVotePage() {
   const firstOptionRef = useRef<HTMLInputElement>(null)
   const secondOptionRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
-
   const handleSubmit = async () => {
     const userId = useUserStore.getState().user?.id
-    const { starts_at, ends_at } = voteTimeRef.current!
+    const voteTime = voteTimeRef.current
+    const title = questionRef.current?.value
+    const firstOption = firstOptionRef.current?.value
+    const secondOption = secondOptionRef.current?.value
 
-    const newVote = {
-      title: questionRef.current!.value,
-      is_active: true,
-      starts_at: starts_at!,
-      ends_at: ends_at!,
-      user_id: userId!
+    const errorMessage = validateAddVote({
+      userId,
+      voteTime,
+      title,
+      firstOption,
+      secondOption
+    })
+
+    if (errorMessage) {
+      alert(errorMessage)
+      return
     }
-    const newOptions = [
-      firstOptionRef.current!.value,
-      secondOptionRef.current!.value
-    ]
 
-    await addVote(newVote, newOptions)
-    navigate('/vote')
+    try {
+      const newVote: VotesTable = {
+        title: title!,
+        is_active: true,
+        starts_at: voteTime!.starts_at,
+        ends_at: voteTime!.ends_at,
+        user_id: userId!
+      }
+
+      await addVote(newVote, [firstOption!, secondOption!])
+      navigate('/vote')
+    } catch (error) {
+      console.error(error)
+      alert('투표 생성 중 오류가 발생했습니다.')
+    }
   }
 
   return (

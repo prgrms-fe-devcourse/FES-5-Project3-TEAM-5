@@ -64,7 +64,6 @@ export const initializeUser = async (
 
   if (currentUser) {
     await get().getUserData(currentUser)
-    console.log('currentUser' + currentUser)
   }
 
   // 세션 변경 감지

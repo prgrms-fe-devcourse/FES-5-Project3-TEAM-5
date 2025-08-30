@@ -1,14 +1,14 @@
 import AddBtn from '@/features/group/AddBtn'
 import GroupCard from '@/features/group/GroupCard'
+import Name from '@/features/group/Name'
+import NumberGroup from '@/features/group/NumberGroup'
 import ThisMonthCard from '@/features/group/ThisMonthCard'
 
 function Home() {
   return (
-    <div className="">
+    <div className="mb-20">
       <div className="bg-primary-light w-full h-45 rounded-bl-xl rounded-br-xl px-2 py-6 shadow-lg">
-        <h1 className="font-semibold text-black text-lg sm:ml-5 ml-4">
-          가계부 이름임돠
-        </h1>
+        <Name />
         <div className="flex justify-between mt-8 sm:mx-6 mx-3">
           <ThisMonthCard
             type="수입"
@@ -21,11 +21,11 @@ function Home() {
         </div>
       </div>
       <div className="px-4 py-2.5">
-        <div className="flex justify-between items-center mb-3">
-          <p className="text-neutral-dark pb-1">{}개의 가계부</p>
+        <div className="flex justify-between items-center mb-5 md:mx-4 md:mt-2">
+          <NumberGroup />
           <AddBtn />
         </div>
-        <div className="flex sm:flex-row flex-col flex-wrap">
+        <div className="flex flex-row justify-between flex-wrap gap-5 md:mx-4">
           <GroupCard />
         </div>
       </div>

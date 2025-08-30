@@ -16,13 +16,14 @@ async function getTotalVoteData() {
   }
   return data ?? []
 }
+
 export async function fetchVoteData(): Promise<TotalVote[]> {
   const response = await getTotalVoteData()
   const userId = useUserStore.getState().user?.id
 
   const data: TotalVote[] = await Promise.all(
     response!.map(async vote => {
-      const mySelect = await fetchMySelectOption(vote.id)
+      const mySelect = await fetchMySelectOption(vote.id, userId)
 
       return {
         ...vote,
@@ -39,8 +40,7 @@ export async function fetchVoteData(): Promise<TotalVote[]> {
   return data
 }
 
-export async function fetchMySelectOption(vote_id: string) {
-  const userId = useUserStore.getState().user?.id
+export async function fetchMySelectOption(vote_id: string, userId?: string) {
   if (!userId) {
     return []
   }

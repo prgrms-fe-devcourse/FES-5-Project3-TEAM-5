@@ -7,6 +7,7 @@ import {
   sortByDeadlineDesc,
   filterMyVote
 } from '../../utils/filterVoteList'
+import { useUserStore } from '@/shared/stores/useUserStore'
 
 interface Props {
   voteList: TotalVote[]
@@ -14,6 +15,7 @@ interface Props {
 }
 
 export function SortButtonList({ voteList, setFilteredList }: Props) {
+  const userId = useUserStore.getState().user?.id
   const [sortButtonData, setSortButtonData] = useState([
     { id: 'total', text: '전체', status: 'active' },
     { id: 'myVote', text: '내 투표', status: 'inactive' },
@@ -27,7 +29,7 @@ export function SortButtonList({ voteList, setFilteredList }: Props) {
         setFilteredList(sortByDeadlineDesc(voteList))
         break
       case 'myVote':
-        setFilteredList(filterMyVote(voteList))
+        setFilteredList(filterMyVote(voteList, userId))
         break
       case 'hot':
         setFilteredList(sortByParticipantsDesc(voteList))

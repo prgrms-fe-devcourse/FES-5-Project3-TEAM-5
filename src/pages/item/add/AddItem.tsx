@@ -253,6 +253,7 @@ function AddItem() {
       {isRepeatInstallmentModalOpen && (
         <RepeatInstallmentModal
           onClose={() => setIsRepeatInstallmentModalOpen(false)}
+          tab={tab}
         />
       )}
     </>

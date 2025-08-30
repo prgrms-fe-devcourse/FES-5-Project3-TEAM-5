@@ -4,9 +4,11 @@ import BinaryTabs from '@/pages/item/add/components/BinaryTabs'
 import Toggle from '../toggle/Toggle'
 import { tw } from '@/shared/utils/tw'
 import SubmitButton from '../form/SubmitButton'
+import SingleTab from '@/pages/item/add/components/SingleTab'
 
 interface Props {
   onClose: () => void
+  tab: '수입' | '지출'
 }
 
 // 매핑 테이블
@@ -21,8 +23,8 @@ const mapping: Record<string, string> = {
   격년: '매년'
 }
 
-function RepeatInstallmentModal({ onClose }: Props) {
-  const [tab, setTab] = useState<'반복' | '할부'>('반복') // 탭 상태
+function RepeatInstallmentModal({ onClose, tab }: Props) {
+  const [mode, setMode] = useState<'반복' | '할부'>('반복') // 탭 상태
   const [isBiMonthly, setIsBiMonthly] = useState(false) // 토글 상태
   const [selectedPeriod, setSelectedPeriod] = useState('매일') // 주기 상태
   const [installment, setInstallment] = useState('') // 할부 상태
@@ -52,15 +54,15 @@ function RepeatInstallmentModal({ onClose }: Props) {
       <div className="min-h-[130px]">
         {/* 상단 탭 */}
         <div className="mt-5">
-          <BinaryTabs
-            value={tab}
-            onChange={setTab}
-            options={['반복', '할부']}
-          />
+          {tab === '지출' ? (
+            <BinaryTabs value={mode} onChange={setMode} options={['반복', '할부']} />
+          ) : (
+            <SingleTab label="반복" />
+          )}
         </div>
 
         {/* 반복 탭일 때 */}
-        {tab === '반복' && (
+        {mode === '반복' && (
           <>
             {/* 종료일 + 토글 */}
             <div className="flex justify-between mt-2">
@@ -111,8 +113,8 @@ function RepeatInstallmentModal({ onClose }: Props) {
           </>
         )}
 
-        {/* 할부 탭일 때 */}
-        {tab === '할부' && (
+        {/* 지출 + 할부 탭일 때 */}
+        {tab === '지출' && mode === '할부' && (
           <div className="mt-4">
             <label className="block mb-2 text-neutral-dark font-bold">
               할부 개월 수
@@ -131,7 +133,7 @@ function RepeatInstallmentModal({ onClose }: Props) {
       </div>
         {/* 완료 버튼 */}
         <div className="mt-9">
-          <SubmitButton text={tab === '반복' ? '반복 설정' : '할부 설정'} />
+          <SubmitButton text={mode === '반복' ? '반복 설정' : '할부 설정'} />
         </div>
     </BaseModal>
   )

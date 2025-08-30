@@ -6,7 +6,7 @@ import InviteList from './InviteList'
 import type { Users } from './type/type'
 import { debounce } from '@/shared/utils/debounce'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
-import deleteBtn from '@/shared/assets/icons/delete.svg'
+import deleteBtn from '@/shared/assets/icons/delete.svg'
 
 interface Props {
   selectedUserList: Users[]

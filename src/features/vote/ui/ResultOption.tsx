@@ -33,8 +33,9 @@ export function ResultOption({
     }
   }
   const percentage =
-    totalParticipants === 0 ? 0 : (optionParticipants / totalParticipants) * 100
-
+    totalParticipants === 0
+      ? 0
+      : Math.round((optionParticipants / totalParticipants) * 100)
   return (
     <>
       <div
@@ -61,7 +62,9 @@ export function ResultOption({
                 : 'h-2 bg-neutral-dark rounded-md'
             }
             initial={{ width: '0%' }}
-            animate={{ width: `${isParticipant ? percentage : 100}%` }}
+            animate={{
+              width: `${isParticipant || isDisabled ? percentage : 100}%`
+            }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           />
         </div>

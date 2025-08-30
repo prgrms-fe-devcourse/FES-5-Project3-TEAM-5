@@ -1,9 +1,8 @@
-import { useUserStore } from '@/shared/stores/useUserStore'
 import type { TotalVote } from '../model/responseBody'
 
-export function filterMyVote(selections?: TotalVote[]) {
-  if (!selections) return []
-  const userId = useUserStore.getState().user?.id
+export function filterMyVote(selections?: TotalVote[], userId?: string) {
+  if (!selections || !userId) return []
+
   return selections.filter(selection => selection.user_id === userId)
 }
 

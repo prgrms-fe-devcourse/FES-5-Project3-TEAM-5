@@ -1,6 +1,7 @@
 import inactiveCharacter from '@/shared/assets/vote/inactiveCharacter.png'
 import activeCharacter from '@/shared/assets/vote/activeCharacter.png'
 import { motion } from 'framer-motion'
+import { tw } from '@/shared/utils/tw'
 
 interface Props {
   selectionText: string
@@ -33,17 +34,21 @@ export function ResultOption({
     }
   }
   const percentage =
-    totalParticipants === 0 ? 0 : (optionParticipants / totalParticipants) * 100
-
+    totalParticipants === 0
+      ? 0
+      : Math.round((optionParticipants / totalParticipants) * 100)
   return (
     <>
       <div
-        className={
-          isSelected && !isDisabled ? 'bg-primary-pale p-2 rounded-md' : 'p-2'
-        }>
+        onClick={() => handleSelect(voteId, optionId)}
+        className={tw(
+          !isDisabled
+            ? 'cursor-pointer p-2 rounded-md hover:translate-0.5 hover:shadow-md'
+            : '',
+          isSelected && !isDisabled ? 'bg-primary-pale' : 'p-2'
+        )}>
         <div className="flex items-center gap-x-2 mb-1">
           <img
-            onClick={() => handleSelect(voteId, optionId)}
             className="w-8"
             src={
               isSelected && !isDisabled ? activeCharacter : inactiveCharacter
@@ -61,7 +66,9 @@ export function ResultOption({
                 : 'h-2 bg-neutral-dark rounded-md'
             }
             initial={{ width: '0%' }}
-            animate={{ width: `${isParticipant ? percentage : 100}%` }}
+            animate={{
+              width: `${isParticipant || isDisabled ? percentage : 100}%`
+            }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
           />
         </div>

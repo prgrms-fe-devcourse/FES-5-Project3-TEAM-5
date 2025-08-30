@@ -6,6 +6,7 @@ import SelectField from './components/SelectField'
 import PaymentModal from '@/shared/components/modal/PaymentModal'
 import supabase from '@/supabase/supabase'
 import CategoryModal from '@/shared/components/modal/CategoryModal'
+import RepeatInstallmentModal from '@/shared/components/modal/RepeatInstallmentModal'
 
 type PaymentMethod = { // 결제 수단 타입
   id: string;
@@ -36,6 +37,7 @@ function AddItem() {
   // 모달 열림 상태
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); // 결제 수단 설정 모달
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false) // 분류 설정 모달
+  const [isRepeatInstallmentModalOpen, setIsRepeatInstallmentModalOpen] = useState(false) // 반복|할부 설정 모달
 
   // 결제 수단
   const [methods, setMethods] = useState<PaymentMethod[]>([]); // 결제 수단
@@ -50,13 +52,6 @@ function AddItem() {
   // 현재 탭 상태 필터
   const filterType = tab === '수입' ? 'income' : 'expense'
 
-
-  // 테스트용 -> 나중에 모달 띄우게 수정
-  const handleButtonClick = () => {
-    // eslint-disable-next-line no-console
-    console.log('버튼이 눌렸습니다.')
-    setActiveOption('repeat')
-  }
 
   // 결제 수단 데이터 패칭
   useEffect(() => {
@@ -89,6 +84,12 @@ function AddItem() {
       }
     })()
   }, [])
+
+
+  // 탭 전환 시 선택된 카테고리 초기화
+  useEffect(() => {
+    setSelectedCategoryId(null)
+  }, [tab])
 
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,7 +127,7 @@ function AddItem() {
           <AmountInput
             value={amount}
             onChange={setAmount}
-            onButtonClick={handleButtonClick}
+            onButtonClick={() => setIsRepeatInstallmentModalOpen(true)}
             activeOption={activeOption}
           />
         </div>
@@ -244,6 +245,12 @@ function AddItem() {
             setSelectedCategoryId(id) // 선택한 카테고리 uuid 저장
             setIsCategoryModalOpen(false)
           }}
+        />
+      )}
+
+      {isRepeatInstallmentModalOpen && (
+        <RepeatInstallmentModal
+          onClose={() => setIsRepeatInstallmentModalOpen(false)}
         />
       )}
     </>

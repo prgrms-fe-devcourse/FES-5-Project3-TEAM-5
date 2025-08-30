@@ -8,6 +8,10 @@ import supabase from '@/supabase/supabase'
 import CategoryModal from '@/shared/components/modal/CategoryModal'
 import RepeatInstallmentModal from '@/shared/components/modal/RepeatInstallmentModal'
 
+import dayjs from "dayjs"
+import "dayjs/locale/ko"
+dayjs.locale("ko")
+
 type PaymentMethod = { // 결제 수단 타입
   id: string;
   type: string;
@@ -22,6 +26,8 @@ type Category = { // 카테고리 타입
 };
 
 function AddItem() {
+  const formattedDate = dayjs().format("M월 D일 ddd") // 오늘 날짜 포맷
+
   const [tab, setTab] = useState<'수입' | '지출'>('수입') // 탭 상태
   const [amount, setAmount] = useState('') // 금액
   const memoRef = useRef<HTMLTextAreaElement>(null) // 메모 내용
@@ -126,7 +132,7 @@ function AddItem() {
       <div className='p-4'>
         {/* 날짜 */}
         <div className="mb-3">
-          <span className="text-neutral-dark font-bold">11월 22일 토</span>
+          <span className="text-neutral-dark font-bold">{ formattedDate }</span>
         </div>
 
         {/* 폼 */}

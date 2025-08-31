@@ -1,6 +1,7 @@
 import { ExpenseButton } from '@/shared/components/expenseButton/expenseButton'
 import { formatPriceNumber } from '@/shared/utils/format'
 import { tw } from '@/shared/utils/tw'
+import { Badge } from './Badge'
 
 export type IconType =
   | 'beauty'
@@ -50,9 +51,17 @@ interface Props {
   icon: IconType
   amount: number
   type: 'income' | 'expense'
+  recurring: boolean
+  installment: boolean
 }
 
-export const ListItem = ({ icon, amount, type }: Props) => {
+export const ListItem = ({
+  icon,
+  amount,
+  type,
+  recurring,
+  installment
+}: Props) => {
   return (
     <div className="w-full border-b border-neutral-light p-2.5 flex justify-between items-center">
       <div className="flex items-center gap-2.5 text-size-md">
@@ -63,6 +72,10 @@ export const ListItem = ({ icon, amount, type }: Props) => {
           />
         </div>
         <div>{iconMap[icon]}</div>
+        <div className="flex items-center gap-1">
+          {recurring && <Badge variant="repeat">반복</Badge>}
+          {installment && <Badge variant="installment">할부</Badge>}
+        </div>
       </div>
       <div
         className={tw(

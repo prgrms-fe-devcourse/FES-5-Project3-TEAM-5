@@ -89,6 +89,8 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
               {events.map(item => (
                 <ListItem
                   key={item.id}
+                  recurring={!!item.recurring_rule_id}
+                  installment={!!item.installment_plan_id}
                   icon={item.categories?.name as IconType}
                   amount={Number(item.amount)}
                   type={item.type}

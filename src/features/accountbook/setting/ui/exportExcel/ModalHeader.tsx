@@ -6,7 +6,7 @@ interface Props {
 
 function ModalHeader({ closeModal }: Props) {
   return (
-    <div className="flex justify-between relative">
+    <div className="flex justify-between relative  mb-4">
       <h2 className="flex-1 text-center text-[22px] font-bold text-black">
         엑셀 내보내기
       </h2>

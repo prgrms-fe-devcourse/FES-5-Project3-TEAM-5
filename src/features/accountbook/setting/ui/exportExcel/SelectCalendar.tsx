@@ -33,8 +33,8 @@ export default function SelectCalendar() {
   }, [selectedMonth])
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="flex gap-16">
+    <div className="flex flex-col items-center gap-2">
+      <div className="flex gap-16 mb-4">
         {/* 년도 리스트 */}
 
         <div className="flex flex-col items-center">

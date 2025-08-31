@@ -83,6 +83,19 @@ export const router = createBrowserRouter([
             Component: SettingPage
           }
         ]
+      },
+      {
+        path: '/accountBook/item',
+        children: [
+          {
+            path: 'add',
+            Component: AddItem,
+            handle: {
+              title: '가계부 작성',
+              hideNav: true
+            }
+          }
+        ]
       }
     ]
   },

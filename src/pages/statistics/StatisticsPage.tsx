@@ -14,19 +14,33 @@ export default function StatisticsPage() {
 
   const { events } = useLoaderData() as { events: AccountItem[] }
 
-  const incomeCategories = events.filter(event => event.type === 'income')
-  const expenseCategories = events.filter(event => event.type === 'expense')
-
   const handleDetail = (type: 'income' | 'expense') => {
     navigate(`/accountBook/statistics/detail/${type}`)
   }
+
+  const result = Object.values(
+    events.reduce<Record<string, AccountItem>>((acc, event) => {
+      const name = event.categories?.name ?? '기타'
+      const amount = Number(event.amount)
+
+      if (acc[name]) {
+        acc[name].amount = Number(acc[name].amount) + amount
+      } else {
+        acc[name] = { ...event, amount }
+      }
+      return acc
+    }, {})
+  )
+
+  const incomeCategories = result.filter(event => event.type === 'income')
+  const expenseCategories = result.filter(event => event.type === 'expense')
 
   return (
     <div className="w-full min-h-[618px] px-5 py-2.5 flex flex-col gap-8">
       <p className="text-size-xl font-bold">
         {startDate} ~ {endDate}
       </p>
-      <div>
+      <div className="flex flex-col gap-4">
         <div className="flex justify-between text-size-2xl font-bold">
           <p>수입 카테고리</p>
           <p className="text-secondary-green">
@@ -38,33 +52,47 @@ export default function StatisticsPage() {
             )}
           </p>
         </div>
-        <div className="flex justify-center">
-          <PieChartItem
-            type="income"
-            data={incomeCategories}
-            onClick={() => handleDetail('income')}
-          />
+        <div>
+          <div
+            className="cursor-pointer hover:underline"
+            onClick={() => handleDetail('income')}>
+            자세히 보기
+          </div>
+          <div className="flex justify-center">
+            <PieChartItem
+              type="income"
+              data={incomeCategories}
+            />
+          </div>
         </div>
       </div>
 
       <div>
-        <div className="flex justify-between text-size-2xl font-bold">
-          <p>지출 카테고리</p>
-          <p className="text-secondary-red">
-            {formatPriceNumber(
-              expenseCategories.reduce(
-                (acc, curr) => acc + Number(curr.amount),
-                0
-              )
-            )}
-          </p>
-        </div>
-        <div className="flex justify-center">
-          <PieChartItem
-            type="expense"
-            data={expenseCategories}
-            onClick={() => handleDetail('expense')}
-          />
+        <div className="flex flex-col gap-4">
+          <div className="flex justify-between text-size-2xl font-bold">
+            <p>지출 카테고리</p>
+            <p className="text-secondary-red">
+              {formatPriceNumber(
+                expenseCategories.reduce(
+                  (acc, curr) => acc + Number(curr.amount),
+                  0
+                )
+              )}
+            </p>
+          </div>
+          <div>
+            <div
+              className="cursor-pointer hover:underline"
+              onClick={() => handleDetail('expense')}>
+              자세히 보기
+            </div>
+            <div className="flex justify-center">
+              <PieChartItem
+                type="expense"
+                data={expenseCategories}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>

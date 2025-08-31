@@ -14,7 +14,21 @@ export default function StatisticsDetailPage() {
   const startDate = dayjs(date).startOf('month').format('MM-DD')
   const endDate = dayjs(date).endOf('month').format('MM-DD')
 
-  const categories = events.filter(event => event.type === type)
+  const result = Object.values(
+    events.reduce<Record<string, AccountItem>>((acc, event) => {
+      const name = event.categories?.name ?? '기타'
+      const amount = Number(event.amount)
+
+      if (acc[name]) {
+        acc[name].amount = Number(acc[name].amount) + amount
+      } else {
+        acc[name] = { ...event, amount }
+      }
+      return acc
+    }, {})
+  )
+
+  const categories = result.filter(event => event.type === type)
 
   const handleBack = () => {
     navigate(-1)

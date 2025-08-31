@@ -9,6 +9,12 @@ import {
 import type { AccountItem } from '@/features/accountItem/index'
 import { useShallow } from 'zustand/shallow'
 import dayjs from 'dayjs'
+import { useRecurringItem } from '@/features/accountItem/service/useRecurringItem'
+import {
+  createRecurringItem,
+  fetchAllItems
+} from '@/features/accountItem/service/accountItem'
+import AddButton from '@/shared/components/buttons/AddButton'
 
 interface LoaderData {
   events: AccountItem[]
@@ -18,6 +24,8 @@ interface LoaderData {
 export const CalendarPage = () => {
   const [isOpen, setIsOpen] = useState(false)
   const { initialDate, events } = useLoaderData() as LoaderData
+
+  const { searchRecurringItem } = useRecurringItem()
 
   const [calendarEventsByDate, setCalendarEventsByDate] = useState<
     AccountItem[]
@@ -29,6 +37,35 @@ export const CalendarPage = () => {
 
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const run = async () => {
+      const all = await fetchAllItems()
+
+      const existingKeys = new Set(
+        all.map(i => {
+          const parentKey = i.recurring_parent_id ?? i.id
+          return `${parentKey}-${dayjs(i.date).format('YYYY-MM-DD')}`
+        })
+      )
+
+      const parents = all.filter(
+        i => i.recurring_rules && !i.recurring_parent_id
+      )
+      const toCreate: AccountItem[] = []
+
+      for (const parent of parents) {
+        const generated = searchRecurringItem(parent, existingKeys)
+        if (generated.length) toCreate.push(...generated)
+      }
+
+      if (toCreate.length) {
+        await createRecurringItem(toCreate)
+      }
+    }
+    run()
+  }, [])
+
+  console.log(events)
   const calc = (events: AccountItem[]) =>
     events.reduce(
       (a, c) => {
@@ -72,6 +109,13 @@ export const CalendarPage = () => {
           setIsOpen={setIsOpen}
           events={calendarEventsByDate}
         />
+      </div>
+      <div className="pointer-events-none fixed inset-x-0 bottom-20 z-[1001]">
+        <div className="relative mx-auto w-full max-w-[420px] px-4">
+          <div className="pointer-events-auto absolute right-3 bottom-0">
+            <AddButton onClick={() => navigate('/accountBook/item/add')} />
+          </div>
+        </div>
       </div>
     </div>
   )

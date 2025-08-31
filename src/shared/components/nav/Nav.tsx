@@ -5,7 +5,7 @@ import { tw } from '@/shared/utils/tw'
 function Nav() {
   const items = [
     { to: '/', label: '홈', Icon: HomeIcon },
-    { to: '/accountBook', label: '가계부', Icon: BookIcon },
+    { to: '/accountBook/calendar', label: '가계부', Icon: BookIcon },
     { to: '/vote', label: '투표', Icon: VoteIcon },
     { to: '/more', label: '더보기', Icon: MoreIcon }
   ]

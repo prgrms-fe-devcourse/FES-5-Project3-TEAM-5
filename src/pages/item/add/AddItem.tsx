@@ -12,15 +12,19 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 import { saveAccountItem } from './saveAccountItem'
 import type { RepeatInstallmentData } from './saveAccountItem'
+import { useSelectedDate } from '@/features/calendar'
+import { useNavigate } from 'react-router'
 dayjs.locale('ko')
 
-type PaymentMethod = { // 결제 수단 타입
+type PaymentMethod = {
+  // 결제 수단 타입
   id: string
   type: string
   index: number
 }
 
-type Category = { // 카테고리 타입
+type Category = {
+  // 카테고리 타입
   id: string
   name: string
   korean_name: string
@@ -28,7 +32,8 @@ type Category = { // 카테고리 타입
 }
 
 function AddItem() {
-  const formattedDate = dayjs().format('M월 D일 ddd') // 오늘 날짜 포맷
+  const date = useSelectedDate(s => s.date)
+  const formattedDate = dayjs(date).format('M월 D일 ddd')
 
   const [tab, setTab] = useState<'수입' | '지출'>('수입') // 탭 상태
   const [amount, setAmount] = useState('') // 금액
@@ -37,6 +42,8 @@ function AddItem() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null) // 업로드한 사진 객체
   const [imageUrl, setImageUrl] = useState<string | null>(null) // 미리보기 사진 url
   const fileInputRef = useRef<HTMLInputElement>(null) // hidden 처리된 file input 클릭하기 위한 ref
+
+  const nav = useNavigate()
 
   // 할부|반복 결제 설정하면 색깔 바뀌게 하려고 해서 남겨뒀습니다.
   // const [activeOption, setActiveOption] = useState<
@@ -82,7 +89,7 @@ function AddItem() {
       const result = await saveAccountItem({
         amount: Number(amount),
         type: tab === '수입' ? 'income' : 'expense',
-        date: dayjs().format('YYYY-MM-DD'), // 임시로 오늘 날짜. 나중에 바꿔야됨!!!!!!!!!!!!!
+        date: dayjs(date).format('YYYY-MM-DD'),
         userId,
         groupId: '192a90cc-ca5f-48f0-a88b-dd600f618513', // 로그인 한 계정으로 만든 그룹 uuid 임시로 넣어놨음. 나중에 바꿔야됨!!!!!!!!!!!!!
         categoryId: selectedCategoryId,
@@ -91,6 +98,7 @@ function AddItem() {
         file: selectedFile,
         repeatInstallmentData
       })
+      nav('/accountBook/calendar', { replace: true })
 
       console.warn('저장 성공:', result)
     } catch (err) {
@@ -110,7 +118,7 @@ function AddItem() {
 
   // 결제 수단 데이터 패칭
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const { data, error } = await supabase
         .from('payment_methods')
         .select('id, type, index')
@@ -126,7 +134,7 @@ function AddItem() {
 
   // 카테고리 데이터 패칭
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       const { data, error } = await supabase
         .from('categories')
         .select('id, name, korean_name, type, index')

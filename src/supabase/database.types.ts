@@ -26,6 +26,7 @@ export type Database = {
           memo: string | null
           payment_method_id: string | null
           receipt_url: string | null
+          recurring_parent_id: string | null
           recurring_rule_id: string | null
           type: string
           user_id: string
@@ -41,6 +42,7 @@ export type Database = {
           memo?: string | null
           payment_method_id?: string | null
           receipt_url?: string | null
+          recurring_parent_id?: string | null
           recurring_rule_id?: string | null
           type: string
           user_id: string
@@ -56,6 +58,7 @@ export type Database = {
           memo?: string | null
           payment_method_id?: string | null
           receipt_url?: string | null
+          recurring_parent_id?: string | null
           recurring_rule_id?: string | null
           type?: string
           user_id?: string
@@ -90,6 +93,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "account_items_recurring_parent_id_fkey"
+            columns: ["recurring_parent_id"]
+            isOneToOne: false
+            referencedRelation: "account_items"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "account_items_recurring_rule_id_fkey"
             columns: ["recurring_rule_id"]
             isOneToOne: false
@@ -108,21 +118,24 @@ export type Database = {
       categories: {
         Row: {
           id: string
+          index: number
           korean_name: string | null
           name: string
-          type: Database["public"]["Enums"]["TransactionType"] | null
+          type: string
         }
         Insert: {
           id?: string
+          index: number
           korean_name?: string | null
           name: string
-          type?: Database["public"]["Enums"]["TransactionType"] | null
+          type: string
         }
         Update: {
           id?: string
+          index?: number
           korean_name?: string | null
           name?: string
-          type?: Database["public"]["Enums"]["TransactionType"] | null
+          type?: string
         }
         Relationships: []
       }
@@ -208,7 +221,7 @@ export type Database = {
           is_group: boolean | null
           is_main: boolean | null
           mascot: string | null
-          name: string
+          name: string | null
           user_id: string | null
         }
         Insert: {
@@ -217,7 +230,7 @@ export type Database = {
           is_group?: boolean | null
           is_main?: boolean | null
           mascot?: string | null
-          name: string
+          name?: string | null
           user_id?: string | null
         }
         Update: {
@@ -226,7 +239,7 @@ export type Database = {
           is_group?: boolean | null
           is_main?: boolean | null
           mascot?: string | null
-          name?: string
+          name?: string | null
           user_id?: string | null
         }
         Relationships: [
@@ -304,14 +317,17 @@ export type Database = {
       payment_methods: {
         Row: {
           id: string
+          index: number
           type: string
         }
         Insert: {
           id?: string
+          index?: never
           type: string
         }
         Update: {
           id?: string
+          index?: never
           type?: string
         }
         Relationships: []
@@ -358,17 +374,17 @@ export type Database = {
       recurring_rules: {
         Row: {
           end_date: string | null
-          frequency: string
+          frequency: Database["public"]["Enums"]["RecurringType"] | null
           id: string
         }
         Insert: {
           end_date?: string | null
-          frequency: string
+          frequency?: Database["public"]["Enums"]["RecurringType"] | null
           id?: string
         }
         Update: {
           end_date?: string | null
-          frequency?: string
+          frequency?: Database["public"]["Enums"]["RecurringType"] | null
           id?: string
         }
         Relationships: []
@@ -512,6 +528,15 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      RecurringType:
+        | "daily"
+        | "weekly"
+        | "monthly"
+        | "yearly"
+        | "twoDays"
+        | "twoWeeks"
+        | "twoMonths"
+        | "twoYears"
       TransactionType: "income" | "expense"
     }
     CompositeTypes: {
@@ -640,6 +665,16 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      RecurringType: [
+        "daily",
+        "weekly",
+        "monthly",
+        "yearly",
+        "twoDays",
+        "twoWeeks",
+        "twoMonths",
+        "twoYears",
+      ],
       TransactionType: ["income", "expense"],
     },
   },

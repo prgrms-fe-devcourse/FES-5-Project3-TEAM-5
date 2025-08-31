@@ -1,9 +1,10 @@
 interface Props {
   onClick: () => void
   activeOption?: 'none' | 'repeat' | 'installment';
+  tab: '수입' | '지출'
 }
 
-function RepeatButton({ onClick, activeOption = 'none' }:Props) {
+function RepeatButton({ onClick, activeOption = 'none', tab }:Props) {
   return (
     <button type="button" onClick={onClick} className="flex items-center gap-1 hover:cursor-pointer">
       <svg width="15" height="15" viewBox="0 0 15 15" className={activeOption !== 'none' ? 'text-primary-base' : 'text-neutral-DEFAULT'} fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -12,8 +13,20 @@ function RepeatButton({ onClick, activeOption = 'none' }:Props) {
       </svg>
 
       <span className={activeOption === 'repeat' ? 'text-primary-base' : 'text-neutral-DEFAULT'}>반복</span>
-      <span className="text-neutral-DEFAULT"> | </span>
-      <span className={activeOption === 'installment' ? 'text-primary-base' : 'text-neutral-DEFAULT'}>할부</span>
+      {tab === '지출' && (
+        <>
+          <span className="text-neutral-DEFAULT"> | </span>
+          <span
+            className={
+              activeOption === 'installment'
+                ? 'text-primary-base'
+                : 'text-neutral-DEFAULT'
+            }
+          >
+            할부
+          </span>
+        </>
+      )}
     </button>
   )
 }

@@ -13,7 +13,7 @@ function Nav() {
   return (
     <nav
       aria-label="하단 내비게이션"
-      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[420px] h-[60px] border-t border-t-neutral-light bg-white">
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[420px] h-[60px] border-t border-t-neutral-light bg-white z-999">
       <ul className="flex">
         {items.map(({ to, label, Icon }) => (
           <li

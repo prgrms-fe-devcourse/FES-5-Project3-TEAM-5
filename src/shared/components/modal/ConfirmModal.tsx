@@ -3,6 +3,7 @@ import momo from '@/shared/assets/momo/momo-cry-loud.png'
 import BaseModal from './BaseModal'
 
 interface Props {
+  open: boolean
   title: string
   lines: [string, string]
   onConfirm: () => void
@@ -12,6 +13,7 @@ interface Props {
 }
 
 function ConfirmModal({
+  open,
   title,
   lines,
   onConfirm,
@@ -30,7 +32,7 @@ function ConfirmModal({
   }, [onConfirm])
 
   return (
-    <BaseModal onClose={onCancel}>
+    <BaseModal isOpen={open} onClose={onCancel}>
       {/* 제목 */}
       <h2 className="text-center text-[22px] font-bold text-black">{title}</h2>
 

@@ -5,12 +5,13 @@ import { tw } from '@/shared/utils/tw'
 import Dropdown from './Dropdown'
 
 interface Props {
+  open: boolean
   onClose: () => void
   onSelect: (date: Date) => void
   selectedDate?: Date | null // 현재 선택된 종료일
 }
 
-function EndDateModal({ onClose, onSelect, selectedDate }: Props) {
+function EndDateModal({ open, onClose, onSelect, selectedDate }: Props) {
   const today = dayjs()
 
   // 선택된 날짜가 있으면 해당 날짜로, 없으면 오늘 날짜
@@ -61,7 +62,7 @@ function EndDateModal({ onClose, onSelect, selectedDate }: Props) {
   const months = Array.from({ length: 12 }, (_, i) => i + 1)
 
   return (
-    <BaseModal onClose={onClose}>
+    <BaseModal isOpen={open} onClose={onClose}>
       <div>
         {/* 상단 헤더 (연/월 드롭다운) */}
         <div className="flex items-center justify-center gap-2 mb-4">

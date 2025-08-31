@@ -9,17 +9,18 @@ type Category = {
 }
 
 interface Props {
+  open: boolean
   onClose: () => void
   onSelect: (id: string) => void
   categories: Category[]
   filterType: "income" | "expense"
 }
 
-function CategoryModal({ onClose, onSelect, categories, filterType }: Props) {
+function CategoryModal({ open, onClose, onSelect, categories, filterType }: Props) {
   const filtered = categories.filter(c => c.type === filterType)
 
   return (
-    <BaseModal onClose={onClose}>
+    <BaseModal isOpen={open} onClose={onClose}>
       <h2 className="text-center text-[22px] font-bold text-black">카테고리 설정</h2>
 
       <div className="mt-6 grid grid-cols-4 gap-2">

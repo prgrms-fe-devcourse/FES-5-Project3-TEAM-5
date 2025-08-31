@@ -10,6 +10,7 @@ interface Props {
 }
 
 function BaseModal({ isOpen, children, onClose }: Props) {
+  const modalRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // 스크롤 잠금
@@ -29,8 +30,15 @@ function BaseModal({ isOpen, children, onClose }: Props) {
 
     // esc 닫기
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-      // else if (e.key === 'Enter') onClose()
+      if (e.key === 'Escape') {
+        // 현재 모달이 최상위일 때만 닫기
+        const modals = document.querySelectorAll('[data-modal="open"]')
+        const topModal = modals[modals.length - 1] as HTMLElement | undefined
+
+        if (modalRef.current && topModal === modalRef.current) {
+          onClose()
+        }
+      }
     }
 
     if (isOpen) {
@@ -76,6 +84,8 @@ function BaseModal({ isOpen, children, onClose }: Props) {
               >
                 {/* 모달 박스 */}
                 <motion.div
+                  ref={modalRef}
+                  data-modal="open"
                   onClick={e => e.stopPropagation()}
                   className="w-full max-w-[420px] rounded-t-xl bg-white p-5"
                   initial={{ y: "100%", opacity: 0 }}

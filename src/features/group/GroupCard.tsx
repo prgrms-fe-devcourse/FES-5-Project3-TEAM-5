@@ -1,17 +1,19 @@
 import { useUserStore } from '@/shared/stores/useUserStore'
 import supabase from '@/supabase/supabase'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
 import type { Group } from './create/type/type'
 import { mascotList } from './create/data/mascots'
 import checkIcon from '@/shared/assets/checkIcon.svg'
 import Loading from '@/shared/components/loading/Loading'
+import { useNavigate } from 'react-router'
 
-function GroupCard() {
+const GroupCard = React.memo(() => {
   const [groups, setGroups] = useState<Group[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   const user = useUserStore(useShallow(state => state.user))
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!user?.id) return
@@ -35,6 +37,10 @@ function GroupCard() {
     fetchSelect()
   }, [user?.id])
 
+  const handleCalendar = (id: string) => {
+    navigate(`/${id}/accountBook`)
+  }
+
   return (
     <>
       {isLoading ? (
@@ -48,6 +54,8 @@ function GroupCard() {
             groups.map(g => (
               <button
                 className="bg-white w-38 h-40 rounded-lg shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
+                type="button"
+                onClick={() => handleCalendar(g.id)}
                 key={g.id}>
                 <div className="bg-primary-pale h-[60%] w-full rounded-lg flex justify-center items-center relative">
                   <img
@@ -66,7 +74,7 @@ function GroupCard() {
                 <div className="px-2 py-1">
                   <div className="flex justify-between items-center text-[13px]">
                     <span className="text-black px-2.5 py-[0.3px] bg-primary-light rounded-lg">
-                      {g.is_group === true ? '개인' : '공동'}
+                      {g.is_personal === true ? '개인' : '공동'}
                     </span>
                     <span className="text-neutral-dark font-light">1일전</span>
                   </div>
@@ -82,6 +90,6 @@ function GroupCard() {
       )}
     </>
   )
-}
+})
 
 export default GroupCard

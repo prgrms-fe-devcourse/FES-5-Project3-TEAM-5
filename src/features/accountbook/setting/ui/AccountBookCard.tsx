@@ -1,6 +1,9 @@
+import ArrowBtn from '@/features/group/create/ArrowBtn'
 import raiseBear from '@/shared/assets/momo/momo-raise.png'
 
 function AccountBookCard() {
+  const handleClick = () => {}
+
   return (
     <div className="flex items-center gap-4 p-4 shadow-md rounded-xl bg-white">
       <div className="w-[100px] h-[100px] bg-primary-pale rounded-full flex justify-center items-center">
@@ -19,9 +22,9 @@ function AccountBookCard() {
         </p>
         <div className="flex text-neutral-dark">
           <p>정보 수정</p>
-          <img
-            src=""
-            alt="오른쪽 화살표"
+          <ArrowBtn
+            type="right"
+            onClick={handleClick}
           />
         </div>
       </div>

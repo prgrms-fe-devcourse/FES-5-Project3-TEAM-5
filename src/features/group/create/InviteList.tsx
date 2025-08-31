@@ -18,7 +18,7 @@ function InviteList({ userList, onSelect, loading }: Props) {
   }
 
   return (
-    <div className="absolute top-12 p-3 flex flex-wrap justify-start gap-5 bg-gray-100 w-full h-50 overflow-y-scroll rounded-lg text-neutral-dark ">
+    <div className="absolute top-12 p-3 flex flex-wrap justify-start gap-5 bg-gray-100 w-full h-50 overflow-y-scroll rounded-lg text-neutral-dark custom-scrollbar">
       {loading ? (
         <Loading
           className="w-15"
@@ -43,7 +43,7 @@ function InviteList({ userList, onSelect, loading }: Props) {
                   <button
                     type="button"
                     onClick={e => handleGetValue(e, u)}
-                    className="cursor-pointer ">
+                    className="cursor-pointer flex gap-4">
                     <span className="">{u.nickname}</span>
                     <span className="text-sm">{u.email}</span>
                   </button>

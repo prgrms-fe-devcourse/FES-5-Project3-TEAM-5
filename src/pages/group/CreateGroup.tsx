@@ -14,8 +14,8 @@ function CreateGroup() {
     setMascot,
     isMain,
     setIsMain,
-    isGroup,
-    setIsGroup,
+    isPersonal,
+    setIsPersonal,
     invitedUsers,
     setInvitedUsers,
     handleSubmit
@@ -26,9 +26,7 @@ function CreateGroup() {
       {isMain === null ? (
         <Loading />
       ) : (
-        <form
-          className="p-4 flex flex-col gap-7"
-          onSubmit={handleSubmit}>
+        <form className="p-4 flex flex-col gap-7">
           <GroupName
             value={groupName}
             onChange={setGroupName}
@@ -50,17 +48,17 @@ function CreateGroup() {
             btn1="개인"
             btn2="그룹"
             name="groupToggle"
-            value={isGroup}
-            onChange={setIsGroup}
-            className={`${isGroup && 'mb-28'}`}
+            value={isPersonal}
+            onChange={setIsPersonal}
+            className={`${isPersonal && 'mb-28'}`}
           />
-          {!isGroup && (
+          {!isPersonal && (
             <Invite
               selectedUserList={invitedUsers}
               setSelectedUserList={setInvitedUsers}
             />
           )}
-          <CreateBtn />
+          <CreateBtn onClick={handleSubmit} />
         </form>
       )}
     </div>

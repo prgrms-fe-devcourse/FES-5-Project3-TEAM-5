@@ -218,8 +218,8 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
-          is_group: boolean | null
           is_main: boolean | null
+          is_personal: boolean | null
           mascot: string | null
           name: string | null
           user_id: string | null
@@ -227,8 +227,8 @@ export type Database = {
         Insert: {
           created_at?: string | null
           id?: string
-          is_group?: boolean | null
           is_main?: boolean | null
+          is_personal?: boolean | null
           mascot?: string | null
           name?: string | null
           user_id?: string | null
@@ -236,8 +236,8 @@ export type Database = {
         Update: {
           created_at?: string | null
           id?: string
-          is_group?: boolean | null
           is_main?: boolean | null
+          is_personal?: boolean | null
           mascot?: string | null
           name?: string | null
           user_id?: string | null

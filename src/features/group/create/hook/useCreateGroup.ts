@@ -10,7 +10,7 @@ export function useCreateGroup() {
   const [groupName, setGroupName] = useState('')
   const [mascot, setMascot] = useState<number | null>(1)
   const [isMain, setIsMain] = useState<boolean | null>(null)
-  const [isGroup, setIsGroup] = useState(true)
+  const [isPersonal, setIsPersonal] = useState(true)
   const [invitedUsers, setInvitedUsers] = useState<Users[]>([])
 
   const groupIdRef = useRef(crypto.randomUUID())
@@ -25,8 +25,7 @@ export function useCreateGroup() {
     }
   }, [initialIsMain])
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     if (!user) return
 
     try {
@@ -35,7 +34,7 @@ export function useCreateGroup() {
         return
       }
 
-      // ✅ 기존 대표 가계부 초기화
+      // 기존 대표 가계부 초기화
       if (isMain) {
         await supabase
           .from('groups')
@@ -44,7 +43,7 @@ export function useCreateGroup() {
           .eq('is_main', true)
       }
 
-      // ✅ 그룹 생성
+      // 그룹 생성
       const { error: groupError } = await supabase
         .from('groups')
         .insert({
@@ -53,15 +52,15 @@ export function useCreateGroup() {
           mascot,
           user_id: user.id,
           is_main: isMain,
-          is_group: isGroup
+          is_personal: isPersonal
         })
         .select()
         .single()
 
       if (groupError) throw groupError
 
-      // ✅ 그룹 멤버 초대
-      if (!isGroup && invitedUsers.length > 0) {
+      // 그룹 멤버 초대
+      if (!isPersonal && invitedUsers.length > 0) {
         const membersToInsert = invitedUsers.map(user => ({
           group_id: groupIdRef.current,
           user_id: user.id
@@ -80,11 +79,11 @@ export function useCreateGroup() {
       console.error('폼 제출 중 오류 발생:', error)
     }
 
-    // ✅ 초기화
+    // 초기화
     setGroupName('')
     setMascot(1)
     setIsMain(null)
-    setIsGroup(true)
+    setIsPersonal(true)
     setInvitedUsers([])
   }
 
@@ -95,8 +94,8 @@ export function useCreateGroup() {
     setMascot,
     isMain,
     setIsMain,
-    isGroup,
-    setIsGroup,
+    isPersonal,
+    setIsPersonal,
     invitedUsers,
     setInvitedUsers,
     handleSubmit

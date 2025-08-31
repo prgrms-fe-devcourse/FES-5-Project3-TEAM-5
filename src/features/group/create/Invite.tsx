@@ -108,7 +108,7 @@ function Invite({ selectedUserList, setSelectedUserList }: Props) {
       <div className="flex justify-between items-center mb-3 relative mt-2">
         <Input
           label="이메일"
-          className="sm:w-88 w-75"
+          className=""
           onChange={handleInputChange}
           value={inputValue}
           id="inviteUser"
@@ -116,6 +116,7 @@ function Invite({ selectedUserList, setSelectedUserList }: Props) {
         <AddButton
           size="sm"
           onClick={() => handleAddUser(inputValue)}
+          className="absolute z-1 right-4"
         />
         {drop && inputValue && (
           <InviteList

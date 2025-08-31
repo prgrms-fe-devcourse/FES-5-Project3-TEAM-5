@@ -14,5 +14,5 @@ export type Group = {
   user_id: UUID
   created_at: string
   is_main: boolean
-  is_group: boolean
+  is_personal: boolean
 }

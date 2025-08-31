@@ -1,5 +1,5 @@
 import { useUserStore } from '@/shared/stores/useUserStore'
-import { formatPriceInput, formatPriceNumber } from '@/shared/utils/format'
+import { formatPriceNumber } from '@/shared/utils/format'
 import { tw } from '@/shared/utils/tw'
 import supabase from '@/supabase/supabase'
 import dayjs from 'dayjs'
@@ -18,6 +18,7 @@ function ThisMonthCard({ type, className }: Props) {
   useEffect(() => {
     const fetchThisMonthTotal = async () => {
       if (!user?.id) return
+      console.log(user?.id)
 
       const { data: groupData, error: groupError } = await supabase
         .from('groups')
@@ -30,19 +31,22 @@ function ThisMonthCard({ type, className }: Props) {
         console.error('대표 그룹 가져오기 실패:', groupError)
         return
       }
+      console.log(groupData)
 
       const groupId = groupData.id
 
-      const startOfMonth = dayjs().startOf('month').toISOString()
-      const endOfMonth = dayjs().endOf('month').toISOString()
+      const start = dayjs().startOf('month').format('YYYY-MM-DD')
+      const end = dayjs().endOf('month').format('YYYY-MM-DD')
+      console.log(start, end)
 
       const { data: itemData, error: itemError } = await supabase
         .from('account_items')
         .select('amount')
         .eq('group_id', groupId)
-        .eq('type', type)
-        .gte('date', startOfMonth)
-        .lte('date', endOfMonth)
+        .eq('type', type === '수입' ? 'income' : 'expense')
+        .gte('date', start)
+        .lte('date', end)
+      console.log(itemData)
 
       if (itemError) {
         console.error('account_items 가져오기 실패:', itemError)
@@ -59,9 +63,11 @@ function ThisMonthCard({ type, className }: Props) {
     const absAmount = Math.abs(amount)
 
     if (absAmount >= 1_0000_0000) {
-      return `${(amount / 1_0000_0000).toFixed(1)}억`
-    } else if (absAmount >= 1_0000) {
-      return `${(amount / 1_0000).toFixed(1)}만`
+      const result = amount / 1_0000_0000
+      return `${Number.isInteger(result) ? result.toFixed(0) : result.toFixed(1)}억`
+    } else if (absAmount >= 10_0000) {
+      const result = amount / 1_0000
+      return `${Number.isInteger(result) ? result.toFixed(0) : result.toFixed(1)}만`
     } else {
       return formatPriceNumber(amount)
     }

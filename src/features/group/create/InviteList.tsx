@@ -18,7 +18,7 @@ function InviteList({ userList, onSelect, loading }: Props) {
   }
 
   return (
-    <div className="absolute top-12 p-3 flex flex-wrap justify-start gap-5 bg-gray-100 w-full h-50 overflow-y-scroll rounded-lg text-neutral-dark ">
+    <div className="absolute top-12 p-3 flex flex-wrap justify-start gap-5 bg-gray-100 w-full h-50 overflow-y-scroll rounded-lg text-neutral-dark custom-scrollbar">
       {loading ? (
         <Loading
           className="w-15"

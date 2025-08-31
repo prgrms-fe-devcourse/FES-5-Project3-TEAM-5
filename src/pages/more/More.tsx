@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router'
 function More() {
   const nav = useNavigate()
   return (
-    <div className="flex flex-col gap-4 bg-[#F5F5F5] mt-3 py-3">
-      <div className="mx-2">
+    <div className="flex flex-col gap-4 bg-[#F5F5F5] py-3 h-screen">
+      <div className="mx-2 mt-15">
         <NicknameCard />
       </div>
       <div className="flex flex-col gap-4 px-4 py-6 bg-white rounded-xl mx-2">

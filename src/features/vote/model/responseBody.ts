@@ -19,6 +19,7 @@ export interface VoteSummary {
     value: number
   }
   isOwner: boolean
+  mySelect: VoteSelections[]
 }
 
 export interface TotalVote {
@@ -33,5 +34,3 @@ export interface TotalVote {
   vote_selections?: VoteSelections[]
   vote_summary?: VoteSummary
 }
-
-export type UserVote = []

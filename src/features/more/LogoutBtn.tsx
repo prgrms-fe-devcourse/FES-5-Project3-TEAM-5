@@ -7,14 +7,14 @@ function LogoutBtn() {
 
   const handleLogout = async () => {
     await logout()
-    showSnackbar({ text: '로그아웃 되었습니다', type: 'success' })
+    showSnackbar({ text: '로그아웃 되었습니다', type: 'error' })
   }
 
   return (
     <button
       type="button"
       aria-label="로그아웃"
-      onClick={handleLogout}
+      onClick={() => handleLogout()}
       className="cursor-pointer">
       로그아웃
     </button>

@@ -6,9 +6,7 @@ interface Props {
 
 function SubmitButton({ text, type = 'button', onClick }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (type === 'submit') {
-      e.preventDefault()
-    }
+    e.preventDefault()
     onClick?.()
   }
 

@@ -11,9 +11,11 @@ interface Props {
 function NotificationButton({ isActive }: Props) {
   return (
     <>
-      <Link to="/notification">
-        {isActive ? <ActiveNotificationIcon /> : <NotificationIcon />}
-      </Link>
+      <div className="absolute top-5 right-3">
+        <Link to="/notification">
+          {isActive ? <ActiveNotificationIcon /> : <NotificationIcon />}
+        </Link>
+      </div>
     </>
   )
 }

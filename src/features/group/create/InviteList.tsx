@@ -43,7 +43,7 @@ function InviteList({ userList, onSelect, loading }: Props) {
                   <button
                     type="button"
                     onClick={e => handleGetValue(e, u)}
-                    className="cursor-pointer ">
+                    className="cursor-pointer flex gap-4">
                     <span className="">{u.nickname}</span>
                     <span className="text-sm">{u.email}</span>
                   </button>

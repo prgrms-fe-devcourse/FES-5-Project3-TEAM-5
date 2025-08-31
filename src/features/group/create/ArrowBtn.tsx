@@ -1,6 +1,6 @@
 interface Props {
   onClick: () => void
-  disabled: boolean
+  disabled?: boolean
   type: 'left' | 'right'
 }
 

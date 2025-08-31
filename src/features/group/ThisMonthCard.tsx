@@ -18,7 +18,6 @@ function ThisMonthCard({ type, className }: Props) {
   useEffect(() => {
     const fetchThisMonthTotal = async () => {
       if (!user?.id) return
-      console.log(user?.id)
 
       const { data: groupData, error: groupError } = await supabase
         .from('groups')
@@ -31,13 +30,11 @@ function ThisMonthCard({ type, className }: Props) {
         console.error('대표 그룹 가져오기 실패:', groupError)
         return
       }
-      console.log(groupData)
 
       const groupId = groupData.id
 
       const start = dayjs().startOf('month').format('YYYY-MM-DD')
       const end = dayjs().endOf('month').format('YYYY-MM-DD')
-      console.log(start, end)
 
       const { data: itemData, error: itemError } = await supabase
         .from('account_items')
@@ -46,7 +43,6 @@ function ThisMonthCard({ type, className }: Props) {
         .eq('type', type === '수입' ? 'income' : 'expense')
         .gte('date', start)
         .lte('date', end)
-      console.log(itemData)
 
       if (itemError) {
         console.error('account_items 가져오기 실패:', itemError)

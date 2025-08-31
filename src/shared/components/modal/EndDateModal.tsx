@@ -2,7 +2,7 @@ import { useState } from 'react'
 import BaseModal from './BaseModal'
 import dayjs, { Dayjs } from 'dayjs'
 import { tw } from '@/shared/utils/tw'
-import Dropdown from './DropDown'
+import Dropdown from './Dropdown'
 
 interface Props {
   onClose: () => void

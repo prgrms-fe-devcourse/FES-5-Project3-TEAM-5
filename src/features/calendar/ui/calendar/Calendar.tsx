@@ -54,6 +54,7 @@ export const Calendar = ({ handleDateClick, calendarEvents }: Props) => {
       headerToolbar={false}
       eventContent={RenderEventContent}
       dateClick={arg => handleDateClick(arg.date)}
+      eventClick={arg => handleDateClick(arg.event.start!)}
       dayCellClassNames={arg => {
         const base = [
           'ring-inset',

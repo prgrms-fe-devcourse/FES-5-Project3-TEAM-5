@@ -13,20 +13,31 @@ function BaseModal({ isOpen, children, onClose }: Props) {
 
   useEffect(() => {
     // 스크롤 잠금
-    document.documentElement.style.setProperty(
-      'overflow',
-      'hidden',
-      'important'
-    )
-    // 포커스
-    modalRef.current?.focus()
+    if (isOpen) {
+      document.documentElement.style.setProperty(
+        'overflow',
+        'hidden',
+        'important'
+      )
+      // 포커스
+      modalRef.current?.focus()
+    } else {
+      document.documentElement.style.setProperty(
+        'overflow',
+        'auto',
+        'important'
+      )
+    }
 
     // esc 닫기
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
       // else if (e.key === 'Enter') onClose()
     }
-    window.addEventListener('keydown', handleKeyDown)
+
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown)
+    }
 
     return () => {
       document.documentElement.style.setProperty(
@@ -36,7 +47,7 @@ function BaseModal({ isOpen, children, onClose }: Props) {
       )
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [onClose])
+  }, [isOpen, onClose])
 
   return (
     <ModalPortal>

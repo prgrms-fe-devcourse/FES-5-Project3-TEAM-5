@@ -14,6 +14,7 @@ import {
   createRecurringItem,
   fetchAllItems
 } from '@/features/accountItem/service/accountItem'
+import AddButton from '@/shared/components/buttons/AddButton'
 
 interface LoaderData {
   events: AccountItem[]
@@ -107,6 +108,13 @@ export const CalendarPage = () => {
           setIsOpen={setIsOpen}
           events={calendarEventsByDate}
         />
+      </div>
+      <div className="pointer-events-none fixed inset-x-0 bottom-20 z-[1001]">
+        <div className="relative mx-auto w-full max-w-[420px] px-4">
+          <div className="pointer-events-auto absolute right-3 bottom-0">
+            <AddButton onClick={() => navigate('/accountBook/item/add')} />
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -1,19 +1,17 @@
 import { useUserStore } from '@/shared/stores/useUserStore'
 import supabase from '@/supabase/supabase'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
 import type { Group } from './create/type/type'
 import { mascotList } from './create/data/mascots'
 import checkIcon from '@/shared/assets/checkIcon.svg'
 import Loading from '@/shared/components/loading/Loading'
-import { useNavigate } from 'react-router'
 
-const GroupCard = React.memo(() => {
+function GroupCard() {
   const [groups, setGroups] = useState<Group[]>([])
   const [isLoading, setIsLoading] = useState(false)
 
   const user = useUserStore(useShallow(state => state.user))
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (!user?.id) return
@@ -37,10 +35,6 @@ const GroupCard = React.memo(() => {
     fetchSelect()
   }, [user?.id])
 
-  const handleCalendar = (id: string) => {
-    navigate(`/${id}/accountBook`)
-  }
-
   return (
     <>
       {isLoading ? (
@@ -54,8 +48,6 @@ const GroupCard = React.memo(() => {
             groups.map(g => (
               <button
                 className="bg-white w-38 h-40 rounded-lg shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
-                type="button"
-                onClick={() => handleCalendar(g.id)}
                 key={g.id}>
                 <div className="bg-primary-pale h-[60%] w-full rounded-lg flex justify-center items-center relative">
                   <img
@@ -90,6 +82,6 @@ const GroupCard = React.memo(() => {
       )}
     </>
   )
-})
+}
 
 export default GroupCard

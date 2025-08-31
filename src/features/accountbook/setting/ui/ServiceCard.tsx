@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import ExportExcelModal from './exportExcel/ExportExcelModal'
 
 const serviceList = [
-  { value: 'removeUser', text: '회원탈퇴' },
+  { value: 'inviteUser', text: '초대하기' },
   { value: 'exportExcel', text: '엑셀 내보내기' },
   { value: 'deleteAccountBook', text: '가계부 삭제' }
 ]
@@ -35,7 +35,7 @@ function ServiceCard() {
   return (
     <>
       {isExport && <ExportExcelModal onCancel={handleExportExcel} />}
-      <div className="flex flex-col gap-4 px-4 py-6 bg-white rounded-xl mx-2 shadow-md ">
+      <div className="flex flex-col gap-4 px-4 py-6 bg-white rounded-xl shadow-md">
         <h2 className="text-neutral-dark font-bold  text-size-lg">
           가계부 서비스
         </h2>

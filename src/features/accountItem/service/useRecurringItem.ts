@@ -32,6 +32,10 @@ export const useRecurringItem = () => {
       else if (frequency === 'weekly') date = date.add(1, 'week')
       else if (frequency === 'monthly') date = date.add(1, 'month')
       else if (frequency === 'yearly') date = date.add(1, 'year')
+      else if (frequency === 'twoDays') date = date.add(2, 'day')
+      else if (frequency === 'twoWeeks') date = date.add(2, 'week')
+      else if (frequency === 'twoMonths') date = date.add(2, 'month')
+      else if (frequency === 'twoYears') date = date.add(2, 'year')
       else break
     }
 

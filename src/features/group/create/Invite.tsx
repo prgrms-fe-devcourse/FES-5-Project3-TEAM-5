@@ -6,6 +6,7 @@ import InviteList from './InviteList'
 import type { Users } from './type/type'
 import { debounce } from '@/shared/utils/debounce'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
+import deleteBtn from '@/shared/assets/icons/delete.svg'
 
 interface Props {
   selectedUserList: Users[]
@@ -29,7 +30,6 @@ function Invite({ selectedUserList, setSelectedUserList }: Props) {
       }
 
       setLoading(true)
-      console.log('로딩중')
 
       try {
         const { data, error } = await supabase
@@ -38,7 +38,6 @@ function Invite({ selectedUserList, setSelectedUserList }: Props) {
           .or(`nickname.ilike.%${value}%,email.ilike.%${value}%`)
 
         setLoading(false)
-        console.log('로딩끝')
 
         if (data) {
           setUserList(data)
@@ -132,16 +131,22 @@ function Invite({ selectedUserList, setSelectedUserList }: Props) {
             selectedUserList.map(s => (
               <li
                 key={s.id}
-                className="bg-primary-pale p-3 flex gap-2 rounded-lg text-sm text-black">
-                <button className="w-[88%] flex justify-between flex-wrap">
-                  <span className="truncate max-w-[50%]">{s.nickname}</span>
+                className="bg-primary-pale p-3 flex gap-2 rounded-lg text-sm text-black pr-0">
+                <div className="w-[88%] flex justify-between flex-wrap">
+                  <span className="truncate max-w-[50%] min-w-[40%]">
+                    {s.nickname}
+                  </span>
                   <span className="truncate max-w-[90%]">{s.email}</span>
-                </button>
+                </div>
                 <button
                   type="button"
-                  className="cursor-pointer"
+                  className="cursor-pointer bg-primary-pale"
                   onClick={() => handleDeleteUser(s.id)}>
-                  삭제
+                  <img
+                    src={deleteBtn}
+                    alt="삭제 버튼"
+                    className="w-6 hover:scale-92 transition ease-in pl-1"
+                  />
                 </button>
               </li>
             ))}

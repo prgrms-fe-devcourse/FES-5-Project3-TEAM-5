@@ -1,7 +1,15 @@
 import loading from '@/shared/assets/loading.gif'
 import { tw } from '@/shared/utils/tw'
 
-function Loading({ text, className }: { text?: string; className?: string }) {
+function Loading({
+  text,
+  className,
+  imgClassName
+}: {
+  text?: string
+  className?: string
+  imgClassName?: string
+}) {
   return (
     <div
       className={tw(
@@ -12,7 +20,7 @@ function Loading({ text, className }: { text?: string; className?: string }) {
       <img
         src={loading}
         alt="loading gif"
-        className="w-50"
+        className={tw(`w-50`, imgClassName)}
       />
     </div>
   )

@@ -3,9 +3,10 @@ import supabase from '@/supabase/supabase'
 import dayjs from 'dayjs'
 import type { AccountItem } from '../model/types'
 
-export const fetchByMonth = async (month: number) => {
-  const startDate = dayjs().month(month).startOf('month').format('YYYY-MM-DD')
-  const endDate = dayjs().month(month).endOf('month').format('YYYY-MM-DD')
+export const fetchByMonth = async (year: number, month: number) => {
+  const base = dayjs().year(year).month(month)
+  const startDate = base.startOf('month').format('YYYY-MM-DD')
+  const endDate = base.endOf('month').format('YYYY-MM-DD')
 
   const { data, error } = await supabase
     .from('account_items')

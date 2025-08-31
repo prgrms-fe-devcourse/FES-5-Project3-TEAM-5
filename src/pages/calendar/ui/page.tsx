@@ -65,6 +65,7 @@ export const CalendarPage = () => {
     run()
   }, [])
 
+  console.log(events)
   const calc = (events: AccountItem[]) =>
     events.reduce(
       (a, c) => {

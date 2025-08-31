@@ -1,28 +1,38 @@
 import Input from '@/shared/components/form/Input'
 import SubmitButton from '@/shared/components/form/SubmitButton'
 import ModalPortal from '@/shared/components/modal/ModalPortal'
-import Overlay from '../../../../../shared/components/modal/Overlay'
+import Overlay from '@/shared/components/modal/Overlay'
 import SelectDate from './SelectDate'
+import { useEffect, useState } from 'react'
+import SelectCalendar from './SelectCalendar'
+import ModalHeader from './ModalHeader'
 
-function ExportExcelModal() {
+interface Props {
+  onCancel: () => void
+}
+function ExportExcelModal({ onCancel }: Props) {
+  const [isCalenderOpen, setIsCalenderOpen] = useState(false)
+  const openCalender = () => {
+    setIsCalenderOpen(!isCalenderOpen)
+  }
+  useEffect(() => {}, [openCalender])
+
   return (
     <ModalPortal>
-      <Overlay>
-        <div className=" w-full max-w-[420px] rounded-t-xl bg-white p-5">
-          <div className="relative">
-            <h2 className="text-center text-[22px] font-bold text-black">
-              엑셀 내보내기
-            </h2>
-          </div>
+      <Overlay onCancel={onCancel}>
+        <ModalHeader closeModal={onCancel} />
+        {isCalenderOpen ? (
+          <SelectCalendar />
+        ) : (
           <div className="flex flex-col gap-5">
-            <SelectDate />
+            <SelectDate openCalender={openCalender} />
             <div className="flex flex-col gap-1.5">
               <h3 className="text-neutral-dark text-lg font-bold">이메일</h3>
               <Input label="이메일" />
             </div>
             <SubmitButton text="내보내기" />
           </div>
-        </div>
+        )}
       </Overlay>
     </ModalPortal>
   )

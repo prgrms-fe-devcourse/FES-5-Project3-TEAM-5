@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ExportExcelModal from './exportExcel/ExportExcelModal'
 
 const serviceList = [
@@ -6,12 +6,35 @@ const serviceList = [
   { value: 'exportExcel', text: '엑셀 내보내기' },
   { value: 'deleteAccountBook', text: '가계부 삭제' }
 ]
+
 function ServiceCard() {
-  const [isExport, setIsExport] = useState(true)
+  // handleExportExcel
+  const [isExport, setIsExport] = useState(false)
+
+  const handleExportExcel = () => {
+    setIsExport(!isExport)
+  }
+
+  const handleService = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault()
+    const target = e.target as HTMLButtonElement
+    switch (target.value) {
+      case 'exportExcel':
+        handleExportExcel()
+        break
+
+      default:
+        break
+    }
+  }
+
+  useEffect(() => {}, [handleExportExcel])
 
   return (
     <>
-      {isExport && <ExportExcelModal />}
+      {isExport && <ExportExcelModal onCancel={handleExportExcel} />}
       <div className="flex flex-col gap-4 px-4 py-6 bg-white rounded-xl mx-2 shadow-md ">
         <h2 className="text-neutral-dark font-bold  text-size-lg">
           가계부 서비스
@@ -21,7 +44,12 @@ function ServiceCard() {
             <li
               key={value}
               className="hover:black  hover:font-bold transition ease-in-out">
-              <button className="cursor-pointer text-size-lg">{text}</button>
+              <button
+                value={value}
+                className="cursor-pointer text-size-lg"
+                onClick={handleService}>
+                {text}
+              </button>
             </li>
           ))}
         </ul>

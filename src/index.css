@@ -65,6 +65,21 @@
   height: 100%;
 }
 
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* 스크롤바 두께 */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-neutral-light); /* 트랙 색상 */
+  margin: 20px;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--color-primary-base); /* 스크롤바 색상 */
+  border-radius: 3px;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

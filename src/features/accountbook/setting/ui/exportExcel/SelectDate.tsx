@@ -1,4 +1,5 @@
 import calenderIcon from '@/shared/assets/icons/calendar.svg'
+
 interface Props {
   openCalender: () => void
 }

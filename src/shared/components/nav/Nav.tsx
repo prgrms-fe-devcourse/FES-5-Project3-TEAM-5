@@ -3,10 +3,12 @@ import { BookIcon, HomeIcon, MoreIcon, VoteIcon } from './icons'
 import { tw } from '@/shared/utils/tw'
 import { useStorageGroup } from '@/features/group/model/useStorageGroup'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
+import { useSelectedDate } from '@/features/calendar/model/useSelectedDate'
 
 function Nav() {
   const getStorageGroup = useStorageGroup(state => state.getStorageGroup)
   const showSnackbar = useSnackbarStore(state => state.showSnackbar)
+  const resetDate = useSelectedDate(state => state.resetDate)
 
   const storageGroup = getStorageGroup()
   const items = [

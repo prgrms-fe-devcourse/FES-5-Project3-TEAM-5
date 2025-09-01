@@ -21,7 +21,9 @@ interface Props {
 export function PickDate({ isSliding }: Props) {
   const [open, setOpen] = React.useState(false)
 
-  const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
+  const [date, setDate, resetDate] = useSelectedDate(
+    useShallow(s => [s.date, s.setDate, s.resetDate])
+  )
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -78,35 +80,47 @@ export function PickDate({ isSliding }: Props) {
           </svg>
         </button>
       )}
-
-      <Popover
-        open={open}
-        onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+      <div className="relative flex-1 flex justify-center">
+        <Popover
+          open={open}
+          onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="ghost"
+              id="date"
+              className="text-size-lg font-bold justify-center p-0">
+              {date ? date.toLocaleDateString() : '날짜 선택'}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="w-auto overflow-hidden p-0"
+            align="start">
+            <Calendar
+              mode="single"
+              selected={date}
+              captionLayout="dropdown"
+              defaultMonth={date}
+              onSelect={nextDate => {
+                if (nextDate) {
+                  navigateWithDate(nextDate as Date)
+                }
+                setOpen(false)
+              }}
+            />
+          </PopoverContent>
+        </Popover>
+        {isSliding && (
           <Button
             variant="ghost"
-            id="date"
-            className="text-size-lg font-bold justify-center p-0">
-            {date ? date.toLocaleDateString() : '날짜 선택'}
+            className="absolute right-4 top-1/2 -translate-y-1/2"
+            onClick={() => {
+              navigateWithDate(new Date())
+              resetDate()
+            }}>
+            오늘
           </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-auto overflow-hidden p-0"
-          align="start">
-          <Calendar
-            mode="single"
-            selected={date}
-            captionLayout="dropdown"
-            defaultMonth={date}
-            onSelect={nextDate => {
-              if (nextDate) {
-                navigateWithDate(nextDate as Date)
-              }
-              setOpen(false)
-            }}
-          />
-        </PopoverContent>
-      </Popover>
+        )}
+      </div>
       {isSliding && (
         <button
           className="group text-3xl font-bold cursor-pointer"

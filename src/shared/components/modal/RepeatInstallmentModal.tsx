@@ -9,6 +9,7 @@ import EndDateModal from './EndDateModal'
 import dayjs from 'dayjs'
 
 interface Props {
+  open: boolean
   onClose: () => void
   tab: '수입' | '지출'
   onSave: (data: {
@@ -32,7 +33,7 @@ const mapping: Record<string, string> = {
   격년: '매년'
 }
 
-function RepeatInstallmentModal({ onClose, tab, onSave }: Props) {
+function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
   const [mode, setMode] = useState<'반복' | '할부'>('반복') // 탭 상태
   const [isBiMonthly, setIsBiMonthly] = useState(false) // 토글 상태
   const [selectedPeriod, setSelectedPeriod] = useState('매일') // 주기 상태
@@ -62,7 +63,7 @@ function RepeatInstallmentModal({ onClose, tab, onSave }: Props) {
   }
 
   return (
-    <BaseModal onClose={onClose}>
+    <BaseModal isOpen={open} onClose={onClose}>
       <div className="min-h-[130px]">
         {/* 상단 탭 */}
         <div className="mt-5">
@@ -155,17 +156,14 @@ function RepeatInstallmentModal({ onClose, tab, onSave }: Props) {
         </div>
 
         {/* 종료일 모달 */}
-        {isEndDateModalOpen && (
-          <EndDateModal
-            onClose={() => setIsEndDateModalOpen(false)}
-            onSelect={date => setEndDate(date)}
-            selectedDate={endDate}   // 이미 선택된 날짜를 넘김
-          />
-        )}
+        <EndDateModal
+          open={isEndDateModalOpen}
+          onClose={() => setIsEndDateModalOpen(false)}
+          onSelect={date => setEndDate(date)}
+          selectedDate={endDate}   // 이미 선택된 날짜를 넘김
+        />
 
     </BaseModal>
   )
 }
 export default RepeatInstallmentModal
-
-// 반복 설정이나 할부 설정을 누른 순간 다른 탭에 있는 데이터 날리기

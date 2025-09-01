@@ -27,6 +27,7 @@ import { useSelectedDate } from '@/features/calendar'
 import PrivacyPage from '@/pages/privacy/Page'
 import SettingPage from '@/pages/accountbook/SettingPage'
 import CreateGroup from '@/pages/group/CreateGroup'
+import DetailAccountItemPage from '@/pages/detail/DetailAccountItemPage'
 
 import Edit from '@/features/group/edit/EditGroup'
 
@@ -100,6 +101,13 @@ export const router = createBrowserRouter([
             Component: SettingPage
           }
         ]
+      },
+      {
+        path: '/accountBook/calendar/detail/:date/:id',
+        Component: DetailAccountItemPage,
+        handle: {
+          hideNav: true
+        }
       },
       {
         path: '/accountBook/item',

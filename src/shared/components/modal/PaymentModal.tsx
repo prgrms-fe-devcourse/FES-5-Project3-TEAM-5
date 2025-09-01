@@ -7,14 +7,15 @@ type PaymentMethod = {
 }
 
 interface Props {
+  open: boolean
   onClose: () => void
   onSelect: (id: string) => void;
   methods: PaymentMethod[];
 }
 
-function PaymentModal({ onClose, onSelect, methods }:Props) {
+function PaymentModal({ open, onClose, onSelect, methods }:Props) {
   return (
-    <BaseModal onClose={onClose}>
+    <BaseModal isOpen={open} onClose={onClose}>
       {/* 제목 */}
       <h2 className="text-center text-[22px] font-bold text-black">결제수단 설정</h2>
 

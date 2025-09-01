@@ -65,18 +65,17 @@ function VotePage() {
 
   return (
     <>
-      {isDelete && (
-        <ConfirmModal
-          title="투표 삭제"
-          lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
-          onCancel={openDeleteModal}
-          onConfirm={() => {
-            handleConfirmDelete()
-          }}
-          cancelText="취소"
-          confirmText="확인"
-        />
-      )}
+      <ConfirmModal
+        open={isDelete}
+        title="투표 삭제"
+        lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
+        onCancel={openDeleteModal}
+        onConfirm={() => {
+          handleConfirmDelete()
+        }}
+        cancelText="취소"
+        confirmText="확인"
+      />
 
       {isLoading ? (
         <Loading />

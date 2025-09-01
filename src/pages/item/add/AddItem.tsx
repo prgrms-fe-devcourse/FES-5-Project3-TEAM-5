@@ -287,44 +287,41 @@ function AddItem() {
       </div>
 
       {/* 결제수단 모달 */}
-      {isPaymentModalOpen && (
-        <PaymentModal
-          methods={methods}
-          onClose={() => setIsPaymentModalOpen(false)}
-          onSelect={id => {
-            console.warn('선택한 결제수단 uuid:', id) // 제대로 보이는지 콘솔에서 확인
-            setSelectedMethodId(id) // 선택한 결제 수단 uuid 저장
-            setIsPaymentModalOpen(false)
-          }}
-        />
-      )}
+      <PaymentModal
+        open={isPaymentModalOpen}
+        methods={methods}
+        onClose={() => setIsPaymentModalOpen(false)}
+        onSelect={id => {
+          console.warn('선택한 결제수단 uuid:', id) // 제대로 보이는지 콘솔에서 확인
+          setSelectedMethodId(id) // 선택한 결제 수단 uuid 저장
+          setIsPaymentModalOpen(false)
+        }}
+      />
 
       {/* 카테고리 모달 */}
-      {isCategoryModalOpen && (
-        <CategoryModal
-          categories={categories}
-          filterType={filterType}
-          onClose={() => setIsCategoryModalOpen(false)}
-          onSelect={id => {
-            console.warn('선택한 카테고리 uuid:', id) // 제대로 보이는지 콘솔에서 확인
-            setSelectedCategoryId(id) // 선택한 카테고리 uuid 저장
-            setIsCategoryModalOpen(false)
-          }}
-        />
-      )}
+      <CategoryModal
+        open={isCategoryModalOpen}
+        categories={categories}
+        filterType={filterType}
+        onClose={() => setIsCategoryModalOpen(false)}
+        onSelect={id => {
+          console.warn('선택한 카테고리 uuid:', id) // 제대로 보이는지 콘솔에서 확인
+          setSelectedCategoryId(id) // 선택한 카테고리 uuid 저장
+          setIsCategoryModalOpen(false)
+        }}
+      />
 
       {/* 반복|할부 모달 */}
-      {isRepeatInstallmentModalOpen && (
-        <RepeatInstallmentModal
-          onClose={() => setIsRepeatInstallmentModalOpen(false)}
-          tab={tab}
-          onSave={data => {
-            console.warn('반복/할부 데이터:', data)
-            setRepeatInstallmentData(data)
-            setIsRepeatInstallmentModalOpen(false)
-          }}
-        />
-      )}
+      <RepeatInstallmentModal
+        open={isRepeatInstallmentModalOpen}
+        onClose={() => setIsRepeatInstallmentModalOpen(false)}
+        tab={tab}
+        onSave={data => {
+          console.warn('반복/할부 데이터:', data)
+          setRepeatInstallmentData(data)
+          setIsRepeatInstallmentModalOpen(false)
+        }}
+      />
     </>
   )
 }

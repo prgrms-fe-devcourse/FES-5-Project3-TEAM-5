@@ -1,6 +1,6 @@
 import { Outlet, useMatches } from 'react-router'
 import Nav from '../nav/Nav'
-import NotificationButton from '../buttons/NotificationButton'
+// import NotificationButton from '../buttons/NotificationButton'
 import Header from '../header/Header'
 // import Login from '@/pages/login/Login'
 import { useEffect } from 'react'
@@ -46,7 +46,7 @@ export const Layout = () => {
             {headerTitle && <Header title={headerTitle} />}
             <main className={` ${hideNav ? '' : 'pb-[60px]'}`}>
               <div className="flex justify-end relative">
-                {hideNav ? '' : <NotificationButton isActive={false} />}
+                {/* {hideNav ? '' : <NotificationButton isActive={false} />} */}
               </div>
               <Outlet />
             </main>

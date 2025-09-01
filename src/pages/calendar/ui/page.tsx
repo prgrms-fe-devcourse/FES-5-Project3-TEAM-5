@@ -15,6 +15,7 @@ import {
   fetchAllItems
 } from '@/features/accountItem/service/accountItem'
 import AddButton from '@/shared/components/buttons/AddButton'
+import { useInstallmentItem } from '@/features/accountItem/service/useInstallmentItem'
 
 interface LoaderData {
   events: AccountItem[]
@@ -26,6 +27,7 @@ export const CalendarPage = () => {
   const { initialDate, events } = useLoaderData() as LoaderData
 
   const { searchRecurringItem } = useRecurringItem()
+  const { searchInstallmentItem } = useInstallmentItem()
 
   const [calendarEventsByDate, setCalendarEventsByDate] = useState<
     AccountItem[]
@@ -41,20 +43,46 @@ export const CalendarPage = () => {
     const run = async () => {
       const all = await fetchAllItems()
 
-      const existingKeys = new Set(
+      // 반복 키
+      const existingRecurringKeys = new Set(
         all.map(i => {
           const parentKey = i.recurring_parent_id ?? i.id
           return `${parentKey}-${dayjs(i.date).format('YYYY-MM-DD')}`
         })
       )
 
-      const parents = all.filter(
+      //할부 키
+      const existingInstallmentKeys = new Set(
+        all.map(i => {
+          const parentKey = i.installment_parent_id ?? i.id
+          return `${parentKey}-${dayjs(i.date).format('YYYY-MM-DD')}`
+        })
+      )
+
+      // 반복 부모
+      const recurringParents = all.filter(
         i => i.recurring_rules && !i.recurring_parent_id
       )
+
+      // 할부 부모
+      const installmentParents = all.filter(
+        i => i.installment_plans && !i.installment_parent_id
+      )
+
       const toCreate: AccountItem[] = []
 
-      for (const parent of parents) {
-        const generated = searchRecurringItem(parent, existingKeys)
+      // 반복
+      for (const parent of recurringParents) {
+        const generated = searchRecurringItem(parent, existingRecurringKeys)
+        if (generated.length) toCreate.push(...generated)
+      }
+
+      // 할부
+      for (const installment of installmentParents) {
+        const generated = searchInstallmentItem(
+          installment,
+          existingInstallmentKeys
+        )
         if (generated.length) toCreate.push(...generated)
       }
 

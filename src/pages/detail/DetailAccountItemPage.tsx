@@ -29,7 +29,7 @@ function DetailAccountItemPage() {
           amount={44000000}
           type={'income'}
           recurring={false}
-          installment={false}
+          installment={{ months: 0, start_date: '', end_date: '' }}
         />
         <DetailContents
           isArticleToggleOn={isArticleToggleOn}

@@ -12,7 +12,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 import { saveAccountItem } from './saveAccountItem'
 import type { RepeatInstallmentData } from './saveAccountItem'
-import { useSelectedDate } from '@/features/calendar'
+import { PickDate, useSelectedDate } from '@/features/calendar'
 import { useNavigate } from 'react-router'
 dayjs.locale('ko')
 
@@ -33,7 +33,6 @@ type Category = {
 
 function AddItem() {
   const date = useSelectedDate(s => s.date)
-  const formattedDate = dayjs(date).format('M월 D일 ddd')
 
   const [tab, setTab] = useState<'수입' | '지출'>('수입') // 탭 상태
   const [amount, setAmount] = useState('') // 금액
@@ -91,7 +90,9 @@ function AddItem() {
         type: tab === '수입' ? 'income' : 'expense',
         date: dayjs(date).format('YYYY-MM-DD'),
         userId,
-        groupId: 'e89513be-c9c1-4b04-bb82-b5afdc1cbc97', // 로그인 한 계정으로 만든 그룹 uuid 임시로 넣어놨음. 나중에 바꿔야됨!!!!!!!!!!!!!
+
+        groupId: '7f39a5ab-c5f2-4c19-99c8-d0adbc5f6e8c', // 로그인 한 계정으로 만든 그룹 uuid 임시로 넣어놨음. 나중에 바꿔야됨!!!!!!!!!!!!!
+
         categoryId: selectedCategoryId,
         paymentMethodId: tab === '지출' ? selectedMethodId : null,
         memo: memoRef.current?.value ?? null,
@@ -177,8 +178,10 @@ function AddItem() {
       </div>
       <div className="p-4">
         {/* 날짜 */}
-        <div className="mb-3">
-          <span className="text-neutral-dark font-bold">{formattedDate}</span>
+        <div className="mb-3 flex justify-start">
+          <span className="text-neutral-dark font-bold">
+            <PickDate isSliding={false} />
+          </span>
         </div>
 
         {/* 폼 */}

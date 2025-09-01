@@ -145,10 +145,21 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
         )}
 
       </div>
+
+        {/* 안내 문구 */}
+        <p className="mt-4 text-sm text-secondary-red text-center">
+          {mode === '반복' && !endDate
+            ? '종료일을 선택해주세요'
+            : mode === '할부' && !installment
+            ? '개월 수를 입력해주세요'
+            : '\u00A0'}
+        </p>
+
         {/* 완료 버튼 */}
-        <div className="mt-9">
+        <div className="mt-2">
           <SubmitButton
             text={mode === '반복' ? '반복 설정' : '할부 설정'}
+            disabled={(mode === '반복' && !endDate) || (mode === '할부' && !installment)}
             onClick={() => {
               onSave({ mode, selectedPeriod, isBiMonthly, endDate, installment })
             }}

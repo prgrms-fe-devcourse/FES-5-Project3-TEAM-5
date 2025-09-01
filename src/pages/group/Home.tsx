@@ -9,7 +9,7 @@ function Home() {
     <div className="mb-20">
       <div className="bg-primary-light w-full h-45 rounded-bl-xl rounded-br-xl px-2 py-6 shadow-lg">
         <Name />
-        <div className="flex justify-between mt-8 sm:mx-6 mx-3">
+        <div className="flex justify-between mt-7 sm:mx-6 mx-3">
           <ThisMonthCard
             type="수입"
             className="text-secondary-blue"

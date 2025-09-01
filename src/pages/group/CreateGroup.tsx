@@ -50,7 +50,6 @@ function CreateGroup() {
             name="groupToggle"
             value={isPersonal}
             onChange={setIsPersonal}
-            className={`${isPersonal && 'mb-28'}`}
           />
           {!isPersonal && (
             <Invite

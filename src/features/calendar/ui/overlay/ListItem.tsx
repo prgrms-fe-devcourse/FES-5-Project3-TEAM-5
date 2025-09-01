@@ -53,11 +53,14 @@ interface Props {
   amount: number
   type: 'income' | 'expense'
   recurring: boolean
+
   installment: {
     months: number
     start_date: string
     end_date: string
   }
+
+  gotoDetail?: () => void
 }
 
 export const ListItem = ({
@@ -65,12 +68,14 @@ export const ListItem = ({
   amount,
   type,
   recurring,
-  installment
+  installment,
+  gotoDetail
 }: Props) => {
-  console.log(installment)
   return (
-    <div className="w-full border-b border-neutral-light p-2.5 flex justify-between items-center">
-      <div className="flex items-center gap-2.5 text-size-md">
+    <div
+      className="w-full border-b border-neutral-light p-2.5 flex justify-between items-center"
+      onClick={gotoDetail}>
+      <div className="flex items-center gap-2.5 text-[16px]">
         <div className="w-[30px] h-[30px] rounded-full bg-gray-50">
           <ExpenseButton
             size="md"
@@ -93,7 +98,7 @@ export const ListItem = ({
       </div>
       <div
         className={tw(
-          'font-bold',
+          'font-bold  text-[16px]',
           type === 'income' ? 'text-secondary-blue' : 'text-secondary-red'
         )}>
         {type === 'income' ? '+' : '-'} {formatPriceNumber(amount)} 원

@@ -99,7 +99,7 @@ function Invite({ selectedUserList, setSelectedUserList }: Props) {
   }
 
   return (
-    <div className="mb-10">
+    <div>
       <label
         className="text-neutral-dark font-semibold"
         htmlFor="inviteUser">
@@ -127,7 +127,7 @@ function Invite({ selectedUserList, setSelectedUserList }: Props) {
         )}
       </div>
       <div>
-        <ul className="flex flex-col gap-3">
+        <ul className="flex flex-col px-1 py-3 gap-3 border-1 w-full h-30 overflow-y-scroll custom-scrollbar rounded-md">
           {selectedUserList &&
             selectedUserList.map(s => (
               <li

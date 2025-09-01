@@ -12,7 +12,7 @@ function NumberGroup() {
     if (!user?.id) return
     const fetchSelect = async () => {
       const { count, error } = await supabase
-        .from('groups')
+        .from('group_members')
         .select('*', { count: 'exact' })
         .match({ user_id: user.id })
 

@@ -8,10 +8,14 @@ interface Props {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   value?: string
   maxLength?: number
+  disabled?: boolean
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
-  ({ label, className, id, onChange, value, maxLength }, ref) => {
+  (
+    { label, className, id, onChange, value, maxLength, disabled = false },
+    ref
+  ) => {
     return (
       <input
         ref={ref}
@@ -19,6 +23,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
         name={id}
         type="text"
         onChange={onChange}
+        disabled={disabled}
         value={value}
         maxLength={maxLength}
         className={tw(

@@ -66,7 +66,6 @@ function GroupCard() {
                     <span className="text-black px-2.5 py-[0.3px] bg-primary-light rounded-lg">
                       {g.groups?.is_personal === true ? '개인' : '공동'}
                     </span>
-                    <span className="text-neutral-dark font-light">1일전</span>
                   </div>
                   <div className="mt-1.5">
                     <p className="text-black text-[15px] text-start pl-1 truncate max-w-[70%]">

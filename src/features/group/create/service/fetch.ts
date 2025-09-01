@@ -33,3 +33,41 @@ export async function getUserGroups(userId: string): Promise<GroupMembers[]> {
     return []
   }
 }
+
+export const updateGroupInfo = async (
+  groupId: string,
+  name: string,
+  mascot: number
+) => {
+  const { error } = await supabase
+    .from('groups')
+    .update({ name, mascot })
+    .eq('id', groupId)
+
+  if (error) {
+    throw new Error('그룹 정보 수정 실패: ' + error.message)
+  }
+}
+
+export const updateMainStatus = async (groupId: string, userId: string) => {
+  // Step 1. 모든 그룹 is_main false로 초기화
+  const { error: resetError } = await supabase
+    .from('group_members')
+    .update({ is_main: false })
+    .eq('user_id', userId)
+
+  if (resetError) {
+    throw new Error('대표 가계부 초기화 실패: ' + resetError.message)
+  }
+
+  // Step 2. 선택한 그룹만 true로 설정
+  const { error: setMainError } = await supabase
+    .from('group_members')
+    .update({ is_main: true })
+    .eq('user_id', userId)
+    .eq('group_id', groupId)
+
+  if (setMainError) {
+    throw new Error('대표 가계부 설정 실패: ' + setMainError.message)
+  }
+}

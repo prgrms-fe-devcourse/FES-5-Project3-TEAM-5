@@ -28,6 +28,8 @@ import PrivacyPage from '@/pages/privacy/Page'
 import SettingPage from '@/pages/accountbook/SettingPage'
 import CreateGroup from '@/pages/group/CreateGroup'
 
+import Edit from '@/features/group/edit/EditGroup'
+
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
   const selected = useSelectedDate.getState().date
@@ -61,6 +63,14 @@ export const router = createBrowserRouter([
         Component: CreateGroup,
         handle: {
           title: '가계부 생성',
+          hideNav: true
+        }
+      },
+      {
+        path: 'edit/:groupId',
+        Component: Edit,
+        handle: {
+          title: '가계부 수정',
           hideNav: true
         }
       },

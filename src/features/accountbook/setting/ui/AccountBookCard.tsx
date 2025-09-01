@@ -4,7 +4,7 @@ import { useUserStore } from '@/shared/stores/useUserStore'
 
 import supabase from '@/supabase/supabase'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { useShallow } from 'zustand/shallow'
 
 type CalendarInfo = {
@@ -22,6 +22,7 @@ function AccountBookCard() {
 
   const { groupId } = useParams()
   const user = useUserStore(useShallow(state => state.user))
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (!groupId && !user?.id) return
@@ -30,7 +31,6 @@ function AccountBookCard() {
         .from('groups')
         .select('*')
         .eq('id', groupId)
-        .eq('user_id', user?.id)
         .single()
 
       if (error) {
@@ -49,7 +49,9 @@ function AccountBookCard() {
     fetchGroups()
   }, [groupId])
 
-  const handleClick = () => {}
+  const handleClick = () => {
+    navigate(`/edit/${groupId}`)
+  }
 
   return (
     <div className="flex items-center gap-4 p-4 shadow-lg rounded-xl bg-white">

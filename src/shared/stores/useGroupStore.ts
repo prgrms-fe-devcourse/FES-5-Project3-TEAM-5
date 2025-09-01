@@ -1,10 +1,16 @@
 import { create } from 'zustand'
+import { fetchGroupsByUser } from '../services/group'
 
-interface Group {
-  id: string
-  name: string
-  mascot: number
+export interface Group {
+  group_id: string
   is_main: boolean
+  groups: {
+    id: string
+    user_id: string
+    name: string
+    mascot: number
+    is_personal: boolean
+  }
 }
 
 interface GroupState {
@@ -12,6 +18,7 @@ interface GroupState {
   mainGroupId: string | null
   setGroups: (groups: Group[]) => void
   setMainGroupId: (id: string) => void
+  fetchGroups: (userId: string) => Promise<void>
 }
 
 export const useGroupStore = create<GroupState>(set => ({
@@ -19,7 +26,18 @@ export const useGroupStore = create<GroupState>(set => ({
   mainGroupId: null,
   setGroups: groups => {
     const main = groups.find(g => g.is_main)
-    set({ groups, mainGroupId: main?.id || null })
+    set({ groups, mainGroupId: main?.groups.id || null })
   },
-  setMainGroupId: id => set({ mainGroupId: id })
+
+  setMainGroupId: id => set({ mainGroupId: id }),
+
+  fetchGroups: async userId => {
+    const data = await fetchGroupsByUser(userId)
+    const main = data.find(g => g.is_main)
+
+    set({
+      groups: data,
+      mainGroupId: main?.groups.id || null
+    })
+  }
 }))

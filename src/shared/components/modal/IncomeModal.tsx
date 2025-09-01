@@ -113,7 +113,7 @@ function IncomeModal({ open, onClose, onSave, initialData }: Props) {
 
       {/* 안내 문구 */}
       <p className="mt-4 text-sm text-secondary-red text-center">
-        {!endDate ? '종료일을 선택해주세요' : '\u00A0'}
+        {!endDate ? '종료일을 선택해 주세요' : '\u00A0'}
       </p>
 
       {/* 초기화 + 완료 버튼 */}

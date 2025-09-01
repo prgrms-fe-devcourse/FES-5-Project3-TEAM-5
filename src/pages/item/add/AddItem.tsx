@@ -82,6 +82,11 @@ function AddItem() {
 
   // DB 저장
   const handleSubmit = async () => {
+    if (Number(amount) < 100) {
+      console.error('금액은 최소 100원 이상이어야 합니다.')
+      return
+    }
+
     try {
       const { data: userData } = await supabase.auth.getUser()
       if (!userData.user) throw new Error('로그인이 필요합니다.')
@@ -282,10 +287,29 @@ function AddItem() {
               rows={4}></textarea>
           </div>
 
+          {/* 안내 문구 */}
+          <p className="mt-4 text-sm text-secondary-red text-center">
+            {!amount
+              ? '금액을 입력해 주세요'
+              : Number(amount) > 0 && Number(amount) < 100
+              ? '금액은 100원 이상 1억 미만으로 입력해 주세요'
+              : tab === '수입' && Number(amount) >= 100 && !selectedCategoryId
+              ? '분류를 선택해 주세요'
+              : tab === '지출' && Number(amount) >= 100
+                ? !selectedCategoryId && !selectedMethodId
+                  ? '분류와 결제수단을 선택해 주세요'
+                  : !selectedCategoryId
+                  ? '분류를 선택해 주세요'
+                  : !selectedMethodId
+                  ? '결제수단을 선택해 주세요'
+                  : '\u00A0'
+                : '\u00A0'}
+          </p>
+
           <SubmitButton
             text="작성 완료"
             onClick={handleSubmit}
-            disabled={!amount || !selectedCategoryId || (tab === '지출' && !selectedMethodId)}
+            disabled={!amount || !selectedCategoryId || (tab === '지출' && !selectedMethodId) || Number(amount) < 100 || Number(amount) > 99999999}
           />
         </form>
       </div>

@@ -145,11 +145,11 @@ function ExpenseModal({ open, onClose, onSave, initialData }: Props) {
         {/* 안내 문구 */}
         <p className="mt-4 text-sm text-secondary-red text-center">
           {mode === '반복' && !endDate
-            ? '종료일을 선택해주세요'
+            ? '종료일을 선택해 주세요'
             : mode === '할부' && !installment
-            ? '개월 수를 입력해주세요'
+            ? '개월 수를 입력해 주세요'
             : mode === '할부' && (Number(installment) < 2 || Number(installment) > 60)
-            ? '2 ~ 60개월 사이로 입력해주세요'
+            ? '2 ~ 60개월 사이로 입력해 주세요'
             : '\u00A0'}
         </p>
 

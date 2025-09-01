@@ -339,6 +339,7 @@ function AddItem() {
             setExpenseRepeatInstallmentData(data)
             setIsRepeatInstallmentModalOpen(false)
           }}
+          initialData={expenseRepeatInstallmentData}
         />
       )}
     </>

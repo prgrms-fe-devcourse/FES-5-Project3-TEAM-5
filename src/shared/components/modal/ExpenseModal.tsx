@@ -6,17 +6,13 @@ import { tw } from '@/shared/utils/tw'
 import SubmitButton from '../form/SubmitButton'
 import EndDateModal from './EndDateModal'
 import dayjs from 'dayjs'
+import type { RepeatInstallmentData } from '@/pages/item/add/saveAccountItem'
 
 interface Props {
   open: boolean
   onClose: () => void
-  onSave: (data: {
-    mode: '반복' | '할부'
-    selectedPeriod: string
-    isBiMonthly: boolean
-    endDate: Date | null
-    installment: string
-  }) => void
+  onSave: (data: RepeatInstallmentData) => void
+  initialData?: RepeatInstallmentData
 }
 
 // 매핑 테이블
@@ -31,13 +27,13 @@ const mapping: Record<string, string> = {
   격년: '매년'
 }
 
-function ExpenseModal({ open, onClose, onSave }: Props) {
-  const [mode, setMode] = useState<'반복' | '할부'>('반복') // 탭 상태
-  const [isBiMonthly, setIsBiMonthly] = useState(false) // 토글 상태
-  const [selectedPeriod, setSelectedPeriod] = useState('매일') // 주기 상태
-  const [installment, setInstallment] = useState('') // 할부 상태
+function ExpenseModal({ open, onClose, onSave, initialData }: Props) {
+  const [mode, setMode] = useState<'반복' | '할부'>(initialData?.mode ?? '반복') // 탭 상태
+  const [isBiMonthly, setIsBiMonthly] = useState(initialData?.isBiMonthly ?? false) // 토글 상태
+  const [selectedPeriod, setSelectedPeriod] = useState(initialData?.selectedPeriod ?? '매일') // 주기 상태
+  const [installment, setInstallment] = useState(initialData?.installment ?? '') // 할부 상태
 
-  const [endDate, setEndDate] = useState<Date | null>(null) // 종료일 상태
+  const [endDate, setEndDate] = useState<Date | null>(initialData?.endDate ?? null) // 종료일 상태
   const [isEndDateModalOpen, setIsEndDateModalOpen] = useState(false) // 종료일 모달 열림 상태
 
   // 토글 상태에 따라 값 변경

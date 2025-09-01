@@ -6,7 +6,7 @@ export type RepeatInstallmentData = {
   selectedPeriod?: string
   isBiMonthly?: boolean
   endDate?: Date | null
-  installment?: string
+  installment?: string | null
 }
 
 type SaveItemParams = {

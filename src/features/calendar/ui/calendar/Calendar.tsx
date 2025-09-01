@@ -35,7 +35,11 @@ export const Calendar = ({ handleDateClick, calendarEvents }: Props) => {
       calendarEvents.map(e => ({
         title: String(e.amount),
         start: e.date,
-        extendedProps: { type: e.type },
+        extendedProps: {
+          type: e.type,
+          installment: e.installment_plans,
+          installment_parent_id: e.installment_parent_id
+        },
         backgroundColor: 'transparent',
         borderColor: 'transparent'
       })),

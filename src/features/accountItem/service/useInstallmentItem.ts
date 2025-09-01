@@ -20,7 +20,7 @@ export const useInstallmentItem = () => {
         newInstallmentItem.push({
           ...installmentItem,
           date: dateStr,
-          amount: (Number(installmentItem.amount) / month).toFixed(2),
+          amount: installmentItem.amount,
           installment_parent_id: installmentItem.id as string,
           installment_plans: null
         })

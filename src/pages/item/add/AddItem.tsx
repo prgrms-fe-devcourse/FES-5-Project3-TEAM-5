@@ -33,7 +33,6 @@ type Category = {
 
 function AddItem() {
   const date = useSelectedDate(s => s.date)
-  const formattedDate = dayjs(date).format('M월 D일 ddd')
 
   const [tab, setTab] = useState<'수입' | '지출'>('수입') // 탭 상태
   const [amount, setAmount] = useState('') // 금액

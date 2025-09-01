@@ -91,14 +91,14 @@ function AddItem() {
         type: tab === '수입' ? 'income' : 'expense',
         date: dayjs(date).format('YYYY-MM-DD'),
         userId,
-        groupId: '192a90cc-ca5f-48f0-a88b-dd600f618513', // 로그인 한 계정으로 만든 그룹 uuid 임시로 넣어놨음. 나중에 바꿔야됨!!!!!!!!!!!!!
+        groupId: 'e89513be-c9c1-4b04-bb82-b5afdc1cbc97', // 로그인 한 계정으로 만든 그룹 uuid 임시로 넣어놨음. 나중에 바꿔야됨!!!!!!!!!!!!!
         categoryId: selectedCategoryId,
         paymentMethodId: tab === '지출' ? selectedMethodId : null,
         memo: memoRef.current?.value ?? null,
         file: selectedFile,
         repeatInstallmentData
       })
-      nav('/accountBook/calendar', { replace: true })
+      nav(`/accountBook/${result.groupId}/calendar`, { replace: true })
 
       console.warn('저장 성공:', result)
     } catch (err) {

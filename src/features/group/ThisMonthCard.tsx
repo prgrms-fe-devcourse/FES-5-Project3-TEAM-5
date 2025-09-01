@@ -20,18 +20,26 @@ function ThisMonthCard({ type, className }: Props) {
       if (!user?.id) return
 
       const { data: groupData, error: groupError } = await supabase
-        .from('groups')
-        .select('id')
+        .from('group_members')
+        .select('group_id')
         .eq('user_id', user.id)
         .eq('is_main', true)
-        .single()
+        .maybeSingle()
 
-      if (groupError || !groupData) {
+      if (!groupData) {
+        console.log('사용자가 속한 그룹이 없습니다.')
+        setTotal(0)
+        return
+      } else {
+        console.log(groupData)
+      }
+
+      if (groupError) {
         console.error('대표 그룹 가져오기 실패:', groupError)
         return
       }
 
-      const groupId = groupData.id
+      const { group_id } = groupData
 
       const start = dayjs().startOf('month').format('YYYY-MM-DD')
       const end = dayjs().endOf('month').format('YYYY-MM-DD')
@@ -39,7 +47,7 @@ function ThisMonthCard({ type, className }: Props) {
       const { data: itemData, error: itemError } = await supabase
         .from('account_items')
         .select('amount')
-        .eq('group_id', groupId)
+        .eq('group_id', group_id)
         .eq('type', type === '수입' ? 'income' : 'expense')
         .gte('date', start)
         .lte('date', end)

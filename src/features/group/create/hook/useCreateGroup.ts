@@ -37,7 +37,7 @@ export function useCreateGroup() {
       // 기존 대표 가계부 초기화
       if (isMain) {
         await supabase
-          .from('groups')
+          .from('group_members')
           .update({ is_main: false })
           .eq('user_id', user.id)
           .eq('is_main', true)
@@ -48,11 +48,10 @@ export function useCreateGroup() {
         .from('groups')
         .insert({
           id: groupIdRef.current,
-          name: groupName,
-          mascot,
           user_id: user.id,
-          is_main: isMain,
-          is_personal: isPersonal
+          is_personal: isPersonal,
+          mascot,
+          name: groupName
         })
         .select()
         .single()
@@ -60,18 +59,22 @@ export function useCreateGroup() {
       if (groupError) throw groupError
 
       // 그룹 멤버 초대
-      if (!isPersonal && invitedUsers.length > 0) {
-        const membersToInsert = invitedUsers.map(user => ({
+      const membersToInsert = [
+        {
           group_id: groupIdRef.current,
-          user_id: user.id
-        }))
+          user_id: user.id,
+          is_main: isMain
+        },
+        ...(!isPersonal
+          ? invitedUsers.map(invited => ({
+              group_id: groupIdRef.current,
+              user_id: invited.id,
+              is_main: false
+            }))
+          : [])
+      ]
 
-        const { error: memberError } = await supabase
-          .from('group_members')
-          .insert(membersToInsert)
-
-        if (memberError) throw memberError
-      }
+      await supabase.from('group_members').insert(membersToInsert)
 
       showSnackbar({ text: '새 가계부 생성 완료!', type: 'success' })
       navigate('/')

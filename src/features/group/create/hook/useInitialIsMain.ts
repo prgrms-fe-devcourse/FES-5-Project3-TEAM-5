@@ -15,16 +15,17 @@ export function useInitialIsMain() {
     const checkUserGroups = async () => {
       try {
         const { data, error } = await supabase
-          .from('groups')
-          .select('id')
+          .from('group_members')
+          .select('is_main')
           .eq('user_id', user.id)
+          .eq('is_main', true)
 
         if (error) {
-          console.error('그룹 정보 불러오기 실패', error)
+          console.error('대표 가계부 조회 실패', error)
           setIsMain(false)
           return
         }
-        setIsMain((data?.length ?? 0) === 0)
+        setIsMain(data.length === 0)
       } catch (err) {
         console.error('오류:', err)
         setIsMain(false)

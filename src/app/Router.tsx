@@ -65,10 +65,14 @@ export const router = createBrowserRouter([
         }
       },
       {
-        path: 'accountBook',
+        path: 'accountBook/:groupId',
         Component: AccountBookLayout,
         children: [
-          { path: 'calendar', Component: CalendarPage, loader: eventsLoader },
+          {
+            path: 'calendar',
+            Component: CalendarPage,
+            loader: eventsLoader
+          },
 
           {
             path: 'statistics',

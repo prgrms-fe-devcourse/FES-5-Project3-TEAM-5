@@ -7,6 +7,7 @@ import checkIcon from '@/shared/assets/checkIcon.svg'
 import Loading from '@/shared/components/loading/Loading'
 import { useNavigate } from 'react-router'
 import { getUserGroups } from './create/service/fetch'
+import { useStorageGroup } from './model/useStorageGroup'
 
 function GroupCard() {
   const [groups, setGroups] = useState<GroupMembers[]>([])
@@ -14,6 +15,8 @@ function GroupCard() {
 
   const navigate = useNavigate()
   const user = useUserStore(useShallow(state => state.user))
+
+  const setStorageGroup = useStorageGroup(state => state.setStorageGroup)
 
   useEffect(() => {
     if (!user?.id) return
@@ -28,6 +31,7 @@ function GroupCard() {
 
   const handleCalendar = (e: React.MouseEvent, groupId: string) => {
     e.preventDefault()
+    setStorageGroup(groupId)
     navigate(`/accountBook/${groupId}/calendar`)
   }
 

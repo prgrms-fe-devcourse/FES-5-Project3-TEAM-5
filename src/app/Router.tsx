@@ -110,7 +110,7 @@ export const router = createBrowserRouter([
         }
       },
       {
-        path: '/accountBook/item',
+        path: '/accountBook/:groupId/item',
         children: [
           {
             path: 'add',

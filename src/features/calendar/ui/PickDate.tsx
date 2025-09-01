@@ -12,6 +12,7 @@ import { useShallow } from 'zustand/shallow'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate } from 'react-router'
 import { tw } from '@/shared/utils/tw'
+import { useStorageGroup } from '@/features/group/model/useStorageGroup'
 
 interface Props {
   isSliding: boolean
@@ -23,8 +24,31 @@ export function PickDate({ isSliding }: Props) {
   const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
   const navigate = useNavigate()
   const location = useLocation()
-  const isCalendar = location.pathname.includes('/accountBook/calendar')
-  const isStatistics = location.pathname.includes('/accountBook/statistics')
+
+  const getStorageGroup = useStorageGroup(state => state.getStorageGroup)
+  const storageGroup = getStorageGroup()
+  const isStatistics = location.pathname.includes(
+    `/accountBook/${storageGroup}/statistics`
+  )
+
+  const isCalendar = location.pathname.includes(
+    `/accountBook/${storageGroup}/calendar`
+  )
+
+  const shouldSyncQuery = isCalendar || isStatistics
+
+  const navigateWithDate = (d: Date) => {
+    setDate(d)
+    if (shouldSyncQuery) {
+      navigate(
+        {
+          pathname: location.pathname,
+          search: `?date=${dayjs(d).format('YYYY-MM-DD')}`
+        },
+        { replace: true }
+      )
+    }
+  }
 
   return (
     <div
@@ -36,16 +60,9 @@ export function PickDate({ isSliding }: Props) {
         <button
           className="group text-3xl font-bold cursor-pointer"
           onClick={() => {
-            setDate(new Date(date.setMonth(date.getMonth() - 1)))
-            if (isCalendar) {
-              navigate(
-                `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
-              )
-            } else if (isStatistics) {
-              navigate(
-                `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
-              )
-            }
+            const prev = new Date(date)
+            prev.setMonth(prev.getMonth() - 1)
+            navigateWithDate(prev)
           }}>
           <svg
             width="24"
@@ -81,19 +98,9 @@ export function PickDate({ isSliding }: Props) {
             selected={date}
             captionLayout="dropdown"
             defaultMonth={date}
-            onSelect={date => {
-              if (isCalendar) {
-                navigate(
-                  `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
-                )
-                setDate(date as Date)
-              } else if (isStatistics) {
-                navigate(
-                  `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
-                )
-                setDate(date as Date)
-              } else {
-                setDate(date as Date)
+            onSelect={nextDate => {
+              if (nextDate) {
+                navigateWithDate(nextDate as Date)
               }
               setOpen(false)
             }}
@@ -104,16 +111,9 @@ export function PickDate({ isSliding }: Props) {
         <button
           className="group text-3xl font-bold cursor-pointer"
           onClick={() => {
-            setDate(new Date(date.setMonth(date.getMonth() + 1)))
-            if (isCalendar) {
-              navigate(
-                `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
-              )
-            } else if (isStatistics) {
-              navigate(
-                `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
-              )
-            }
+            const next = new Date(date)
+            next.setMonth(next.getMonth() + 1)
+            navigateWithDate(next)
           }}>
           <svg
             width="24"

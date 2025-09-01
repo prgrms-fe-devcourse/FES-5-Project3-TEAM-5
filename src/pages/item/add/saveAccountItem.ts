@@ -4,6 +4,7 @@ import supabase from "@/supabase/supabase"
 export type RepeatInstallmentData = {
   mode: "반복" | "할부"
   selectedPeriod?: string
+  isBiMonthly?: boolean
   endDate?: Date | null
   installment?: string
 }

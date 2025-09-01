@@ -325,6 +325,7 @@ function AddItem() {
             setIncomeRepeatData(data)
             setIsRepeatInstallmentModalOpen(false)
           }}
+          initialData={incomeRepeatData}
         />
       )}
 

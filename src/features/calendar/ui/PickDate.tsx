@@ -12,43 +12,51 @@ import { useShallow } from 'zustand/shallow'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate } from 'react-router'
 
-export function PickDate() {
+interface Props {
+  isSliding: boolean
+}
+
+export function PickDate({ isSliding }: Props) {
   const [open, setOpen] = React.useState(false)
 
   const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
   const navigate = useNavigate()
   const location = useLocation()
   const isCalendar = location.pathname.includes('/accountBook/calendar')
+  const isStatistics = location.pathname.includes('/accountBook/statistics')
 
   return (
     <div className=" w-full px-6 flex justify-between border-none items-center">
-      <button
-        className="group text-3xl font-bold cursor-pointer"
-        onClick={() => {
-          setDate(new Date(date.setMonth(date.getMonth() - 1)))
-          if (isCalendar) {
-            navigate(
-              `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
-            )
-          } else {
-            navigate(
-              `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
-            )
-          }
-        }}>
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M15 6L9 12L15 18"
-            className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
-            strokeWidth="2"
-          />
-        </svg>
-      </button>
+      {isSliding && (
+        <button
+          className="group text-3xl font-bold cursor-pointer"
+          onClick={() => {
+            setDate(new Date(date.setMonth(date.getMonth() - 1)))
+            if (isCalendar) {
+              navigate(
+                `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
+              )
+            } else if (isStatistics) {
+              navigate(
+                `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
+              )
+            }
+          }}>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M15 6L9 12L15 18"
+              className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
+              strokeWidth="2"
+            />
+          </svg>
+        </button>
+      )}
+
       <Popover
         open={open}
         onOpenChange={setOpen}>
@@ -69,48 +77,53 @@ export function PickDate() {
             captionLayout="dropdown"
             defaultMonth={date}
             onSelect={date => {
-              setDate(date as Date)
               if (isCalendar) {
                 navigate(
                   `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
                 )
-              } else {
+                setDate(date as Date)
+              } else if (isStatistics) {
                 navigate(
                   `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
                 )
+                setDate(date as Date)
+              } else {
+                setDate(date as Date)
               }
               setOpen(false)
             }}
           />
         </PopoverContent>
       </Popover>
-      <button
-        className="group text-3xl font-bold cursor-pointer"
-        onClick={() => {
-          setDate(new Date(date.setMonth(date.getMonth() + 1)))
-          if (isCalendar) {
-            navigate(
-              `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
-            )
-          } else {
-            navigate(
-              `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
-            )
-          }
-        }}>
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M9 6L15 12L9 18"
-            className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
-            strokeWidth="2"
-          />
-        </svg>
-      </button>
+      {isSliding && (
+        <button
+          className="group text-3xl font-bold cursor-pointer"
+          onClick={() => {
+            setDate(new Date(date.setMonth(date.getMonth() + 1)))
+            if (isCalendar) {
+              navigate(
+                `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
+              )
+            } else if (isStatistics) {
+              navigate(
+                `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
+              )
+            }
+          }}>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M9 6L15 12L9 18"
+              className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
+              strokeWidth="2"
+            />
+          </svg>
+        </button>
+      )}
     </div>
   )
 }

@@ -6,7 +6,7 @@ export const AccountBookLayout = () => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex flex-col justify-between items-center">
-        <PickDate />
+        <PickDate isSliding={true} />
         <div className="w-full flex gap-2 justify-between">
           <NavLink
             className={({ isActive }) =>

@@ -12,7 +12,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 import { saveAccountItem } from './saveAccountItem'
 import type { RepeatInstallmentData } from './saveAccountItem'
-import { useSelectedDate } from '@/features/calendar'
+import { PickDate, useSelectedDate } from '@/features/calendar'
 import { useNavigate } from 'react-router'
 dayjs.locale('ko')
 
@@ -177,8 +177,10 @@ function AddItem() {
       </div>
       <div className="p-4">
         {/* 날짜 */}
-        <div className="mb-3">
-          <span className="text-neutral-dark font-bold">{formattedDate}</span>
+        <div className="mb-3 flex justify-center">
+          <span className="text-neutral-dark font-bold">
+            <PickDate isSliding={false} />
+          </span>
         </div>
 
         {/* 폼 */}

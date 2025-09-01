@@ -7,11 +7,12 @@ import SubmitButton from '../form/SubmitButton'
 import EndDateModal from './EndDateModal'
 import dayjs from 'dayjs'
 import type { RepeatInstallmentData } from '@/pages/item/add/saveAccountItem'
+import ResetButton from '../buttons/ResetButton'
 
 interface Props {
   open: boolean
   onClose: () => void
-  onSave: (data: RepeatInstallmentData) => void
+  onSave: (data: RepeatInstallmentData | undefined) => void
   initialData?: RepeatInstallmentData
 }
 
@@ -45,6 +46,16 @@ function ExpenseModal({ open, onClose, onSave, initialData }: Props) {
   const handleToggleChange = (next: boolean) => {
     setIsBiMonthly(next)
     setSelectedPeriod(prev => mapping[prev] ?? prev)
+  }
+
+  // 초기화 버튼 클릭 시 state 리셋
+  const handleReset = () => {
+    setMode('반복')
+    setIsBiMonthly(false)
+    setSelectedPeriod('매일')
+    setInstallment('')
+    setEndDate(null)
+    onSave(undefined)
   }
 
   return (
@@ -142,14 +153,30 @@ function ExpenseModal({ open, onClose, onSave, initialData }: Props) {
             : '\u00A0'}
         </p>
 
-        {/* 완료 버튼 */}
-        <div className="mt-2">
+        {/* 초기화 + 완료 버튼 */}
+        <div className="mt-2 flex gap-3">
+          {mode === '반복' && initialData?.mode === '반복' && ( // 이미 저장된 데이터가 있을 때만 렌더링
+            <ResetButton
+              text="초기화"
+              onClick={handleReset}
+              className="flex-[1]"
+            />
+          )}
+          {mode === '할부' && initialData?.mode === '할부' && ( // 이미 저장된 데이터가 있을 때만 렌더링
+            <ResetButton
+              text="초기화"
+              onClick={handleReset}
+              className="flex-[1]"
+            />
+          )}
+
           <SubmitButton
             text={mode === '반복' ? '반복 설정' : '할부 설정'}
             disabled={
               (mode === '반복' && !endDate) ||
               (mode === '할부' && (!installment || Number(installment) < 2 || Number(installment) > 60))
             }
+            className='flex-[2]'
             onClick={() => {
               onSave({ mode, selectedPeriod, isBiMonthly, endDate, installment })
             }}

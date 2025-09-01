@@ -16,7 +16,7 @@ function GroupCard() {
   const navigate = useNavigate()
   const user = useUserStore(useShallow(state => state.user))
 
-  const setStorageGroup = useStorageGroup(state => state.setStorageGroup)
+  const setStorageGroup = useStorageGroup(state => state.setStorageGroup) // 그룹 선택시 해당 아이디 로컬스토리지 저장 => 나중에 가계부 nav를 위해서 저장
 
   useEffect(() => {
     if (!user?.id) return

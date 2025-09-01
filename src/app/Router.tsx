@@ -29,6 +29,8 @@ import SettingPage from '@/pages/accountbook/SettingPage'
 import CreateGroup from '@/pages/group/CreateGroup'
 import DetailAccountItemPage from '@/pages/detail/DetailAccountItemPage'
 
+import Edit from '@/features/group/edit/EditGroup'
+
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
   const selected = useSelectedDate.getState().date
@@ -66,7 +68,15 @@ export const router = createBrowserRouter([
         }
       },
       {
-        path: 'accountBook',
+        path: 'edit/:groupId',
+        Component: Edit,
+        handle: {
+          title: '가계부 수정',
+          hideNav: true
+        }
+      },
+      {
+        path: 'accountBook/:groupId',
         Component: AccountBookLayout,
         children: [
           {

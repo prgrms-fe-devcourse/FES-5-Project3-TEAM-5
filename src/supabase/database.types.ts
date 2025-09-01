@@ -183,18 +183,21 @@ export type Database = {
           created_at: string | null
           group_id: string
           id: string
+          is_main: boolean
           user_id: string
         }
         Insert: {
           created_at?: string | null
           group_id: string
           id?: string
+          is_main: boolean
           user_id: string
         }
         Update: {
           created_at?: string | null
           group_id?: string
           id?: string
+          is_main?: boolean
           user_id?: string
         }
         Relationships: [
@@ -218,28 +221,25 @@ export type Database = {
         Row: {
           created_at: string | null
           id: string
-          is_main: boolean | null
           is_personal: boolean | null
-          mascot: string | null
-          name: string | null
+          mascot: number | null
+          name: string
           user_id: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
-          is_main?: boolean | null
           is_personal?: boolean | null
-          mascot?: string | null
-          name?: string | null
+          mascot?: number | null
+          name: string
           user_id?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
-          is_main?: boolean | null
           is_personal?: boolean | null
-          mascot?: string | null
-          name?: string | null
+          mascot?: number | null
+          name?: string
           user_id?: string | null
         }
         Relationships: [

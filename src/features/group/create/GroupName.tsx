@@ -3,10 +3,12 @@ import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 
 function GroupName({
   value,
-  onChange
+  onChange,
+  disabled = false
 }: {
   value: string
   onChange: (v: string) => void
+  disabled?: boolean
 }) {
   const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
@@ -31,9 +33,10 @@ function GroupName({
         label="가계부 이름"
         id="groupName"
         onChange={e => handleChange(e)}
-        className="mt-2"
+        className={`input-class ${disabled ? 'opacity-50 cursor-not-allowed' : ''} mt-2`}
         value={value}
         maxLength={15}
+        disabled={disabled}
       />
     </div>
   )

@@ -46,10 +46,6 @@ function AddItem() {
 
   const nav = useNavigate()
 
-  // 할부|반복 결제 설정하면 색깔 바뀌게 하려고 해서 남겨뒀습니다.
-  // const [activeOption, setActiveOption] = useState<
-  //   'none' | 'repeat' | 'installment'
-  // >('none')
 
   // 모달 열림 상태
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false) // 결제 수단 설정 모달
@@ -76,6 +72,13 @@ function AddItem() {
   const [incomeRepeatData, setIncomeRepeatData] = useState<RepeatInstallmentData | undefined>(undefined) // 수입 - 반복 모달 데이터
   const [expenseRepeatInstallmentData, setExpenseRepeatInstallmentData] = useState<RepeatInstallmentData | undefined>(undefined) // 지출 - 반복|할부 모달 데이터
 
+  // 반복|할부 설정 여부에 따라 색깔 바꾸기
+  const activeOption =
+    tab === '수입'
+      ? (incomeRepeatData ? 'repeat' : 'none') // 수입에서 반복 설정을 했다면 색깔 바꾸기
+      : (expenseRepeatInstallmentData
+          ? (expenseRepeatInstallmentData.mode === '반복' ? 'repeat' : 'installment') // 지출에서 반복과 할부 여부에 따라 색깔 바꾸기
+          : 'none')
 
   // DB 저장
   const handleSubmit = async () => {
@@ -189,6 +192,7 @@ function AddItem() {
               onChange={setAmount}
               onButtonClick={() => setIsRepeatInstallmentModalOpen(true)}
               tab={tab}
+              activeOption={activeOption}
             />
           </div>
 

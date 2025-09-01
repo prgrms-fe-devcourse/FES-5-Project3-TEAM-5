@@ -91,7 +91,7 @@ function AddItem() {
         date: dayjs(date).format('YYYY-MM-DD'),
         userId,
 
-        groupId: '7f39a5ab-c5f2-4c19-99c8-d0adbc5f6e8c', // 로그인 한 계정으로 만든 그룹 uuid 임시로 넣어놨음. 나중에 바꿔야됨!!!!!!!!!!!!!
+        groupId: localStorage.getItem('storageGroup') || '',
 
         categoryId: selectedCategoryId,
         paymentMethodId: tab === '지출' ? selectedMethodId : null,
@@ -99,7 +99,9 @@ function AddItem() {
         file: selectedFile,
         repeatInstallmentData
       })
-      nav(`/accountBook/${result.groupId}/calendar`, { replace: true })
+      nav(`/accountBook/${localStorage.getItem('storageGroup')}/calendar`, {
+        replace: true
+      })
 
       console.warn('저장 성공:', result)
     } catch (err) {

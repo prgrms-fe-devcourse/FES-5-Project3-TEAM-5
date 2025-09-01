@@ -43,9 +43,11 @@ const eventsLoader = async ({ request }: { request: Request }) => {
   const url = new URL(request.url)
   const dateParam = url.searchParams.get('date')
   const initialDate = getInitialDateForCalendar(dateParam)
+
   const events = await fetchByMonth(
     dayjs(initialDate).year(),
-    dayjs(initialDate).month()
+    dayjs(initialDate).month(),
+    localStorage.getItem('storageGroup') || ''
   )
   return { initialDate, events }
 }

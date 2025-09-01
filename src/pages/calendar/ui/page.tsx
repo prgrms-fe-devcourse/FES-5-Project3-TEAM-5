@@ -45,7 +45,7 @@ export const CalendarPage = () => {
 
   useEffect(() => {
     const run = async () => {
-      const all = await fetchAllItems()
+      const all = await fetchAllItems(storageGroup)
 
       // 반복 키
       const existingRecurringKeys = new Set(

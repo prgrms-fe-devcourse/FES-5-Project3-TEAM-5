@@ -282,6 +282,7 @@ function AddItem() {
           <SubmitButton
             text="작성 완료"
             onClick={handleSubmit}
+            disabled={!amount || !selectedCategoryId || (tab === '지출' && !selectedMethodId)}
           />
         </form>
       </div>

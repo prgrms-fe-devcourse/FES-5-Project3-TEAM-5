@@ -6,7 +6,8 @@ import SelectField from './components/SelectField'
 import PaymentModal from '@/shared/components/modal/PaymentModal'
 import supabase from '@/supabase/supabase'
 import CategoryModal from '@/shared/components/modal/CategoryModal'
-import RepeatInstallmentModal from '@/shared/components/modal/RepeatInstallmentModal'
+import IncomeModal from '@/shared/components/modal/IncomeModal'
+import ExpenseModal from '@/shared/components/modal/ExpenseModal'
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
@@ -53,8 +54,7 @@ function AddItem() {
   // 모달 열림 상태
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false) // 결제 수단 설정 모달
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false) // 분류 설정 모달
-  const [isRepeatInstallmentModalOpen, setIsRepeatInstallmentModalOpen] =
-    useState(false) // 반복|할부 설정 모달
+  const [isRepeatInstallmentModalOpen, setIsRepeatInstallmentModalOpen] = useState(false) // 반복|할부 설정 모달
 
   // 결제 수단
   const [methods, setMethods] = useState<PaymentMethod[]>([]) // 결제 수단
@@ -73,10 +73,9 @@ function AddItem() {
   // 현재 탭 상태 필터
   const filterType = tab === '수입' ? 'income' : 'expense'
 
-  // 반복|할부 모달 데이터
-  const [repeatInstallmentData, setRepeatInstallmentData] = useState<
-    RepeatInstallmentData | undefined
-  >(undefined)
+  const [incomeRepeatData, setIncomeRepeatData] = useState<RepeatInstallmentData | undefined>(undefined) // 수입 - 반복 모달 데이터
+  const [expenseRepeatInstallmentData, setExpenseRepeatInstallmentData] = useState<RepeatInstallmentData | undefined>(undefined) // 지출 - 반복|할부 모달 데이터
+
 
   // DB 저장
   const handleSubmit = async () => {
@@ -96,7 +95,7 @@ function AddItem() {
         paymentMethodId: tab === '지출' ? selectedMethodId : null,
         memo: memoRef.current?.value ?? null,
         file: selectedFile,
-        repeatInstallmentData
+        repeatInstallmentData: tab === '수입' ? incomeRepeatData : expenseRepeatInstallmentData
       })
       nav('/accountBook/calendar', { replace: true })
 
@@ -312,17 +311,31 @@ function AddItem() {
         }}
       />
 
-      {/* 반복|할부 모달 */}
-      <RepeatInstallmentModal
-        open={isRepeatInstallmentModalOpen}
-        onClose={() => setIsRepeatInstallmentModalOpen(false)}
-        tab={tab}
-        onSave={data => {
-          console.warn('반복/할부 데이터:', data)
-          setRepeatInstallmentData(data)
-          setIsRepeatInstallmentModalOpen(false)
-        }}
-      />
+      {/* 수입 - 반복 모달 */}
+      {tab === '수입' && (
+        <IncomeModal
+          open={isRepeatInstallmentModalOpen}
+          onClose={() => setIsRepeatInstallmentModalOpen(false)}
+          onSave={data => {
+            console.warn('반복 데이터:', data)
+            setIncomeRepeatData(data)
+            setIsRepeatInstallmentModalOpen(false)
+          }}
+        />
+      )}
+
+      {/* 지출 - 반복|할부 모달 */}
+      {tab === '지출' && (
+        <ExpenseModal
+          open={isRepeatInstallmentModalOpen}
+          onClose={() => setIsRepeatInstallmentModalOpen(false)}
+          onSave={data => {
+            console.warn('반복/할부 데이터:', data)
+            setExpenseRepeatInstallmentData(data)
+            setIsRepeatInstallmentModalOpen(false)
+          }}
+        />
+      )}
     </>
   )
 }

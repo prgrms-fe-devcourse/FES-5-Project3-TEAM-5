@@ -4,14 +4,12 @@ import BinaryTabs from '@/pages/item/add/components/BinaryTabs'
 import Toggle from '../toggle/Toggle'
 import { tw } from '@/shared/utils/tw'
 import SubmitButton from '../form/SubmitButton'
-import SingleTab from '@/pages/item/add/components/SingleTab'
 import EndDateModal from './EndDateModal'
 import dayjs from 'dayjs'
 
 interface Props {
   open: boolean
   onClose: () => void
-  tab: '수입' | '지출'
   onSave: (data: {
     mode: '반복' | '할부'
     selectedPeriod: string
@@ -33,7 +31,7 @@ const mapping: Record<string, string> = {
   격년: '매년'
 }
 
-function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
+function ExpenseModal({ open, onClose, onSave }: Props) {
   const [mode, setMode] = useState<'반복' | '할부'>('반복') // 탭 상태
   const [isBiMonthly, setIsBiMonthly] = useState(false) // 토글 상태
   const [selectedPeriod, setSelectedPeriod] = useState('매일') // 주기 상태
@@ -58,11 +56,7 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
       <div className="min-h-[130px]">
         {/* 상단 탭 */}
         <div className="mt-5">
-          {tab === '지출' ? (
             <BinaryTabs value={mode} onChange={setMode} options={['반복', '할부']} />
-          ) : (
-            <SingleTab label="반복" />
-          )}
         </div>
 
         {/* 반복 탭일 때 */}
@@ -119,7 +113,7 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
         )}
 
         {/* 지출 + 할부 탭일 때 */}
-        {tab === '지출' && mode === '할부' && (
+        {mode === '할부' && (
           <div className="mt-4">
             <label className="block mb-2 text-neutral-dark font-bold">
               할부 개월 수
@@ -171,10 +165,10 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
           open={isEndDateModalOpen}
           onClose={() => setIsEndDateModalOpen(false)}
           onSelect={date => setEndDate(date)}
-          selectedDate={endDate}  // 이미 선택된 날짜를 넘김
+          selectedDate={endDate}   // 이미 선택된 날짜를 넘김
         />
 
     </BaseModal>
   )
 }
-export default RepeatInstallmentModal
+export default ExpenseModal

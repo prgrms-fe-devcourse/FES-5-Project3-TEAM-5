@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
 function DetailAccountItemPage() {
-  const { date, id } = useParams()
+  const { date } = useParams()
   const title = date ? dayjs(date).format('M월 D일 ddd') : ''
   const [isArticleToggleOn, setIsArticleToggleOn] = useState(false)
   const [isCommentToggleOn, setCommentToggleOn] = useState(false)

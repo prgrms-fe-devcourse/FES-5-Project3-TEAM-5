@@ -177,7 +177,7 @@ function AddItem() {
       </div>
       <div className="p-4">
         {/* 날짜 */}
-        <div className="mb-3 flex justify-center">
+        <div className="mb-3 flex justify-start">
           <span className="text-neutral-dark font-bold">
             <PickDate isSliding={false} />
           </span>

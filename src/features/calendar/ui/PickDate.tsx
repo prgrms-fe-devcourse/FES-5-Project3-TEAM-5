@@ -11,6 +11,7 @@ import { useSelectedDate } from '../model/useSelectedDate'
 import { useShallow } from 'zustand/shallow'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate } from 'react-router'
+import { tw } from '@/shared/utils/tw'
 
 interface Props {
   isSliding: boolean
@@ -26,7 +27,11 @@ export function PickDate({ isSliding }: Props) {
   const isStatistics = location.pathname.includes('/accountBook/statistics')
 
   return (
-    <div className=" w-full px-6 flex justify-between border-none items-center">
+    <div
+      className={tw(
+        ' w-full  flex justify-between border-none items-center',
+        isSliding && 'px-6'
+      )}>
       {isSliding && (
         <button
           className="group text-3xl font-bold cursor-pointer"
@@ -64,7 +69,7 @@ export function PickDate({ isSliding }: Props) {
           <Button
             variant="ghost"
             id="date"
-            className="w-32 text-size-lg font-bold justify-center">
+            className="text-size-lg font-bold justify-center p-0">
             {date ? date.toLocaleDateString() : '날짜 선택'}
           </Button>
         </PopoverTrigger>

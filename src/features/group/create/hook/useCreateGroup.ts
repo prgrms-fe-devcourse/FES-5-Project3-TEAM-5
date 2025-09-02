@@ -30,7 +30,7 @@ export function useCreateGroup() {
 
     try {
       if (!groupName || mascot === null || isMain === null) {
-        showSnackbar({ text: '모든 필드를 입력해주세요', type: 'error' })
+        showSnackbar({ text: '모든 필드를 입력해주세요', type: 'warning' })
         return
       }
 

@@ -6,6 +6,7 @@ import supabase from '@/supabase/supabase'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useShallow } from 'zustand/shallow'
+import { fetchGroups } from '../service/service'
 
 type CalendarInfo = {
   name: string
@@ -26,18 +27,8 @@ function AccountBookCard() {
 
   useEffect(() => {
     if (!groupId && !user?.id) return
-    const fetchGroups = async () => {
-      const { data, error } = await supabase
-        .from('groups')
-        .select('*')
-        .eq('id', groupId)
-        .single()
-
-      if (error) {
-        console.error('그룹정보 불러오기: ', error)
-        return
-      }
-
+    const fetchData = async () => {
+      const data = await fetchGroups(groupId)
       if (data) {
         setCalendarInfo({
           name: data.name,
@@ -46,8 +37,8 @@ function AccountBookCard() {
         })
       }
     }
-    fetchGroups()
-  }, [groupId])
+    fetchData()
+  }, [groupId, user?.id])
 
   const handleClick = () => {
     navigate(`/edit/${groupId}`)

@@ -134,7 +134,7 @@ export const Snackbar = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.18, ease: 'easeOut' }}
-              className="relative w-[300px] sm:w-[400px]">
+              className="relative w-[250px] sm:w-[350px]">
               <div className="relative rounded-xl bg-white shadow-lg border border-neutral-200 pl-4 pr-3 py-3">
                 <div
                   className={`absolute left-0 top-0 h-full w-2 rounded-l-xl ${cfg.stripe}`}
@@ -145,7 +145,7 @@ export const Snackbar = () => {
                     <div className="text-neutral-900 font-semibold">
                       {cfg.title}
                     </div>
-                    <div className="text-neutral-700 text-sm mt-0.5">
+                    <div className="text-neutral-700 text-sm mt-0.5 whitespace-pre-line">
                       {t.text}
                     </div>
                   </div>

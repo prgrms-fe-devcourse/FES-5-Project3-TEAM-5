@@ -56,7 +56,7 @@ function InviteCompleteBtn({ personal, invitedUsers, groupId, user }: Props) {
     if (filteredUsers.length === 0) {
       showSnackbar({
         text: '이미 초대된 유저입니다.',
-        type: 'error'
+        type: 'warning'
       })
       return
     }

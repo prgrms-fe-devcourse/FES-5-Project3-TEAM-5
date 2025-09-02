@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import ExportExcelModal from './exportExcel/ExportExcelModal'
 import { useNavigate, useParams } from 'react-router'
 import DeleteModal from './deleteGroup/DeleteModal'
+import { fetchGroups } from '../service/service'
+import { useUserStore } from '@/shared/stores/useUserStore'
 
 const serviceList = [
   { value: 'inviteUser', text: '초대하기' },
@@ -9,7 +11,7 @@ const serviceList = [
   { value: 'deleteAccountBook', text: '가계부 삭제' }
 ]
 
-interface Delete {
+export interface Delete {
   isOwner: boolean
   delete: boolean
 }
@@ -21,8 +23,23 @@ function ServiceCard() {
     isOwner: false,
     delete: false
   })
+
   const navigate = useNavigate()
   const { groupId } = useParams()
+  const user = useUserStore(state => state.user)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchGroups(groupId)
+      if (data) {
+        if (data.user_id === user?.id) {
+          setIsDelete(prev => ({ ...prev, isOwner: true }))
+        }
+      }
+    }
+
+    fetchData()
+  }, [groupId, user?.id, isDelete])
 
   const handleExportExcel = () => {
     setIsExport(!isExport)
@@ -79,6 +96,7 @@ function ServiceCard() {
         <DeleteModal
           isDelete={isDelete}
           onCancel={handleDelete}
+          setIsDelete={setIsDelete}
         />
       )}
       {isExport && <ExportExcelModal onCancel={handleExportExcel} />}

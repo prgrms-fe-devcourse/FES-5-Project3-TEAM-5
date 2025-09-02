@@ -70,6 +70,8 @@ export function PickDate({ isSliding }: Props) {
     navigateWithDate(next)
   }
 
+  const isToday = dayjs(date).isSame(dayjs(), 'day')
+
   return (
     <div
       className={tw(
@@ -83,45 +85,49 @@ export function PickDate({ isSliding }: Props) {
         />
       )}
       <div className="relative flex-1 flex justify-center">
-        <Popover
-          open={open}
-          onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
+        <div className="flex items-center gap-2">
+          <Popover
+            open={open}
+            onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="ghost"
+                id="date"
+                className="text-size-lg font-bold justify-center p-0">
+                {selectedDate}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-auto overflow-hidden p-0"
+              align="start">
+              <Calendar
+                mode="single"
+                selected={date}
+                captionLayout="dropdown"
+                defaultMonth={date}
+                onSelect={nextDate => {
+                  if (nextDate) {
+                    navigateWithDate(nextDate as Date)
+                  }
+                  setOpen(false)
+                }}
+              />
+            </PopoverContent>
+          </Popover>
+
+          {isSliding && !isToday && (
             <Button
-              variant="ghost"
-              id="date"
-              className="text-size-lg font-bold justify-center p-0">
-              {selectedDate}
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+              onClick={() => {
+                navigateWithDate(new Date())
+                resetDate()
+              }}>
+              오늘로
             </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            className="w-auto overflow-hidden p-0"
-            align="start">
-            <Calendar
-              mode="single"
-              selected={date}
-              captionLayout="dropdown"
-              defaultMonth={date}
-              onSelect={nextDate => {
-                if (nextDate) {
-                  navigateWithDate(nextDate as Date)
-                }
-                setOpen(false)
-              }}
-            />
-          </PopoverContent>
-        </Popover>
-        {isSliding && (
-          <Button
-            variant="ghost"
-            className="absolute right-4 top-1/2 -translate-y-1/2"
-            onClick={() => {
-              navigateWithDate(new Date())
-              resetDate()
-            }}>
-            오늘
-          </Button>
-        )}
+          )}
+        </div>
       </div>
       {isSliding && (
         <SlideBtn

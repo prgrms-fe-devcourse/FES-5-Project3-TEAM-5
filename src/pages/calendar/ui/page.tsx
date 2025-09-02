@@ -1,22 +1,28 @@
 import { useEffect, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router'
+
+import dayjs from 'dayjs'
+import { useShallow } from 'zustand/shallow'
+
 import { TotalReport } from './TotalReport'
+
 import {
   Calendar,
   DateListOverlay,
   useSelectedDate
 } from '@/features/calendar/index'
-import type { AccountItem } from '@/features/accountItem/index'
-import { useShallow } from 'zustand/shallow'
-import dayjs from 'dayjs'
-import { useRecurringItem } from '@/features/accountItem/service/useRecurringItem'
+
 import {
-  createRecurringItem,
-  fetchAllItems
-} from '@/features/accountItem/service/accountItem'
-import AddButton from '@/shared/components/buttons/AddButton'
-import { useInstallmentItem } from '@/features/accountItem/service/useInstallmentItem'
+  useRecurringItem,
+  useInstallmentItem,
+  useExistingKey,
+  type AccountItem,
+  createRecurringItem
+} from '@/features/accountItem/index'
+
 import { useStorageGroup } from '@/features/group/model/useStorageGroup'
+
+import AddButton from '@/shared/components/buttons/AddButton'
 
 interface LoaderData {
   events: AccountItem[]
@@ -25,6 +31,10 @@ interface LoaderData {
 
 export const CalendarPage = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const [calendarEventsByDate, setCalendarEventsByDate] = useState<
+    AccountItem[]
+  >([])
+
   const { initialDate, events } = useLoaderData() as LoaderData
 
   const { searchRecurringItem } = useRecurringItem()
@@ -33,9 +43,7 @@ export const CalendarPage = () => {
   const getStorageGroup = useStorageGroup(state => state.getStorageGroup)
   const storageGroup = getStorageGroup()
 
-  const [calendarEventsByDate, setCalendarEventsByDate] = useState<
-    AccountItem[]
-  >([])
+  const { fetchExistingKey } = useExistingKey()
 
   const [setData, setAmountList] = useSelectedDate(
     useShallow(s => [s.setDate, s.setAmountList])
@@ -45,33 +53,12 @@ export const CalendarPage = () => {
 
   useEffect(() => {
     const run = async () => {
-      const all = await fetchAllItems(storageGroup)
-
-      // 반복 키
-      const existingRecurringKeys = new Set(
-        all.map(i => {
-          const parentKey = i.recurring_parent_id ?? i.id
-          return `${parentKey}-${dayjs(i.date).format('YYYY-MM-DD')}`
-        })
-      )
-
-      //할부 키
-      const existingInstallmentKeys = new Set(
-        all.map(i => {
-          const parentKey = i.installment_parent_id ?? i.id
-          return `${parentKey}-${dayjs(i.date).format('YYYY-MM-DD')}`
-        })
-      )
-
-      // 반복 부모
-      const recurringParents = all.filter(
-        i => i.recurring_rules && !i.recurring_parent_id
-      )
-
-      // 할부 부모
-      const installmentParents = all.filter(
-        i => i.installment_plans && !i.installment_parent_id
-      )
+      const {
+        recurringParents,
+        installmentParents,
+        existingRecurringKeys,
+        existingInstallmentKeys
+      } = await fetchExistingKey(storageGroup) // 이렇게 안에 넣어도 되나?
 
       const toCreate: AccountItem[] = []
 

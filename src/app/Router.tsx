@@ -15,8 +15,6 @@ import VotePage from '@/pages/vote/VotePage'
 import AddVotePage from '@/pages/vote/AddVotePage'
 import EditVotePage from '@/pages/vote/EditVotePage'
 import AddItem from '@/pages/item/add/AddItem'
-import StatisticsPage from '@/pages/statistics/ui/StatisticsPage'
-import StatisticsDetailPage from '@/pages/statistics/ui/StatisticsDetailPage'
 import NotFound from '@/shared/components/notFound/NotFound'
 import FAQPage from '@/pages/faq/page'
 import NoticePage from '@/pages/notice/page'
@@ -30,6 +28,7 @@ import CreateGroup from '@/pages/group/CreateGroup'
 import DetailAccountItemPage from '@/pages/detail/DetailAccountItemPage'
 
 import Edit from '@/features/group/edit/EditGroup'
+import { StatisticsDetailPage, StatisticsPage } from '@/pages/statistics/ui'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()

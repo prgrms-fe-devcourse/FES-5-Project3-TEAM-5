@@ -4,14 +4,14 @@ import type { Comments } from '../../model/responseBody'
 
 interface Props {
   isCommentToggleOn: boolean
-  onChangeCommentToggle: () => void
   commentData?: Comments[]
+  onChangeCommentToggle: () => void
 }
 
 export function CommentContainer({
   isCommentToggleOn,
-  onChangeCommentToggle,
-  commentData
+  commentData,
+  onChangeCommentToggle
 }: Props) {
   return (
     <div className="flex flex-col gap-2.5 border-t-2 border-neutral-light py-3 ">
@@ -20,6 +20,7 @@ export function CommentContainer({
       {commentData &&
         commentData.map(item => (
           <Comment
+            key={item.id}
             created_at={item.created_at}
             content={item.content}
             writer={item.users.nickname}

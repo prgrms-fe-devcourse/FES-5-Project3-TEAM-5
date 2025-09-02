@@ -8,18 +8,22 @@ interface Props {
   payment_methods?: string
   user_id: string
   memo?: string
-  onChangeArticleToggle: () => void
+  item_id: string
   reactions: Reactions[]
+  onChangeArticleToggle: () => void
+  handleReactions: (itemId: string, kind: string) => Promise<void>
 }
 
 export function DetailContents({
   isArticleToggleOn,
-  onChangeArticleToggle,
+  item_id,
   payment_methods,
   user_id,
   receipt_url,
   memo,
-  reactions
+  reactions,
+  onChangeArticleToggle,
+  handleReactions
 }: Props) {
   return (
     <>
@@ -41,7 +45,11 @@ export function DetailContents({
         />
         <p className=" w-full  text-black text-[16px]">{memo}</p>
 
-        <ReactionButtonContainer reactions={reactions} />
+        <ReactionButtonContainer
+          item_id={item_id}
+          reactions={reactions}
+          onChangeReaction={handleReactions}
+        />
       </div>
     </>
   )

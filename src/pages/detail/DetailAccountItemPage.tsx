@@ -7,15 +7,17 @@ import type {
   Comments,
   DetailAccountItem
 } from '@/features/detail/model/responseBody'
+import { insertReaction } from '@/features/detail/service/addReaction'
 import {
   getCommentsData,
   getDetailItemData
 } from '@/features/detail/service/fetchDetailData'
 
 import Header from '@/shared/components/header/Header'
+import { useUserStore } from '@/shared/stores/useUserStore'
 
 import dayjs from 'dayjs'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
 function DetailAccountItemPage() {
@@ -36,15 +38,27 @@ function DetailAccountItemPage() {
     setCommentToggleOn(!isCommentToggleOn)
   }
 
-  useEffect(() => {
-    const fetch = async () => {
-      if (!id) return
-      const detailData = await getDetailItemData(id)
-      setDetailItemData(detailData)
-      const commentsData = await getCommentsData(id)
-      setCommentsData(commentsData)
+  const handleReactions = async (itemId: string, kind: string) => {
+    const userId = useUserStore.getState().user!.id
+    try {
+      await insertReaction(itemId, userId, kind)
+      await loadData()
+    } catch (error) {
+      console.log('리액션 에러', error)
+
+      alert('리액션 중 오류가 발생했습니다.')
     }
-    fetch()
+  }
+
+  const loadData = async () => {
+    if (!id) return
+    const detailData = await getDetailItemData(id)
+    setDetailItemData(detailData)
+    const commentsData = await getCommentsData(id)
+    setCommentsData(commentsData)
+  }
+  useEffect(() => {
+    loadData()
   }, [id])
 
   return (
@@ -53,7 +67,7 @@ function DetailAccountItemPage() {
       <div className="flex flex-col p-4 gap-2">
         {detailItemData &&
           detailItemData.map(item => (
-            <>
+            <Fragment key={item.id}>
               <ListItem
                 key={item.id}
                 recurring={!!item.recurring_rule_id}
@@ -67,6 +81,7 @@ function DetailAccountItemPage() {
                 type={item.type}
               />
               <DetailContents
+                item_id={String(item.id)}
                 user_id={item.users.nickname}
                 receipt_url={item.receipt_url!}
                 payment_methods={item.payment_methods?.type}
@@ -74,8 +89,9 @@ function DetailAccountItemPage() {
                 reactions={item.reactions}
                 isArticleToggleOn={isArticleToggleOn}
                 onChangeArticleToggle={onChangeArticleToggle}
+                handleReactions={handleReactions}
               />
-            </>
+            </Fragment>
           ))}
 
         <CommentContainer

@@ -10,13 +10,21 @@ import { getReactionCount } from '../utils/countReacions'
 
 interface Props {
   reactions: Reactions[]
+  item_id: string
+  onChangeReaction: (itemId: string, kind: string) => Promise<void>
 }
 
-function ReactionButtonContainer({ reactions }: Props) {
+function ReactionButtonContainer({
+  reactions,
+  onChangeReaction,
+  item_id
+}: Props) {
   const [isLikeActive, setIsLikeActive] = useState(false)
   const [isDislikeActive, setIsDislikeClicked] = useState(false)
   const { dislike, like } = getReactionCount(reactions)
-  console.log(dislike, like)
+  const handleReactions = (kind: string) => {
+    onChangeReaction(item_id, kind)
+  }
 
   return (
     <div className="flex gap-7">
@@ -25,6 +33,7 @@ function ReactionButtonContainer({ reactions }: Props) {
         onClick={() => {
           setIsLikeActive(!isLikeActive)
           setIsDislikeClicked(false)
+          handleReactions('like')
         }}>
         {isLikeActive ? <ActiveLikeIcon /> : <InactiveLikeIcon />}
         <p>{like}</p>
@@ -34,6 +43,7 @@ function ReactionButtonContainer({ reactions }: Props) {
         onClick={() => {
           setIsLikeActive(false)
           setIsDislikeClicked(!isDislikeActive)
+          handleReactions('dislike')
         }}>
         {isDislikeActive ? <ActiveDislikeIcon /> : <InactiveDislikeIcon />}
         <p>{dislike}</p>

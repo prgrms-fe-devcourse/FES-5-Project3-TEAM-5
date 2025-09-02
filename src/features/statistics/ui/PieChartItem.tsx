@@ -1,6 +1,7 @@
 import type { AccountItem } from '@/features/accountItem'
 import { Pie, PieChart, Tooltip } from 'recharts'
-import { expenseColors, incomeColors } from './constant'
+import { expenseColors, incomeColors } from '../model/constant'
+import { formatPriceNumber } from '@/shared/utils/format'
 
 interface Props {
   type: 'income' | 'expense'
@@ -43,7 +44,12 @@ export const PieChartItem = ({ type, data, onClick }: Props) => {
         outerRadius={130}
         paddingAngle={3}
       />
-      <Tooltip />
+      <Tooltip
+        formatter={(value: number, name: string) => [
+          formatPriceNumber(Number(value)),
+          name
+        ]}
+      />
     </PieChart>
   )
 }

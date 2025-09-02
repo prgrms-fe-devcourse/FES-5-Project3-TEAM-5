@@ -5,15 +5,25 @@ interface Props {
   label: string
   className?: string
   id?: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   value?: string
   maxLength?: number
   disabled?: boolean
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
   (
-    { label, className, id, onChange, value, maxLength, disabled = false },
+    {
+      label,
+      className,
+      id,
+      onChange,
+      value,
+      maxLength,
+      disabled = false,
+      onKeyDown
+    },
     ref
   ) => {
     return (
@@ -23,6 +33,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
         name={id}
         type="text"
         onChange={onChange}
+        onKeyDown={onKeyDown}
         disabled={disabled}
         value={value}
         maxLength={maxLength}

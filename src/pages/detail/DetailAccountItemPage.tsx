@@ -46,7 +46,7 @@ function DetailAccountItemPage() {
   }) => {
     try {
       await insertReaction(itemId, userId, kind)
-      await loadData()
+      fetchDetailData(id!)
     } catch (error) {
       console.log('리액션 에러', error)
       alert('리액션 중 오류가 발생했습니다.')
@@ -115,12 +115,6 @@ function DetailAccountItemPage() {
   const fetchDetailData = async (id: string) => {
     const detailData = await getDetailItemData(id)
     setDetailItemData(detailData)
-  }
-
-  const loadData = async () => {
-    if (!id) return
-    fetchDetailData(id)
-    fetchCommentData(id)
   }
 
   useEffect(() => {

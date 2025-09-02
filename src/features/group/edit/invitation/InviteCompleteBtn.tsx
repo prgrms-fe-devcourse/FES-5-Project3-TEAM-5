@@ -22,7 +22,7 @@ function InviteCompleteBtn({ personal, invitedUsers, groupId, user }: Props) {
       return
     }
 
-    // Step 1: 개인 → 공동 전환
+    // 개인 → 공동 전환
     if (personal) {
       const { error: updateError } = await supabase
         .from('groups')
@@ -36,30 +36,51 @@ function InviteCompleteBtn({ personal, invitedUsers, groupId, user }: Props) {
       }
     }
 
-    let userHasMain = new Set<string>()
+    const invitedUserIds = invitedUsers.map(u => u.id)
 
-    if (invitedUsers.length > 0) {
-      const userIds = invitedUsers.map(u => u.id)
+    const { data: existingMembers, error: fetchError } = await supabase
+      .from('group_members')
+      .select('user_id')
+      .eq('group_id', groupId)
+      .in('user_id', invitedUserIds)
 
-      const { data, error } = await supabase
-        .from('group_members')
-        .select('user_id')
-        .in('user_id', userIds)
-        .eq('is_main', true)
-
-      if (error) {
-        console.error('대표 가계부 확인 실패:', error)
-        return
-      }
-
-      userHasMain = new Set(data?.map(d => d.user_id))
+    if (fetchError) {
+      console.error('기존 그룹 멤버 조회 실패:', fetchError)
+      return
     }
 
+    const existingUserIds = new Set(existingMembers.map(m => m.user_id))
+
+    const filteredUsers = invitedUsers.filter(u => !existingUserIds.has(u.id))
+
+    if (filteredUsers.length === 0) {
+      showSnackbar({
+        text: '이미 초대된 유저입니다.',
+        type: 'error'
+      })
+      return
+    }
+
+    const filteredUserIds = filteredUsers.map(u => u.id)
+
+    const { data: mainData, error: mainError } = await supabase
+      .from('group_members')
+      .select('user_id')
+      .in('user_id', filteredUserIds)
+      .eq('is_main', true)
+
+    if (mainError) {
+      console.error('대표 가계부 확인 실패:', mainError)
+      return
+    }
+
+    const hasMainSet = new Set(mainData.map(m => m.user_id))
+
     // Step 2: 초대한 유저들 insert
-    const inserts = invitedUsers.map(u => ({
+    const inserts = filteredUsers.map(u => ({
       group_id: groupId,
       user_id: u.id,
-      is_main: !userHasMain.has(u.id)
+      is_main: !hasMainSet.has(u.id)
     }))
 
     const { error: insertError } = await supabase
@@ -71,7 +92,7 @@ function InviteCompleteBtn({ personal, invitedUsers, groupId, user }: Props) {
       return
     }
 
-    navigate(`accountBook/${groupId}/settings`)
+    navigate(`/accountBook/${groupId}/settings`)
     showSnackbar({ text: '초대가 완료되었습니다!', type: 'success' })
   }
 

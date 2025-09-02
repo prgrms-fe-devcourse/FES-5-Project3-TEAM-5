@@ -1,24 +1,40 @@
 import { create } from 'zustand'
 
-interface SnackbarState {
-  visible: boolean
+type SnackbarType = 'success' | 'error' | 'info' | 'warning'
+
+interface Toast {
+  id: string
   text: string
-  type: 'success' | 'error'
+  type: SnackbarType
   duration: number
-  showSnackbar: (payload: {
-    text: string
-    type: 'success' | 'error'
-    duration?: number
-  }) => void
 }
 
-export const useSnackbarStore = create<SnackbarState>(set => ({
-  visible: false,
-  text: '',
-  type: 'success',
-  duration: 2000,
-  showSnackbar: ({ text, type, duration = 2000 }) => {
-    set({ visible: true, text, type, duration })
-    setTimeout(() => set({ visible: false }), duration)
-  }
+interface SnackbarState {
+  toasts: Toast[]
+  showSnackbar: (payload: {
+    text: string
+    type: SnackbarType
+    duration?: number
+  }) => void
+  hideSnackbar: (id: string) => void
+  clear: () => void
+}
+
+export const useSnackbarStore = create<SnackbarState>((set, get) => ({
+  toasts: [],
+  showSnackbar: ({ text, type, duration = 2500 }) => {
+    const id = crypto?.randomUUID
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random()}`
+    const toast: Toast = { id, text, type, duration }
+    set(state => ({ toasts: [...state.toasts, toast] }))
+    // auto hide
+    window.setTimeout(() => {
+      const { hideSnackbar } = get()
+      hideSnackbar(id)
+    }, duration)
+  },
+  hideSnackbar: id =>
+    set(state => ({ toasts: state.toasts.filter(t => t.id !== id) })),
+  clear: () => set({ toasts: [] })
 }))

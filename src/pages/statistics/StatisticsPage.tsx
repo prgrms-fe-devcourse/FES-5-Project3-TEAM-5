@@ -53,16 +53,16 @@ export default function StatisticsPage() {
           </p>
         </div>
         <div>
-          <div
-            className="cursor-pointer hover:underline"
-            onClick={() => handleDetail('income')}>
-            자세히 보기
-          </div>
           <div className="flex justify-center">
             <PieChartItem
               type="income"
               data={incomeCategories}
             />
+          </div>
+          <div
+            className="cursor-pointer hover:underline flex justify-end"
+            onClick={() => handleDetail('income')}>
+            자세히 보기
           </div>
         </div>
       </div>
@@ -81,16 +81,16 @@ export default function StatisticsPage() {
             </p>
           </div>
           <div>
-            <div
-              className="cursor-pointer hover:underline"
-              onClick={() => handleDetail('expense')}>
-              자세히 보기
-            </div>
             <div className="flex justify-center">
               <PieChartItem
                 type="expense"
                 data={expenseCategories}
               />
+            </div>
+            <div
+              className="cursor-pointer hover:underline flex justify-end"
+              onClick={() => handleDetail('expense')}>
+              자세히 보기
             </div>
           </div>
         </div>

@@ -15,6 +15,8 @@ import {
   fetchAllItems
 } from '@/features/accountItem/service/accountItem'
 import AddButton from '@/shared/components/buttons/AddButton'
+import { useInstallmentItem } from '@/features/accountItem/service/useInstallmentItem'
+import { useStorageGroup } from '@/features/group/model/useStorageGroup'
 
 interface LoaderData {
   events: AccountItem[]
@@ -26,6 +28,10 @@ export const CalendarPage = () => {
   const { initialDate, events } = useLoaderData() as LoaderData
 
   const { searchRecurringItem } = useRecurringItem()
+  const { searchInstallmentItem } = useInstallmentItem()
+
+  const getStorageGroup = useStorageGroup(state => state.getStorageGroup)
+  const storageGroup = getStorageGroup()
 
   const [calendarEventsByDate, setCalendarEventsByDate] = useState<
     AccountItem[]
@@ -39,22 +45,48 @@ export const CalendarPage = () => {
 
   useEffect(() => {
     const run = async () => {
-      const all = await fetchAllItems()
+      const all = await fetchAllItems(storageGroup)
 
-      const existingKeys = new Set(
+      // 반복 키
+      const existingRecurringKeys = new Set(
         all.map(i => {
           const parentKey = i.recurring_parent_id ?? i.id
           return `${parentKey}-${dayjs(i.date).format('YYYY-MM-DD')}`
         })
       )
 
-      const parents = all.filter(
+      //할부 키
+      const existingInstallmentKeys = new Set(
+        all.map(i => {
+          const parentKey = i.installment_parent_id ?? i.id
+          return `${parentKey}-${dayjs(i.date).format('YYYY-MM-DD')}`
+        })
+      )
+
+      // 반복 부모
+      const recurringParents = all.filter(
         i => i.recurring_rules && !i.recurring_parent_id
       )
+
+      // 할부 부모
+      const installmentParents = all.filter(
+        i => i.installment_plans && !i.installment_parent_id
+      )
+
       const toCreate: AccountItem[] = []
 
-      for (const parent of parents) {
-        const generated = searchRecurringItem(parent, existingKeys)
+      // 반복
+      for (const parent of recurringParents) {
+        const generated = searchRecurringItem(parent, existingRecurringKeys)
+        if (generated.length) toCreate.push(...generated)
+      }
+
+      // 할부
+      for (const installment of installmentParents) {
+        const generated = searchInstallmentItem(
+          installment,
+          existingInstallmentKeys
+        )
         if (generated.length) toCreate.push(...generated)
       }
 
@@ -65,7 +97,6 @@ export const CalendarPage = () => {
     run()
   }, [])
 
-  console.log(events)
   const calc = (events: AccountItem[]) =>
     events.reduce(
       (a, c) => {
@@ -86,9 +117,12 @@ export const CalendarPage = () => {
   }, [initialDate, setData, setAmountList, events])
 
   const handleDateClick = async (info: Date) => {
-    navigate(`/accountBook/calendar?date=${dayjs(info).format('YYYY-MM-DD')}`, {
-      replace: true
-    })
+    navigate(
+      `/accountBook/${storageGroup}/calendar?date=${dayjs(info).format('YYYY-MM-DD')}`,
+      {
+        replace: true
+      }
+    )
 
     setCalendarEventsByDate(
       events.filter(e => e.date === dayjs(info).format('YYYY-MM-DD'))
@@ -113,7 +147,9 @@ export const CalendarPage = () => {
       <div className="pointer-events-none fixed inset-x-0 bottom-20 z-[1001]">
         <div className="relative mx-auto w-full max-w-[420px] px-4">
           <div className="pointer-events-auto absolute right-3 bottom-0">
-            <AddButton onClick={() => navigate('/accountBook/item/add')} />
+            <AddButton
+              onClick={() => navigate(`/accountBook/${storageGroup}/item/add`)}
+            />
           </div>
         </div>
       </div>

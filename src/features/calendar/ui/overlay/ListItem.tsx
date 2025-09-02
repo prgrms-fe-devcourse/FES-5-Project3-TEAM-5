@@ -2,6 +2,7 @@ import { ExpenseButton } from '@/shared/components/expenseButton/expenseButton'
 import { formatPriceNumber } from '@/shared/utils/format'
 import { tw } from '@/shared/utils/tw'
 import { Badge } from './Badge'
+import dayjs from 'dayjs'
 
 export type IconType =
   | 'beauty'
@@ -52,7 +53,14 @@ interface Props {
   amount: number
   type: 'income' | 'expense'
   recurring: boolean
-  installment: boolean
+
+  installment: {
+    months: number
+    start_date: string
+    end_date: string
+  }
+
+  gotoDetail?: () => void
 }
 
 export const ListItem = ({
@@ -60,11 +68,14 @@ export const ListItem = ({
   amount,
   type,
   recurring,
-  installment
+  installment,
+  gotoDetail
 }: Props) => {
   return (
-    <div className="w-full border-b border-neutral-light p-2.5 flex justify-between items-center">
-      <div className="flex items-center gap-2.5 text-size-md">
+    <div
+      className="w-full border-b border-neutral-light p-2.5 flex justify-between items-center"
+      onClick={gotoDetail}>
+      <div className="flex items-center gap-2.5 text-[16px]">
         <div className="w-[30px] h-[30px] rounded-full bg-gray-50">
           <ExpenseButton
             size="md"
@@ -74,12 +85,20 @@ export const ListItem = ({
         <div>{iconMap[icon]}</div>
         <div className="flex items-center gap-1">
           {recurring && <Badge variant="repeat">반복</Badge>}
-          {installment && <Badge variant="installment">할부</Badge>}
+          {installment.months > 0 && <Badge variant="installment">할부</Badge>}
         </div>
+        {installment.months > 0 && (
+          <div className="text-size-sm text-neutral-dark flex flex-col">
+            <div>
+              {dayjs(installment.start_date).format('YY.MM')} 시작 /{' '}
+              {installment.months}개월 할부
+            </div>
+          </div>
+        )}
       </div>
       <div
         className={tw(
-          'font-bold',
+          'font-bold  text-[16px]',
           type === 'income' ? 'text-secondary-blue' : 'text-secondary-red'
         )}>
         {type === 'income' ? '+' : '-'} {formatPriceNumber(amount)} 원

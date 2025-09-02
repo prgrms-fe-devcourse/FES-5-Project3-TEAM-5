@@ -5,10 +5,12 @@ import ArrowBtn from './ArrowBtn'
 
 function Mascot({
   value,
-  onChange
+  onChange,
+  disabled
 }: {
   value: number | null
   onChange: (value: number) => void
+  disabled?: boolean
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const [visibleCount, setVisibleCount] = useState(4)
@@ -76,12 +78,18 @@ function Mascot({
               <button
                 type="button"
                 key={item.id}
-                onClick={() => handleSelect(item.id)}
-                className={`w-[70px] h-[80px] rounded-md hover:bg-primary-pale hover:shadow-lg transition ease-in cursor-pointer ${
-                  selectedId === item.id
-                    ? 'border-2 border-primary-light bg-primary-pale shadow-md scale-105 transition-transform duration-200'
-                    : 'border border-transparent hover:shadow-sm hover:scale-105 transition-all duration-200'
-                }`}>
+                onClick={() => {
+                  if (!disabled) handleSelect(item.id)
+                }}
+                disabled={disabled}
+                className={`w-[70px] h-[80px] rounded-md hover:bg-primary-pale hover:shadow-lg transition ease-in cursor-pointer 
+                  ${
+                    selectedId === item.id
+                      ? 'border-2 border-primary-light bg-primary-pale shadow-md scale-105 transition-transform duration-200'
+                      : 'border border-transparent hover:shadow-sm hover:scale-105 transition-all duration-200'
+                  }
+                     ${disabled ? 'opacity-50 cursor-not-allowed pointer-events-none' : ''}
+                `}>
                 <img
                   src={item.src}
                   alt={item.alt}
@@ -104,6 +112,7 @@ function Mascot({
         id="groupChar"
         name="groupChar"
         value={selectedId}
+        disabled={disabled}
       />
     </div>
   )

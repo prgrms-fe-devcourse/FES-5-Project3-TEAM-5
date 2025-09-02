@@ -4,6 +4,8 @@ import { ListHeader } from './ListHeader'
 
 import type { AccountItem } from '@/features/accountItem/index'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useNavigate } from 'react-router'
+import dayjs from 'dayjs'
 
 interface Props {
   isOpen: boolean
@@ -14,6 +16,7 @@ interface Props {
 export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
   const ref = useRef<HTMLDivElement>(null)
   const [entering, setEntering] = useState(false)
+  const navigate = useNavigate()
 
   // const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
   //   if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -90,10 +93,21 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
                 <ListItem
                   key={item.id}
                   recurring={!!item.recurring_rule_id}
-                  installment={!!item.installment_plan_id}
+                  installment={
+                    item.installment_plans || {
+                      months: 0,
+                      start_date: '',
+                      end_date: ''
+                    }
+                  }
                   icon={item.categories?.name as IconType}
                   amount={Number(item.amount)}
                   type={item.type}
+                  gotoDetail={() =>
+                    navigate(
+                      `/accountBook/calendar/detail/${dayjs(item.date).format('YYYY-MM-DD')}/${item.id}`
+                    )
+                  }
                 />
               ))}
             </div>

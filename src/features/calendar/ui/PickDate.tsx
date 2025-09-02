@@ -11,106 +11,138 @@ import { useSelectedDate } from '../model/useSelectedDate'
 import { useShallow } from 'zustand/shallow'
 import dayjs from 'dayjs'
 import { useLocation, useNavigate } from 'react-router'
+import { tw } from '@/shared/utils/tw'
+import { useStorageGroup } from '@/features/group/model/useStorageGroup'
 
-export function PickDate() {
+interface Props {
+  isSliding: boolean
+}
+
+export function PickDate({ isSliding }: Props) {
   const [open, setOpen] = React.useState(false)
 
-  const [date, setDate] = useSelectedDate(useShallow(s => [s.date, s.setDate]))
+  const [date, setDate, resetDate] = useSelectedDate(
+    useShallow(s => [s.date, s.setDate, s.resetDate])
+  )
   const navigate = useNavigate()
   const location = useLocation()
-  const isCalendar = location.pathname.includes('/accountBook/calendar')
+
+  const getStorageGroup = useStorageGroup(state => state.getStorageGroup)
+  const storageGroup = getStorageGroup()
+  const isStatistics = location.pathname.includes(
+    `/accountBook/${storageGroup}/statistics`
+  )
+
+  const isCalendar = location.pathname.includes(
+    `/accountBook/${storageGroup}/calendar`
+  )
+
+  const shouldSyncQuery = isCalendar || isStatistics
+
+  const navigateWithDate = (d: Date) => {
+    setDate(d)
+    if (shouldSyncQuery) {
+      navigate(
+        {
+          pathname: location.pathname,
+          search: `?date=${dayjs(d).format('YYYY-MM-DD')}`
+        },
+        { replace: true }
+      )
+    }
+  }
 
   return (
-    <div className=" w-full px-6 flex justify-between border-none items-center">
-      <button
-        className="group text-3xl font-bold cursor-pointer"
-        onClick={() => {
-          setDate(new Date(date.setMonth(date.getMonth() - 1)))
-          if (isCalendar) {
-            navigate(
-              `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
-            )
-          } else {
-            navigate(
-              `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
-            )
-          }
-        }}>
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M15 6L9 12L15 18"
-            className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
-            strokeWidth="2"
-          />
-        </svg>
-      </button>
-      <Popover
-        open={open}
-        onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
+    <div
+      className={tw(
+        ' w-full  flex justify-between border-none items-center',
+        isSliding && 'px-6'
+      )}>
+      {isSliding && (
+        <button
+          className="group text-3xl font-bold cursor-pointer"
+          onClick={() => {
+            const prev = new Date(date)
+            prev.setMonth(prev.getMonth() - 1)
+            navigateWithDate(prev)
+          }}>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M15 6L9 12L15 18"
+              className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
+              strokeWidth="2"
+            />
+          </svg>
+        </button>
+      )}
+      <div className="relative flex-1 flex justify-center">
+        <Popover
+          open={open}
+          onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <Button
+              variant="ghost"
+              id="date"
+              className="text-size-lg font-bold justify-center p-0">
+              {date ? date.toLocaleDateString() : '날짜 선택'}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            className="w-auto overflow-hidden p-0"
+            align="start">
+            <Calendar
+              mode="single"
+              selected={date}
+              captionLayout="dropdown"
+              defaultMonth={date}
+              onSelect={nextDate => {
+                if (nextDate) {
+                  navigateWithDate(nextDate as Date)
+                }
+                setOpen(false)
+              }}
+            />
+          </PopoverContent>
+        </Popover>
+        {isSliding && (
           <Button
             variant="ghost"
-            id="date"
-            className="w-32 text-size-lg font-bold justify-center">
-            {date ? date.toLocaleDateString() : '날짜 선택'}
+            className="absolute right-4 top-1/2 -translate-y-1/2"
+            onClick={() => {
+              navigateWithDate(new Date())
+              resetDate()
+            }}>
+            오늘
           </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="w-auto overflow-hidden p-0"
-          align="start">
-          <Calendar
-            mode="single"
-            selected={date}
-            captionLayout="dropdown"
-            defaultMonth={date}
-            onSelect={date => {
-              setDate(date as Date)
-              if (isCalendar) {
-                navigate(
-                  `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
-                )
-              } else {
-                navigate(
-                  `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
-                )
-              }
-              setOpen(false)
-            }}
-          />
-        </PopoverContent>
-      </Popover>
-      <button
-        className="group text-3xl font-bold cursor-pointer"
-        onClick={() => {
-          setDate(new Date(date.setMonth(date.getMonth() + 1)))
-          if (isCalendar) {
-            navigate(
-              `/accountBook/calendar?date=${dayjs(date).format('YYYY-MM-DD')}`
-            )
-          } else {
-            navigate(
-              `/accountBook/statistics?date=${dayjs(date).format('YYYY-MM-DD')}`
-            )
-          }
-        }}>
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <path
-            d="M9 6L15 12L9 18"
-            className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
-            strokeWidth="2"
-          />
-        </svg>
-      </button>
+        )}
+      </div>
+      {isSliding && (
+        <button
+          className="group text-3xl font-bold cursor-pointer"
+          onClick={() => {
+            const next = new Date(date)
+            next.setMonth(next.getMonth() + 1)
+            navigateWithDate(next)
+          }}>
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M9 6L15 12L9 18"
+              className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
+              strokeWidth="2"
+            />
+          </svg>
+        </button>
+      )}
     </div>
   )
 }

@@ -1,24 +1,75 @@
 import ArrowBtn from '@/features/group/create/ArrowBtn'
-import raiseBear from '@/shared/assets/momo/momo-raise.png'
+import { mascotList } from '@/features/group/create/data/mascots'
+import { useUserStore } from '@/shared/stores/useUserStore'
+
+import supabase from '@/supabase/supabase'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router'
+import { useShallow } from 'zustand/shallow'
+
+type CalendarInfo = {
+  name: string
+  isPersonal: boolean | null
+  mascot: number | undefined
+}
 
 function AccountBookCard() {
-  const handleClick = () => {}
+  const [calendarInfo, setCalendarInfo] = useState<CalendarInfo>({
+    name: '',
+    isPersonal: null,
+    mascot: undefined
+  })
+
+  const { groupId } = useParams()
+  const user = useUserStore(useShallow(state => state.user))
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (!groupId && !user?.id) return
+    const fetchGroups = async () => {
+      const { data, error } = await supabase
+        .from('groups')
+        .select('*')
+        .eq('id', groupId)
+        .single()
+
+      if (error) {
+        console.error('그룹정보 불러오기: ', error)
+        return
+      }
+
+      if (data) {
+        setCalendarInfo({
+          name: data.name,
+          isPersonal: data.is_personal,
+          mascot: data.mascot
+        })
+      }
+    }
+    fetchGroups()
+  }, [groupId])
+
+  const handleClick = () => {
+    navigate(`/edit/${groupId}`)
+  }
 
   return (
-    <div className="flex items-center gap-4 p-4 shadow-md rounded-xl bg-white">
+    <div className="flex items-center gap-4 p-4 shadow-lg rounded-xl bg-white">
       <div className="w-[100px] h-[100px] bg-primary-pale rounded-full flex justify-center items-center">
         <img
-          src={raiseBear}
+          src={mascotList[calendarInfo.mascot!]?.src as string}
           alt="profile Icon"
-          className="w-[90%] h-[90%]"
+          className="w-[82%] h-[82%]"
         />
       </div>
       <div className="flex flex-col gap-1 ">
         <span className=" text-xs bg-primary-light rounded-lg py-0.5 w-[43px] text-center text-black">
-          개인
+          {calendarInfo.isPersonal && calendarInfo.isPersonal === true
+            ? '개인'
+            : '공동'}
         </span>
-        <p className="text-black font-bold text-[18px]">
-          일이삼사오육칠팔구십일이삼사오육
+        <p className="text-black font-bold text-[18px] truncate max-w-55">
+          {calendarInfo.name}
         </p>
         <div className="flex text-neutral-dark">
           <p>정보 수정</p>

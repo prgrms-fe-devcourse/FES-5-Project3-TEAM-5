@@ -13,6 +13,7 @@ type Store = {
     balance: number
   }) => void
   setDate: (date: Date) => void
+  resetDate: () => void
 }
 
 export const useSelectedDate = create<Store>(set => ({
@@ -27,5 +28,6 @@ export const useSelectedDate = create<Store>(set => ({
     expense: number
     balance: number
   }) => set({ amountList }),
-  setDate: (date: Date) => set({ date })
+  setDate: (date: Date) => set({ date }),
+  resetDate: () => set({ date: new Date() })
 }))

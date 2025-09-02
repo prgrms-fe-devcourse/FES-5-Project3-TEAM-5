@@ -24,6 +24,7 @@ export interface MySelection {
   id: string
   vote_id: string
   option_id: string
+  user_id: string
   created_at: string
 }
 
@@ -32,6 +33,7 @@ export interface TotalVote {
   ends_at: string
   id: string
   is_active: boolean
+  user_id: string
   my_select: MySelection[]
   starts_at: string
   title: string

@@ -52,13 +52,14 @@ export function DetailContents({
             />
           </div>
         </div>
-        <img
-          className="rounded-lg w-full"
-          src={receipt_url}
-          alt="사진"
-        />
+        {receipt_url && (
+          <img
+            className="rounded-lg w-full"
+            src={receipt_url}
+            alt="사진"
+          />
+        )}
         <p className=" w-full  text-black text-[16px]">{memo}</p>
-
         <ReactionButtonContainer
           item_id={item_id}
           reactions={reactions}

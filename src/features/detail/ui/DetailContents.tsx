@@ -47,6 +47,7 @@ export function DetailContents({
           <div className="flex absolute right-0">
             <p>{user_id}</p>
             <ToggleMoreButton
+              deletedId={item_id}
               isOpen={isArticleToggleOn}
               onChangeToggle={onChangeArticleToggle}
             />

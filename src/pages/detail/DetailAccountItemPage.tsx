@@ -29,7 +29,8 @@ function DetailAccountItemPage() {
   const [commentsData, setCommentsData] = useState<Comments[] | null>(null)
   const commentRef = useRef<HTMLInputElement>(null)
   const itemId = detailItemData?.[0]?.id
-  const onChangeArticleToggle = () => {
+
+  const onOpenArticleToggle = () => {
     setIsArticleToggleOn(!isArticleToggleOn)
   }
 
@@ -47,7 +48,6 @@ function DetailAccountItemPage() {
       await loadData()
     } catch (error) {
       console.log('리액션 에러', error)
-
       alert('리액션 중 오류가 발생했습니다.')
     }
   }
@@ -74,9 +74,10 @@ function DetailAccountItemPage() {
     }
   }
 
-  const handleCommentDelete = async (itemId: string) => {
+  const handleCommentDelete = async (deletedId: string) => {
     try {
-      await deleteComment(itemId)
+      await deleteComment(deletedId)
+      loadData()
     } catch (error) {
       console.error('댓글 삭제 실패:', error)
       alert('댓글 삭제 중 오류가 발생했습니다.')
@@ -129,13 +130,14 @@ function DetailAccountItemPage() {
                 memo={item.memo ?? ''}
                 reactions={item.reactions}
                 isArticleToggleOn={isArticleToggleOn}
-                onChangeArticleToggle={onChangeArticleToggle}
+                onChangeArticleToggle={onOpenArticleToggle}
                 handleReactions={handleReactions}
               />
             </Fragment>
           ))}
 
         <CommentContainer
+          onDelete={handleCommentDelete}
           itemId={String(itemId)}
           handleComments={handleComments}
           commentRef={commentRef}

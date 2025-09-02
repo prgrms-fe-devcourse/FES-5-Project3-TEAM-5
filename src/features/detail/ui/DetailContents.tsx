@@ -1,3 +1,4 @@
+import { tw } from '@/shared/utils/tw'
 import type { Reactions } from '../model/responseBody'
 import ReactionButtonContainer from './ReactionButtonContainer'
 import ToggleMoreButton from './ToggleMoreButton'
@@ -27,19 +28,24 @@ export function DetailContents({
 }: Props) {
   return (
     <>
-      <div className="flex flex-col w-full items-center gap-4">
+      <div className="flex flex-col w-full items-center gap-4 ">
         <div
-          className="flex  w-full  text-neutral-dark  text-size-md "
+          className={tw(
+            'relative flex  w-full  text-neutral-dark text-size-md',
+            !payment_methods && 'mb-4'
+          )}
           onClick={onChangeArticleToggle}>
           {payment_methods && <p>결제수단: {payment_methods}</p>}
-          <p className="mr-2.5 flex-1">{user_id}</p>
-          <ToggleMoreButton
-            isOpen={isArticleToggleOn}
-            onChangeToggle={onChangeArticleToggle}
-          />
+          <div className="flex absolute right-0">
+            <p>{user_id}</p>
+            <ToggleMoreButton
+              isOpen={isArticleToggleOn}
+              onChangeToggle={onChangeArticleToggle}
+            />
+          </div>
         </div>
         <img
-          className="rounded-lg  w-full "
+          className="rounded-lg w-full"
           src={receipt_url}
           alt="사진"
         />

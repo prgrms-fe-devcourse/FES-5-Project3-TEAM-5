@@ -14,6 +14,7 @@ import {
   getCommentsData,
   getDetailItemData
 } from '@/features/detail/service/fetchDetailData'
+import { updateComment } from '@/features/detail/service/updateComment'
 import Header from '@/shared/components/header/Header'
 import dayjs from 'dayjs'
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -63,21 +64,44 @@ function DetailAccountItemPage() {
         content: commentRef.current?.value!
       }
       await insertComment(request)
-      fetchCommentData(item_id)
+      fetchCommentData(id!)
       if (commentRef.current) {
         commentRef.current.value = ''
       }
     } catch (error) {
-      console.log('리액션 에러', error)
+      console.log(' 댓글 업로드  에러', error)
 
       alert('댓글 업로드 중 오류가 발생했습니다.')
+    }
+  }
+
+  const handleCommentEdit = async (
+    commentId: string,
+    userId: string,
+    content: string
+  ) => {
+    if (!commentId || !userId)
+      return alert('댓글 수정 중, 필요한 정보가 부족합니다')
+    try {
+      const request = {
+        id: commentId,
+        item_id: String(itemId),
+        user_id: userId,
+        content: content
+      }
+      await updateComment(request!)
+      fetchCommentData(id!)
+    } catch (error) {
+      console.log('댓글 수정 에러', error)
+
+      alert('댓글 수정 중 오류가 발생했습니다.')
     }
   }
 
   const handleCommentDelete = async (deletedId: string) => {
     try {
       await deleteComment(deletedId)
-      loadData()
+      fetchCommentData(id!)
     } catch (error) {
       console.error('댓글 삭제 실패:', error)
       alert('댓글 삭제 중 오류가 발생했습니다.')
@@ -100,7 +124,9 @@ function DetailAccountItemPage() {
   }
 
   useEffect(() => {
-    loadData()
+    if (!id) return
+    fetchDetailData(id)
+    fetchCommentData(id)
   }, [])
 
   return (
@@ -142,6 +168,7 @@ function DetailAccountItemPage() {
           handleComments={handleComments}
           commentRef={commentRef}
           commentData={commentsData ?? []}
+          handleCommentEdit={handleCommentEdit}
         />
       </div>
     </>

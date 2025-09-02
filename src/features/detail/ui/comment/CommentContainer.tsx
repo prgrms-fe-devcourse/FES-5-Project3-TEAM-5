@@ -14,6 +14,11 @@ interface Props {
   commentRef: React.RefObject<HTMLInputElement | null>
   handleComments: (item_id: string, user_id: string) => Promise<void>
   onDelete: (itemId: string) => Promise<void>
+  handleCommentEdit: (
+    commentId: string,
+    userId: string,
+    content: string
+  ) => Promise<void>
 }
 
 export function CommentContainer({
@@ -21,6 +26,7 @@ export function CommentContainer({
   commentRef,
   itemId,
   handleComments,
+  handleCommentEdit,
   onDelete
 }: Props) {
   const userId = useUserStore.getState().user!.id
@@ -55,8 +61,10 @@ export function CommentContainer({
       {commentData &&
         sortByCreatedAtDesc(commentData).map(item => (
           <Comment
+            userId={userId}
             commentId={item.id}
             onDelete={onDelete}
+            onEdit={handleCommentEdit}
             isMine={item.user_id === userId}
             key={item.id}
             created_at={getCreateFormatDate(item.created_at)}

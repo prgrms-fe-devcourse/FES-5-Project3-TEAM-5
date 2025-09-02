@@ -4,7 +4,13 @@ export interface ReactionTable {
   kind: string
 }
 
-export interface CommentTable {
+export interface AddCommentTable {
+  item_id: string
+  user_id: string
+  content: string
+}
+export interface EditCommentTable {
+  id: string
   item_id: string
   user_id: string
   content: string

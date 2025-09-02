@@ -6,11 +6,13 @@ interface Props {
   isOpen: boolean
   deletedId: string
   onChangeToggle: () => void
+  onEdit?: () => void
   onDelete?: (deletedId: string) => Promise<void>
 }
 function ToggleMoreButton({
   isOpen,
   deletedId,
+  onEdit,
   onDelete,
   onChangeToggle
 }: Props) {
@@ -26,7 +28,9 @@ function ToggleMoreButton({
         onClick={handleToggle}>
         {isOpen && (
           <div className="absolute right-0 top-5 w-25  shadow-md rounded-md bg-white text-center border-0.5 cursor-pointer z-10">
-            <button className="rounded-t-md  w-full p-2  hover:bg-neutral-light  text-black text-size-md">
+            <button
+              className="rounded-t-md  w-full p-2  hover:bg-neutral-light  text-black text-size-md"
+              onClick={onEdit}>
               수정하기
             </button>
             <button
@@ -41,15 +45,17 @@ function ToggleMoreButton({
           alt=""
         />
       </div>
-      <ConfirmModal
-        open={isDelete}
-        title="투표 삭제"
-        lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
-        onCancel={() => setIsDelete(false)}
-        onConfirm={() => onDelete!(deletedId)}
-        cancelText="취소"
-        confirmText="확인"
-      />
+      {isDelete && (
+        <ConfirmModal
+          open={isDelete}
+          title="투표 삭제"
+          lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
+          onCancel={() => setIsDelete(false)}
+          onConfirm={() => onDelete!(deletedId)}
+          cancelText="취소"
+          confirmText="확인"
+        />
+      )}
     </>
   )
 }

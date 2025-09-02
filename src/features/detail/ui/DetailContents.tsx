@@ -60,7 +60,7 @@ export function DetailContents({
             alt="사진"
           />
         )}
-        <p className=" w-full  text-black text-[16px]">{memo}</p>
+        <p className=" w-full  text-black text-[16px] mb-3">{memo}</p>
         <ReactionButtonContainer
           item_id={item_id}
           reactions={reactions}

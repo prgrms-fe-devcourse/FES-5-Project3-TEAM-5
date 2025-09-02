@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ActiveDislikeIcon,
   ActiveLikeIcon,
@@ -6,12 +6,21 @@ import {
   InactiveLikeIcon
 } from './ReactionButtonIcons'
 import type { Reactions } from '../model/responseBody'
-import { getReactionCount } from '../utils/countReacions'
+import { getReactionCount, getUserReaction } from '../utils/getReaction'
+import { useUserStore } from '@/shared/stores/useUserStore'
 
 interface Props {
   reactions: Reactions[]
   item_id: string
-  onChangeReaction: (itemId: string, kind: string) => Promise<void>
+  onChangeReaction: ({
+    itemId,
+    userId,
+    kind
+  }: {
+    itemId: string
+    userId: string
+    kind: string
+  }) => Promise<void>
 }
 
 function ReactionButtonContainer({
@@ -22,9 +31,16 @@ function ReactionButtonContainer({
   const [isLikeActive, setIsLikeActive] = useState(false)
   const [isDislikeActive, setIsDislikeClicked] = useState(false)
   const { dislike, like } = getReactionCount(reactions)
+  const userId = useUserStore.getState().user!.id
+
   const handleReactions = (kind: string) => {
-    onChangeReaction(item_id, kind)
+    onChangeReaction({ itemId: item_id, kind, userId: userId! })
   }
+  useEffect(() => {
+    const { kind } = getUserReaction(reactions, userId)
+    if (kind === 'dislike') setIsDislikeClicked(true)
+    if (kind === 'like') setIsLikeActive(true)
+  }, [])
 
   return (
     <div className="flex gap-7">

@@ -38,8 +38,15 @@ function DetailAccountItemPage() {
     setCommentToggleOn(!isCommentToggleOn)
   }
 
-  const handleReactions = async (itemId: string, kind: string) => {
-    const userId = useUserStore.getState().user!.id
+  const handleReactions = async ({
+    itemId,
+    userId,
+    kind
+  }: {
+    itemId: string
+    userId: string
+    kind: string
+  }) => {
     try {
       await insertReaction(itemId, userId, kind)
       await loadData()

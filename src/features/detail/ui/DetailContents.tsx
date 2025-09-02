@@ -12,7 +12,15 @@ interface Props {
   item_id: string
   reactions: Reactions[]
   onChangeArticleToggle: () => void
-  handleReactions: (itemId: string, kind: string) => Promise<void>
+  handleReactions: ({
+    itemId,
+    userId,
+    kind
+  }: {
+    itemId: string
+    userId: string
+    kind: string
+  }) => Promise<void>
 }
 
 export function DetailContents({

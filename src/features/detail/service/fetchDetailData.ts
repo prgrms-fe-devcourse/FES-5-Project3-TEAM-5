@@ -12,7 +12,7 @@ export async function getDetailItemData(itemId: string) {
         payment_methods:payment_methods!account_items_payment_method_id_fkey(type),
         installment_plans:installment_plans!account_items_installment_plan_id_fkey(months, start_date, end_date),
         users:users!account_items_user_id_fkey(id, nickname),
-        reactions:reactions!reactions_item_id_fkey(id, kind)
+        reactions:reactions!reactions_item_id_fkey(id, kind,user_id)
       `
     )
     .eq('id', itemId)

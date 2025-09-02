@@ -1,25 +1,34 @@
+import { getCreateFormatDate } from '../../utils/dateFormat'
 import ToggleMoreButton from '../ToggleMoreButton'
 interface Props {
   isCommentToggleOn: boolean
   onChangeCommentToggle: () => void
+  content: string
+  writer: string
+  created_at: string
 }
 
-function Comment({ isCommentToggleOn, onChangeCommentToggle }: Props) {
+function Comment({
+  isCommentToggleOn,
+  onChangeCommentToggle,
+  content,
+  writer,
+  created_at
+}: Props) {
+  const createdDate = getCreateFormatDate(created_at)
   return (
     <div
       className="border-b-2 border-neutral-light  py-2.5"
       onClick={onChangeCommentToggle}>
       <div className="flex justify-between mb-2.5">
-        <span className="text-size-md text-neutral-dark">작성자 이름</span>
+        <span className="flex-1 text-size-md text-neutral-dark">{writer}</span>
+        <span className="text-size-sm text-neutral-DEFAULT">{createdDate}</span>
         <ToggleMoreButton
           isOpen={isCommentToggleOn}
           onChangeToggle={onChangeCommentToggle}
         />
       </div>
-      <p className="text-[16px]">
-        돈 그렇게 쓰는거 아닌데....어쩌구 저쩌구
-        뭐시기asfsaf뭐시기ㄴ머로ㅓㅏ모러ㅏㅗㅇ너ㅓㅏㅁ남
-      </p>
+      <p className="text-[16px]">{content}</p>
     </div>
   )
 }

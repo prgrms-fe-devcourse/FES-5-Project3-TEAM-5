@@ -1,10 +1,14 @@
+import { tw } from "@/shared/utils/tw";
+
 interface Props {
   text: string
   type?: 'button' | 'submit' | 'reset'
   onClick?: () => void
+  disabled?: boolean;
+  className?: string
 }
 
-function SubmitButton({ text, type = 'button', onClick }: Props) {
+function SubmitButton({ text, type = 'button', onClick, disabled, className }: Props) {
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
     onClick?.()
@@ -14,7 +18,8 @@ function SubmitButton({ text, type = 'button', onClick }: Props) {
     <button
       onClick={handleClick}
       type={type}
-      className="flex items-center justify-center w-full py-2 bg-primary-light rounded-lg text-size-md font-bold text-neutral-dark cursor-pointer transition hover:brightness-90 hover:text-black">
+      disabled={disabled}
+      className={tw('flex items-center justify-center w-full py-2 rounded-lg text-size-md text-neutral-dark font-bold transition', disabled ? 'bg-neutral-light  cursor-not-allowed' : 'bg-primary-light hover:bg-[#f7c954] hover:text-black cursor-pointer', className)}>
       {text}
     </button>
   )

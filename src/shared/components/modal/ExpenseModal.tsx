@@ -4,21 +4,16 @@ import BinaryTabs from '@/pages/item/add/components/BinaryTabs'
 import Toggle from '../toggle/Toggle'
 import { tw } from '@/shared/utils/tw'
 import SubmitButton from '../form/SubmitButton'
-import SingleTab from '@/pages/item/add/components/SingleTab'
 import EndDateModal from './EndDateModal'
 import dayjs from 'dayjs'
+import type { RepeatInstallmentData } from '@/pages/item/add/saveAccountItem'
+import ResetButton from '../buttons/ResetButton'
 
 interface Props {
   open: boolean
   onClose: () => void
-  tab: '수입' | '지출'
-  onSave: (data: {
-    mode: '반복' | '할부'
-    selectedPeriod: string
-    isBiMonthly: boolean
-    endDate: Date | null
-    installment: string
-  }) => void
+  onSave: (data: RepeatInstallmentData | undefined) => void
+  initialData?: RepeatInstallmentData
 }
 
 // 매핑 테이블
@@ -33,13 +28,13 @@ const mapping: Record<string, string> = {
   격년: '매년'
 }
 
-function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
-  const [mode, setMode] = useState<'반복' | '할부'>('반복') // 탭 상태
-  const [isBiMonthly, setIsBiMonthly] = useState(false) // 토글 상태
-  const [selectedPeriod, setSelectedPeriod] = useState('매일') // 주기 상태
-  const [installment, setInstallment] = useState('') // 할부 상태
+function ExpenseModal({ open, onClose, onSave, initialData }: Props) {
+  const [mode, setMode] = useState<'반복' | '할부'>(initialData?.mode ?? '반복') // 탭 상태
+  const [isBiMonthly, setIsBiMonthly] = useState(initialData?.isBiMonthly ?? false) // 토글 상태
+  const [selectedPeriod, setSelectedPeriod] = useState(initialData?.selectedPeriod ?? '매일') // 주기 상태
+  const [installment, setInstallment] = useState(initialData?.installment ?? '') // 할부 상태
 
-  const [endDate, setEndDate] = useState<Date | null>(null) // 종료일 상태
+  const [endDate, setEndDate] = useState<Date | null>(initialData?.endDate ?? null) // 종료일 상태
   const [isEndDateModalOpen, setIsEndDateModalOpen] = useState(false) // 종료일 모달 열림 상태
 
   // 토글 상태에 따라 값 변경
@@ -53,16 +48,22 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
     setSelectedPeriod(prev => mapping[prev] ?? prev)
   }
 
+  // 초기화 버튼 클릭 시 state 리셋
+  const handleReset = () => {
+    setMode('반복')
+    setIsBiMonthly(false)
+    setSelectedPeriod('매일')
+    setInstallment('')
+    setEndDate(null)
+    onSave(undefined)
+  }
+
   return (
     <BaseModal isOpen={open} onClose={onClose}>
       <div className="min-h-[130px]">
         {/* 상단 탭 */}
         <div className="mt-5">
-          {tab === '지출' ? (
             <BinaryTabs value={mode} onChange={setMode} options={['반복', '할부']} />
-          ) : (
-            <SingleTab label="반복" />
-          )}
         </div>
 
         {/* 반복 탭일 때 */}
@@ -119,7 +120,7 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
         )}
 
         {/* 지출 + 할부 탭일 때 */}
-        {tab === '지출' && mode === '할부' && (
+        {mode === '할부' && (
           <div className="mt-4">
             <label className="block mb-2 text-neutral-dark font-bold">
               할부 개월 수
@@ -144,22 +145,38 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
         {/* 안내 문구 */}
         <p className="mt-4 text-sm text-secondary-red text-center">
           {mode === '반복' && !endDate
-            ? '종료일을 선택해주세요'
+            ? '종료일을 선택해 주세요'
             : mode === '할부' && !installment
-            ? '개월 수를 입력해주세요'
+            ? '개월 수를 입력해 주세요'
             : mode === '할부' && (Number(installment) < 2 || Number(installment) > 60)
-            ? '2 ~ 60개월 사이로 입력해주세요'
+            ? '2 ~ 60개월 사이로 입력해 주세요'
             : '\u00A0'}
         </p>
 
-        {/* 완료 버튼 */}
-        <div className="mt-2">
+        {/* 초기화 + 완료 버튼 */}
+        <div className="mt-2 flex gap-3">
+          {mode === '반복' && initialData?.mode === '반복' && ( // 이미 저장된 데이터가 있을 때만 렌더링
+            <ResetButton
+              text="초기화"
+              onClick={handleReset}
+              className="flex-[1]"
+            />
+          )}
+          {mode === '할부' && initialData?.mode === '할부' && ( // 이미 저장된 데이터가 있을 때만 렌더링
+            <ResetButton
+              text="초기화"
+              onClick={handleReset}
+              className="flex-[1]"
+            />
+          )}
+
           <SubmitButton
             text={mode === '반복' ? '반복 설정' : '할부 설정'}
             disabled={
               (mode === '반복' && !endDate) ||
               (mode === '할부' && (!installment || Number(installment) < 2 || Number(installment) > 60))
             }
+            className='flex-[2]'
             onClick={() => {
               onSave({ mode, selectedPeriod, isBiMonthly, endDate, installment })
             }}
@@ -171,10 +188,10 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
           open={isEndDateModalOpen}
           onClose={() => setIsEndDateModalOpen(false)}
           onSelect={date => setEndDate(date)}
-          selectedDate={endDate}  // 이미 선택된 날짜를 넘김
+          selectedDate={endDate}   // 이미 선택된 날짜를 넘김
         />
 
     </BaseModal>
   )
 }
-export default RepeatInstallmentModal
+export default ExpenseModal

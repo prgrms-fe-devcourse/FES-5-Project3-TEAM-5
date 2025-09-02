@@ -1,5 +1,5 @@
 import type { AccountItem } from '@/features/accountItem'
-import { expenseColors, incomeColors } from './constant'
+import { expenseColors, incomeColors } from '../model/constant'
 import { formatPriceNumber } from '@/shared/utils/format'
 
 interface Props {

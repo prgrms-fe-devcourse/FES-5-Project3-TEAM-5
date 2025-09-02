@@ -1,12 +1,15 @@
 import { useLoaderData, useNavigate, useParams } from 'react-router'
 import type { AccountItem } from '@/features/accountItem'
 import { formatPriceNumber } from '@/shared/utils/format'
-import { PieChartItem } from './PieChartItem'
-import { expenseColors, incomeColors } from './constant'
+import { PieChartItem } from '../../../features/statistics/ui/PieChartItem'
+import {
+  expenseColors,
+  incomeColors
+} from '../../../features/statistics/model/constant'
 import { useSelectedDate } from '@/features/calendar'
 import dayjs from 'dayjs'
 
-export default function StatisticsDetailPage() {
+export function StatisticsDetailPage() {
   const { type } = useParams<{ type: 'income' | 'expense' }>()
   const navigate = useNavigate()
   const { events } = useLoaderData() as { events: AccountItem[] }

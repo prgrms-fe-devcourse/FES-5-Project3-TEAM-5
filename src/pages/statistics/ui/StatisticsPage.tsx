@@ -1,12 +1,12 @@
 import { useSelectedDate } from '@/features/calendar'
-import { PieChartItem } from './PieChartItem'
+import { PieChartItem } from '../../../features/statistics/ui/PieChartItem'
 
 import dayjs from 'dayjs'
 import { useLoaderData, useNavigate } from 'react-router'
 import type { AccountItem } from '@/features/accountItem'
 import { formatPriceNumber } from '@/shared/utils/format'
 
-export default function StatisticsPage() {
+export function StatisticsPage() {
   const date = useSelectedDate(s => s.date)
   const startDate = dayjs(date).startOf('month').format('MM-DD')
   const endDate = dayjs(date).endOf('month').format('MM-DD')

@@ -1,6 +1,6 @@
 import type { AccountItem } from '@/features/accountItem'
 import { Pie, PieChart, Tooltip } from 'recharts'
-import { expenseColors, incomeColors } from './constant'
+import { expenseColors, incomeColors } from '../model/constant'
 
 interface Props {
   type: 'income' | 'expense'

@@ -19,7 +19,12 @@ export interface VoteSummary {
     value: number
   }
   isOwner: boolean
-  mySelect: VoteSelections[]
+}
+export interface MySelection {
+  id: string
+  vote_id: string
+  option_id: string
+  created_at: string
 }
 
 export interface TotalVote {
@@ -27,9 +32,9 @@ export interface TotalVote {
   ends_at: string
   id: string
   is_active: boolean
+  my_select: MySelection[]
   starts_at: string
   title: string
-  user_id: string
   vote_options: VoteOptions[]
   vote_selections?: VoteSelections[]
   vote_summary?: VoteSummary

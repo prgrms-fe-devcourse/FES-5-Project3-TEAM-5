@@ -96,6 +96,7 @@ function VotePage() {
                 id,
                 title,
                 starts_at,
+                my_select,
                 vote_summary,
                 vote_options,
                 vote_selections
@@ -110,7 +111,7 @@ function VotePage() {
                   deadline={vote_summary!.deadline.text!}
                   voteOptions={vote_options}
                   voteSelections={vote_selections!}
-                  mySelect={vote_summary?.mySelect ?? []}
+                  mySelect={my_select ?? []}
                   openDeleteModal={openDeleteModal}
                   onSelect={handleSelectOptions}
                 />

@@ -1,4 +1,9 @@
 import * as React from 'react'
+import { useLocation, useNavigate } from 'react-router'
+import { useShallow } from 'zustand/shallow'
+
+import dayjs from 'dayjs'
+import { tw } from '@/shared/utils/tw'
 
 import { Button } from '@/shared/components/shadcn/ui/button'
 import { Calendar } from '@/shared/components/shadcn/ui/calendar'
@@ -7,12 +12,10 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/shared/components/shadcn/ui/popover'
-import { useSelectedDate } from '../model/useSelectedDate'
-import { useShallow } from 'zustand/shallow'
-import dayjs from 'dayjs'
-import { useLocation, useNavigate } from 'react-router'
-import { tw } from '@/shared/utils/tw'
+import { useSelectedDate } from '../../model/useSelectedDate'
+
 import { useStorageGroup } from '@/features/group/model/useStorageGroup'
+import { SlideBtn } from './SlideBtn'
 
 interface Props {
   isSliding: boolean
@@ -29,6 +32,9 @@ export function PickDate({ isSliding }: Props) {
 
   const getStorageGroup = useStorageGroup(state => state.getStorageGroup)
   const storageGroup = getStorageGroup()
+
+  const selectedDate = date ? date.toLocaleDateString() : '날짜 선택'
+
   const isStatistics = location.pathname.includes(
     `/accountBook/${storageGroup}/statistics`
   )
@@ -52,6 +58,18 @@ export function PickDate({ isSliding }: Props) {
     }
   }
 
+  const handlePrev = () => {
+    const prev = new Date(date)
+    prev.setMonth(prev.getMonth() - 1)
+    navigateWithDate(prev)
+  }
+
+  const handleNext = () => {
+    const next = new Date(date)
+    next.setMonth(next.getMonth() + 1)
+    navigateWithDate(next)
+  }
+
   return (
     <div
       className={tw(
@@ -59,26 +77,10 @@ export function PickDate({ isSliding }: Props) {
         isSliding && 'px-6'
       )}>
       {isSliding && (
-        <button
-          className="group text-3xl font-bold cursor-pointer"
-          onClick={() => {
-            const prev = new Date(date)
-            prev.setMonth(prev.getMonth() - 1)
-            navigateWithDate(prev)
-          }}>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M15 6L9 12L15 18"
-              className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
-              strokeWidth="2"
-            />
-          </svg>
-        </button>
+        <SlideBtn
+          onClick={handlePrev}
+          type="prev"
+        />
       )}
       <div className="relative flex-1 flex justify-center">
         <Popover
@@ -89,7 +91,7 @@ export function PickDate({ isSliding }: Props) {
               variant="ghost"
               id="date"
               className="text-size-lg font-bold justify-center p-0">
-              {date ? date.toLocaleDateString() : '날짜 선택'}
+              {selectedDate}
             </Button>
           </PopoverTrigger>
           <PopoverContent
@@ -122,26 +124,10 @@ export function PickDate({ isSliding }: Props) {
         )}
       </div>
       {isSliding && (
-        <button
-          className="group text-3xl font-bold cursor-pointer"
-          onClick={() => {
-            const next = new Date(date)
-            next.setMonth(next.getMonth() + 1)
-            navigateWithDate(next)
-          }}>
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg">
-            <path
-              d="M9 6L15 12L9 18"
-              className="stroke-[#33363F] group-hover:stroke-primary-light transition-colors"
-              strokeWidth="2"
-            />
-          </svg>
-        </button>
+        <SlideBtn
+          onClick={handleNext}
+          type="next"
+        />
       )}
     </div>
   )

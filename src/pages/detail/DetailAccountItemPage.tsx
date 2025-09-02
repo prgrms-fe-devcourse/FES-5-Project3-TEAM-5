@@ -1,16 +1,33 @@
-import { ListItem } from '@/features/calendar/ui/overlay/ListItem'
-import CommentContainer from '@/features/detail/ui/comment/CommentContainer'
-import DetailContents from '@/features/detail/ui/DetailContents'
+import {
+  ListItem,
+  type IconType
+} from '@/features/calendar/ui/overlay/ListItem'
+import { CommentContainer, DetailContents } from '@/features/detail'
+import type {
+  Comments,
+  DetailAccountItem
+} from '@/features/detail/model/responseBody'
+import {
+  getCommentsData,
+  getDetailItemData
+} from '@/features/detail/service/fetchDetailData'
+
 import Header from '@/shared/components/header/Header'
+
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
 function DetailAccountItemPage() {
-  const { date } = useParams()
+  const { date, id } = useParams()
   const title = date ? dayjs(date).format('M월 D일 ddd') : ''
   const [isArticleToggleOn, setIsArticleToggleOn] = useState(false)
   const [isCommentToggleOn, setCommentToggleOn] = useState(false)
+  const [detailItemData, setDetailItemData] = useState<
+    DetailAccountItem[] | null
+  >(null)
+  const [commentsData, setCommentsData] = useState<Comments[] | null>(null)
+
   const onChangeArticleToggle = () => {
     setIsArticleToggleOn(!isArticleToggleOn)
   }
@@ -19,23 +36,50 @@ function DetailAccountItemPage() {
     setCommentToggleOn(!isCommentToggleOn)
   }
 
-  useEffect(() => {}, [onChangeArticleToggle])
+  useEffect(() => {
+    const fetch = async () => {
+      if (!id) return
+      const detailData = await getDetailItemData(id)
+      setDetailItemData(detailData)
+      const commentsData = await getCommentsData(id)
+      setCommentsData(commentsData)
+    }
+    fetch()
+  }, [id])
+
   return (
     <>
       <Header title={title} />
       <div className="flex flex-col p-4 gap-2">
-        <ListItem
-          icon="beauty"
-          amount={44000000}
-          type={'income'}
-          recurring={false}
-          installment={{ months: 0, start_date: '', end_date: '' }}
-        />
-        <DetailContents
-          isArticleToggleOn={isArticleToggleOn}
-          onChangeArticleToggle={onChangeArticleToggle}
-        />
+        {detailItemData &&
+          detailItemData.map(item => (
+            <>
+              <ListItem
+                key={item.id}
+                recurring={!!item.recurring_rule_id}
+                installment={{
+                  months: item.installment_plans?.months ?? 0,
+                  start_date: item.installment_plans?.start_date ?? '',
+                  end_date: item.installment_plans?.end_date ?? ''
+                }}
+                icon={item.categories?.name as IconType}
+                amount={Number(item.amount)}
+                type={item.type}
+              />
+              <DetailContents
+                user_id={item.users.nickname}
+                receipt_url={item.receipt_url!}
+                payment_methods={item.payment_methods?.type}
+                memo={item.memo ?? ''}
+                reactions={item.reactions}
+                isArticleToggleOn={isArticleToggleOn}
+                onChangeArticleToggle={onChangeArticleToggle}
+              />
+            </>
+          ))}
+
         <CommentContainer
+          commentData={commentsData ?? []}
           isCommentToggleOn={isCommentToggleOn}
           onChangeCommentToggle={onChangeCommentToggle}
         />

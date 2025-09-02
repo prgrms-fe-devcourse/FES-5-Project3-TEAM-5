@@ -4,11 +4,19 @@ import {
   ActiveLikeIcon,
   InactiveDislikeIcon,
   InactiveLikeIcon
-} from './likeDislikeButtonIcons'
+} from './ReactionButtonIcons'
+import type { Reactions } from '../model/responseBody'
+import { getReactionCount } from '../utils/countReacions'
 
-function ButtonContainer() {
+interface Props {
+  reactions: Reactions[]
+}
+
+function ReactionButtonContainer({ reactions }: Props) {
   const [isLikeActive, setIsLikeActive] = useState(false)
   const [isDislikeActive, setIsDislikeClicked] = useState(false)
+  const { dislike, like } = getReactionCount(reactions)
+  console.log(dislike, like)
 
   return (
     <div className="flex gap-7">
@@ -19,7 +27,7 @@ function ButtonContainer() {
           setIsDislikeClicked(false)
         }}>
         {isLikeActive ? <ActiveLikeIcon /> : <InactiveLikeIcon />}
-        <p>10</p>
+        <p>{like}</p>
       </div>
       <div
         className="flex flex-col items-center gap-2"
@@ -28,9 +36,9 @@ function ButtonContainer() {
           setIsDislikeClicked(!isDislikeActive)
         }}>
         {isDislikeActive ? <ActiveDislikeIcon /> : <InactiveDislikeIcon />}
-        <p>10</p>
+        <p>{dislike}</p>
       </div>
     </div>
   )
 }
-export default ButtonContainer
+export default ReactionButtonContainer

@@ -1,20 +1,34 @@
-import ButtonContainer from './ButtonContainer'
+import type { Reactions } from '../model/responseBody'
+import ReactionButtonContainer from './ReactionButtonContainer'
 import ToggleMoreButton from './ToggleMoreButton'
 
 interface Props {
   isArticleToggleOn: boolean
+  receipt_url?: string
+  payment_methods?: string
+  user_id: string
+  memo?: string
   onChangeArticleToggle: () => void
+  reactions: Reactions[]
 }
 
-function DetailContents({ isArticleToggleOn, onChangeArticleToggle }: Props) {
+export function DetailContents({
+  isArticleToggleOn,
+  onChangeArticleToggle,
+  payment_methods,
+  user_id,
+  receipt_url,
+  memo,
+  reactions
+}: Props) {
   return (
     <>
       <div className="flex flex-col w-full items-center gap-4">
         <div
           className="flex  w-full  text-neutral-dark  text-size-md "
           onClick={onChangeArticleToggle}>
-          <p className="flex-1">결제수단: 신용카드</p>
-          <p className="mr-2.5">작성자</p>
+          {payment_methods && <p>결제수단: {payment_methods}</p>}
+          <p className="mr-2.5 flex-1">{user_id}</p>
           <ToggleMoreButton
             isOpen={isArticleToggleOn}
             onChangeToggle={onChangeArticleToggle}
@@ -22,17 +36,13 @@ function DetailContents({ isArticleToggleOn, onChangeArticleToggle }: Props) {
         </div>
         <img
           className="rounded-lg  w-full "
-          src="https://i.pinimg.com/736x/c7/c8/f7/c7c8f7013c96d7ec33fdeb82ce391aa0.jpg"
-          alt=""
+          src={receipt_url}
+          alt="사진"
         />
-        <p className=" w-full  text-black text-[16px]">
-          배민은 다가와 아오예~ 배고파배고파 너무 배 고파 집인데 집가고 싶고
-          배고프고 졸려요ㅠㅠ
-        </p>
+        <p className=" w-full  text-black text-[16px]">{memo}</p>
 
-        <ButtonContainer />
+        <ReactionButtonContainer reactions={reactions} />
       </div>
     </>
   )
 }
-export default DetailContents

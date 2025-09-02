@@ -28,7 +28,7 @@ import CreateGroup from '@/pages/group/CreateGroup'
 import DetailAccountItemPage from '@/pages/detail/DetailAccountItemPage'
 
 import Edit from '@/features/group/edit/EditGroup'
-import { StatisticsDetailPage, StatisticsPage } from '@/pages/statistics/ui'
+import { StatisticsDetailPage, StatisticsPage } from '@/pages/statistics'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()

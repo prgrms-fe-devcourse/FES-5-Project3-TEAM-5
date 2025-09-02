@@ -90,8 +90,8 @@ export const ListItem = ({
         {installment.months > 0 && (
           <div className="text-size-sm text-neutral-dark flex flex-col">
             <div>
-              {dayjs(installment.start_date).format('YY.MM')} 시작 /{' '}
-              {installment.months}개월 할부
+              {dayjs(installment.start_date).format('YY.MM')} /{' '}
+              {installment.months}개월
             </div>
           </div>
         )}

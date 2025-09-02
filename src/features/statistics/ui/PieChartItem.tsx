@@ -23,15 +23,28 @@ const labelText = (props: { name: string; percent: number }) => {
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const renderSmallLabel: PieLabel = (props: any) => {
-  const { x, y, textAnchor } = props
+  const { x, y, textAnchor, name, percent } = props
+  const p = Math.round(((percent ?? 0) as number) * 100)
+
   return (
     <text
       x={x}
       y={y}
       textAnchor={textAnchor}
+      dominantBaseline="central"
       fill="#111827"
-      fontSize={10}>
-      {labelText(props as any)}
+      fontSize={12}>
+      <tspan
+        x={x}
+        dy={-6}>
+        {String(name ?? '')}
+      </tspan>
+      <tspan
+        x={x}
+        dy={12}
+        fontWeight={700}>
+        {p}%
+      </tspan>
     </text>
   )
 }

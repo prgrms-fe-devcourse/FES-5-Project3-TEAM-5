@@ -69,31 +69,16 @@ export function StatisticsDetailPage() {
           type={type as 'income' | 'expense'}
           data={categories}
         />
-        {categories.length === 0 ? (
-          <div className="grid place-items-center text-gray-500">
-            {storageGroup && (
-              <Button
-                asChild
-                variant="outline"
-                size="sm">
-                <Link to={`/accountBook/${storageGroup}/item/add`}>
-                  항목 추가하기
-                </Link>
-              </Button>
-            )}
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {categories.map(category => (
-              <ChartDetailsItem
-                key={category.id}
-                type={type as 'income' | 'expense'}
-                category={category}
-                categories={categories}
-              />
-            ))}
-          </div>
-        )}
+        <div className="flex flex-col gap-2">
+          {categories.map(category => (
+            <ChartDetailsItem
+              key={category.id}
+              type={type as 'income' | 'expense'}
+              category={category}
+              categories={categories}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

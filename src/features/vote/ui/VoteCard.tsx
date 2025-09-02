@@ -1,6 +1,10 @@
 import { Link } from 'react-router'
 import { ResultOption } from './ResultOption'
-import type { VoteOptions, VoteSelections } from '../model/responseBody'
+import type {
+  MySelection,
+  VoteOptions,
+  VoteSelections
+} from '../model/responseBody'
 import { formatDate } from '../utils/Date'
 import { tw } from '@/shared/utils/tw'
 
@@ -13,7 +17,7 @@ interface Props {
   voteOptions: VoteOptions[]
   voteSelections: VoteSelections[]
   totalParticipants: number
-  mySelect: VoteSelections[]
+  mySelect: MySelection[]
   openDeleteModal: (deleteId: string) => void
   onSelect: (vote_id: string, option_id: string) => void
 }

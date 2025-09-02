@@ -1,19 +1,27 @@
 import { useEffect, useState } from 'react'
 import { useLoaderData, useNavigate } from 'react-router'
+
+import dayjs from 'dayjs'
+import { useShallow } from 'zustand/shallow'
+
 import { TotalReport } from './TotalReport'
+
 import {
   Calendar,
   DateListOverlay,
   useSelectedDate
 } from '@/features/calendar/index'
-import type { AccountItem } from '@/features/accountItem/index'
-import { useShallow } from 'zustand/shallow'
-import dayjs from 'dayjs'
-import { useRecurringItem } from '@/features/accountItem/service/useRecurringItem'
+
 import {
-  createRecurringItem,
-  fetchAllItems
-} from '@/features/accountItem/service/accountItem'
+  useRecurringItem,
+  useInstallmentItem,
+  useExistingKey,
+  type AccountItem,
+  createRecurringItem
+} from '@/features/accountItem/index'
+
+import { useStorageGroup } from '@/features/group/model/useStorageGroup'
+
 import AddButton from '@/shared/components/buttons/AddButton'
 
 interface LoaderData {
@@ -23,13 +31,19 @@ interface LoaderData {
 
 export const CalendarPage = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const { initialDate, events } = useLoaderData() as LoaderData
-
-  const { searchRecurringItem } = useRecurringItem()
-
   const [calendarEventsByDate, setCalendarEventsByDate] = useState<
     AccountItem[]
   >([])
+
+  const { initialDate, events } = useLoaderData() as LoaderData
+
+  const { searchRecurringItem } = useRecurringItem()
+  const { searchInstallmentItem } = useInstallmentItem()
+
+  const getStorageGroup = useStorageGroup(state => state.getStorageGroup)
+  const storageGroup = getStorageGroup()
+
+  const { fetchExistingKey } = useExistingKey()
 
   const [setData, setAmountList] = useSelectedDate(
     useShallow(s => [s.setDate, s.setAmountList])
@@ -39,22 +53,27 @@ export const CalendarPage = () => {
 
   useEffect(() => {
     const run = async () => {
-      const all = await fetchAllItems()
+      const {
+        recurringParents,
+        installmentParents,
+        existingRecurringKeys,
+        existingInstallmentKeys
+      } = await fetchExistingKey(storageGroup) // 이렇게 안에 넣어도 되나?
 
-      const existingKeys = new Set(
-        all.map(i => {
-          const parentKey = i.recurring_parent_id ?? i.id
-          return `${parentKey}-${dayjs(i.date).format('YYYY-MM-DD')}`
-        })
-      )
-
-      const parents = all.filter(
-        i => i.recurring_rules && !i.recurring_parent_id
-      )
       const toCreate: AccountItem[] = []
 
-      for (const parent of parents) {
-        const generated = searchRecurringItem(parent, existingKeys)
+      // 반복
+      for (const parent of recurringParents) {
+        const generated = searchRecurringItem(parent, existingRecurringKeys)
+        if (generated.length) toCreate.push(...generated)
+      }
+
+      // 할부
+      for (const installment of installmentParents) {
+        const generated = searchInstallmentItem(
+          installment,
+          existingInstallmentKeys
+        )
         if (generated.length) toCreate.push(...generated)
       }
 
@@ -65,7 +84,6 @@ export const CalendarPage = () => {
     run()
   }, [])
 
-  console.log(events)
   const calc = (events: AccountItem[]) =>
     events.reduce(
       (a, c) => {
@@ -86,9 +104,12 @@ export const CalendarPage = () => {
   }, [initialDate, setData, setAmountList, events])
 
   const handleDateClick = async (info: Date) => {
-    navigate(`/accountBook/calendar?date=${dayjs(info).format('YYYY-MM-DD')}`, {
-      replace: true
-    })
+    navigate(
+      `/accountBook/${storageGroup}/calendar?date=${dayjs(info).format('YYYY-MM-DD')}`,
+      {
+        replace: true
+      }
+    )
 
     setCalendarEventsByDate(
       events.filter(e => e.date === dayjs(info).format('YYYY-MM-DD'))
@@ -113,7 +134,9 @@ export const CalendarPage = () => {
       <div className="pointer-events-none fixed inset-x-0 bottom-20 z-[1001]">
         <div className="relative mx-auto w-full max-w-[420px] px-4">
           <div className="pointer-events-auto absolute right-3 bottom-0">
-            <AddButton onClick={() => navigate('/accountBook/item/add')} />
+            <AddButton
+              onClick={() => navigate(`/accountBook/${storageGroup}/item/add`)}
+            />
           </div>
         </div>
       </div>

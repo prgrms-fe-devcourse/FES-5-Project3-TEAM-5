@@ -1,38 +1,62 @@
-import ButtonContainer from './ButtonContainer'
+import { tw } from '@/shared/utils/tw'
+import type { Reactions } from '../model/responseBody'
+import ReactionButtonContainer from './ReactionButtonContainer'
 import ToggleMoreButton from './ToggleMoreButton'
 
 interface Props {
   isArticleToggleOn: boolean
+  receipt_url?: string
+  payment_methods?: string
+  user_id: string
+  memo?: string
+  item_id: string
+  reactions: Reactions[]
   onChangeArticleToggle: () => void
+  handleReactions: (itemId: string, kind: string) => Promise<void>
 }
 
-function DetailContents({ isArticleToggleOn, onChangeArticleToggle }: Props) {
+export function DetailContents({
+  isArticleToggleOn,
+  item_id,
+  payment_methods,
+  user_id,
+  receipt_url,
+  memo,
+  reactions,
+  onChangeArticleToggle,
+  handleReactions
+}: Props) {
   return (
     <>
-      <div className="flex flex-col w-full items-center gap-4">
+      <div className="flex flex-col w-full items-center gap-4 ">
         <div
-          className="flex  w-full  text-neutral-dark  text-size-md "
+          className={tw(
+            'relative flex  w-full  text-neutral-dark text-size-md',
+            !payment_methods && 'mb-4'
+          )}
           onClick={onChangeArticleToggle}>
-          <p className="flex-1">결제수단: 신용카드</p>
-          <p className="mr-2.5">작성자</p>
-          <ToggleMoreButton
-            isOpen={isArticleToggleOn}
-            onChangeToggle={onChangeArticleToggle}
-          />
+          {payment_methods && <p>결제수단: {payment_methods}</p>}
+          <div className="flex absolute right-0">
+            <p>{user_id}</p>
+            <ToggleMoreButton
+              isOpen={isArticleToggleOn}
+              onChangeToggle={onChangeArticleToggle}
+            />
+          </div>
         </div>
         <img
-          className="rounded-lg  w-full "
-          src="https://i.pinimg.com/736x/c7/c8/f7/c7c8f7013c96d7ec33fdeb82ce391aa0.jpg"
-          alt=""
+          className="rounded-lg w-full"
+          src={receipt_url}
+          alt="사진"
         />
-        <p className=" w-full  text-black text-[16px]">
-          배민은 다가와 아오예~ 배고파배고파 너무 배 고파 집인데 집가고 싶고
-          배고프고 졸려요ㅠㅠ
-        </p>
+        <p className=" w-full  text-black text-[16px]">{memo}</p>
 
-        <ButtonContainer />
+        <ReactionButtonContainer
+          item_id={item_id}
+          reactions={reactions}
+          onChangeReaction={handleReactions}
+        />
       </div>
     </>
   )
 }
-export default DetailContents

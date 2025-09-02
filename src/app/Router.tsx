@@ -15,8 +15,6 @@ import VotePage from '@/pages/vote/VotePage'
 import AddVotePage from '@/pages/vote/AddVotePage'
 import EditVotePage from '@/pages/vote/EditVotePage'
 import AddItem from '@/pages/item/add/AddItem'
-import StatisticsPage from '@/pages/statistics/StatisticsPage'
-import StatisticsDetailPage from '@/pages/statistics/StatisticsDetailPage'
 import NotFound from '@/shared/components/notFound/NotFound'
 import FAQPage from '@/pages/faq/page'
 import NoticePage from '@/pages/notice/page'
@@ -32,6 +30,7 @@ import DetailAccountItemPage from '@/pages/detail/DetailAccountItemPage'
 import EditLayout from '@/features/group/edit/EditLayout'
 import Edit from '@/features/group/edit/EditGroup'
 import Invitation from '@/features/group/edit/invitation/Invitation'
+import { StatisticsDetailPage, StatisticsPage } from '@/pages/statistics'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -45,9 +44,11 @@ const eventsLoader = async ({ request }: { request: Request }) => {
   const url = new URL(request.url)
   const dateParam = url.searchParams.get('date')
   const initialDate = getInitialDateForCalendar(dateParam)
+
   const events = await fetchByMonth(
     dayjs(initialDate).year(),
-    dayjs(initialDate).month()
+    dayjs(initialDate).month(),
+    localStorage.getItem('storageGroup') || ''
   )
   return { initialDate, events }
 }
@@ -126,7 +127,7 @@ export const router = createBrowserRouter([
         }
       },
       {
-        path: '/accountBook/item',
+        path: '/accountBook/:groupId/item',
         children: [
           {
             path: 'add',

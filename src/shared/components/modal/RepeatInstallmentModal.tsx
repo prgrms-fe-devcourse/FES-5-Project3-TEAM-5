@@ -53,15 +53,6 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
     setSelectedPeriod(prev => mapping[prev] ?? prev)
   }
 
-  // 할부 개월 보정 (2 ~ 60)
-  const handleInstallment = () => {
-    if (installment === '') return
-    let num = Number(installment)
-    if (num < 2) num = 2
-    if (num > 60) num = 60
-    setInstallment(String(num))
-  }
-
   return (
     <BaseModal isOpen={open} onClose={onClose}>
       <div className="min-h-[130px]">
@@ -138,17 +129,37 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
               placeholder="할부 개월 수를 입력하세요 (2 ~ 60개월)"
               className="mt-2 w-full rounded-lg border border-gray-300 p-2 text-gray-700"
               value={installment}
-              onChange={e => setInstallment(e.target.value)}
-              onBlur={handleInstallment}
+              onChange={e => {
+                const value = e.target.value
+                if(value.length <= 2) {
+                  setInstallment(value)
+                }
+              }}
             />
           </div>
         )}
 
       </div>
+
+        {/* 안내 문구 */}
+        <p className="mt-4 text-sm text-secondary-red text-center">
+          {mode === '반복' && !endDate
+            ? '종료일을 선택해주세요'
+            : mode === '할부' && !installment
+            ? '개월 수를 입력해주세요'
+            : mode === '할부' && (Number(installment) < 2 || Number(installment) > 60)
+            ? '2 ~ 60개월 사이로 입력해주세요'
+            : '\u00A0'}
+        </p>
+
         {/* 완료 버튼 */}
-        <div className="mt-9">
+        <div className="mt-2">
           <SubmitButton
             text={mode === '반복' ? '반복 설정' : '할부 설정'}
+            disabled={
+              (mode === '반복' && !endDate) ||
+              (mode === '할부' && (!installment || Number(installment) < 2 || Number(installment) > 60))
+            }
             onClick={() => {
               onSave({ mode, selectedPeriod, isBiMonthly, endDate, installment })
             }}
@@ -160,7 +171,7 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
           open={isEndDateModalOpen}
           onClose={() => setIsEndDateModalOpen(false)}
           onSelect={date => setEndDate(date)}
-          selectedDate={endDate}   // 이미 선택된 날짜를 넘김
+          selectedDate={endDate}  // 이미 선택된 날짜를 넘김
         />
 
     </BaseModal>

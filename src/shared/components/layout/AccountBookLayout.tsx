@@ -4,9 +4,9 @@ import { NavLink, Outlet } from 'react-router'
 
 export const AccountBookLayout = () => {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full py-4">
       <div className="flex flex-col justify-between items-center">
-        <PickDate />
+        <PickDate isSliding={true} />
         <div className="w-full flex gap-2 justify-between">
           <NavLink
             className={({ isActive }) =>
@@ -44,7 +44,7 @@ export const AccountBookLayout = () => {
         </div>
       </div>
 
-      <div className="flex-1 p-2.5">
+      <div className="flex-1">
         <Outlet />
       </div>
     </div>

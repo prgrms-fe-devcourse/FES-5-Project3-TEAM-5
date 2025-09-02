@@ -30,17 +30,40 @@ export const Calendar = ({ handleDateClick, calendarEvents }: Props) => {
     })
   }, [date])
 
-  const fcEvent = useMemo(
-    () =>
-      calendarEvents.map(e => ({
-        title: String(e.amount),
-        start: e.date,
-        extendedProps: { type: e.type },
-        backgroundColor: 'transparent',
-        borderColor: 'transparent'
-      })),
-    [calendarEvents]
-  )
+  // 캘린더 일자별 수입, 지출 계산
+  const fcEvent = useMemo(() => {
+    const byDate: Record<string, { income: number; expense: number }> = {}
+
+    for (const e of calendarEvents) {
+      const d = e.date
+      if (!byDate[d]) byDate[d] = { income: 0, expense: 0 }
+      if (e.type === 'income') byDate[d].income += Number(e.amount)
+      else byDate[d].expense += Number(e.amount)
+    }
+
+    const result = []
+    for (const [d, sums] of Object.entries(byDate)) {
+      if (sums.income > 0) {
+        result.push({
+          title: String(sums.income),
+          start: d,
+          extendedProps: { type: 'income', order: 0 },
+          backgroundColor: 'transparent',
+          borderColor: 'transparent'
+        })
+      }
+      if (sums.expense > 0) {
+        result.push({
+          title: String(sums.expense),
+          start: d,
+          extendedProps: { type: 'expense', order: 1 },
+          backgroundColor: 'transparent',
+          borderColor: 'transparent'
+        })
+      }
+    }
+    return result
+  }, [calendarEvents])
 
   return (
     <FullCalendar
@@ -53,6 +76,10 @@ export const Calendar = ({ handleDateClick, calendarEvents }: Props) => {
       height="auto"
       headerToolbar={false}
       eventContent={RenderEventContent}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      eventOrder={(a: any, b: any) =>
+        (a.extendedProps?.order ?? 0) - (b.extendedProps?.order ?? 0)
+      }
       dateClick={arg => handleDateClick(arg.date)}
       eventClick={arg => handleDateClick(arg.event.start!)}
       dayCellClassNames={arg => {

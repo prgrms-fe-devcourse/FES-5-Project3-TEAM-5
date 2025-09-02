@@ -1,13 +1,16 @@
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
+import { useStorageGroup } from '../group/model/useStorageGroup'
 
 function LogoutBtn() {
   const logout = useUserStore(state => state.logout)
   const showSnackbar = useSnackbarStore(state => state.showSnackbar)
+  const clearStorageGroup = useStorageGroup(state => state.clearStorageGroup)
 
   const handleLogout = async () => {
     await logout()
-    showSnackbar({ text: '로그아웃 되었습니다', type: 'success' })
+    clearStorageGroup()
+    showSnackbar({ text: '로그아웃 되었습니다', type: 'error' })
   }
 
   return (

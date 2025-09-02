@@ -1,0 +1,100 @@
+import { useLoaderData, useNavigate, useParams, Link } from 'react-router'
+
+import dayjs from 'dayjs'
+
+import type { AccountItem } from '@/features/accountItem'
+import { useSelectedDate } from '@/features/calendar'
+import { ChartContainer, ChartDetailsItem } from '@/features/statistics'
+import { Button } from '@/shared/components/shadcn/ui/button'
+
+export function StatisticsDetailPage() {
+  const { type } = useParams<{ type: 'income' | 'expense' }>()
+  const navigate = useNavigate()
+  const { events } = useLoaderData() as { events: AccountItem[] }
+  const date = useSelectedDate(s => s.date)
+  const startDate = dayjs(date).startOf('month').format('MM-DD')
+  const endDate = dayjs(date).endOf('month').format('MM-DD')
+
+  const result = Object.values(
+    events.reduce<Record<string, AccountItem>>((acc, event) => {
+      const name = event.categories?.name ?? '기타'
+      const amount = Number(event.amount)
+
+      if (acc[name]) {
+        acc[name].amount = Number(acc[name].amount) + amount
+      } else {
+        acc[name] = { ...event, amount }
+      }
+      return acc
+    }, {})
+  )
+
+  const categories = result.filter(event => event.type === type)
+
+  const handleBack = () => {
+    navigate(-1)
+  }
+
+  const storageGroup = localStorage.getItem('storageGroup') || ''
+
+  return (
+    <div className="w-full min-h-[618px] px-5 py-2.5 flex flex-col gap-8 ">
+      <div className="flex justify-between items-center">
+        <p className="text-size-xl font-bold">
+          {startDate} ~ {endDate}
+        </p>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleBack}>
+          <svg
+            className="size-4"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+              d="M12.5 5L7.5 10L12.5 15"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          뒤로가기
+        </Button>
+      </div>
+      <div>
+        <ChartContainer
+          title={type === 'income' ? '수입' : '지출'}
+          type={type as 'income' | 'expense'}
+          data={categories}
+        />
+        {categories.length === 0 ? (
+          <div className="grid place-items-center text-gray-500">
+            {storageGroup && (
+              <Button
+                asChild
+                variant="outline"
+                size="sm">
+                <Link to={`/accountBook/${storageGroup}/item/add`}>
+                  항목 추가하기
+                </Link>
+              </Button>
+            )}
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2">
+            {categories.map(category => (
+              <ChartDetailsItem
+                key={category.id}
+                type={type as 'income' | 'expense'}
+                category={category}
+                categories={categories}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}

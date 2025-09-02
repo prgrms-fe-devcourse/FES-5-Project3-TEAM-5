@@ -6,13 +6,14 @@ import SelectField from './components/SelectField'
 import PaymentModal from '@/shared/components/modal/PaymentModal'
 import supabase from '@/supabase/supabase'
 import CategoryModal from '@/shared/components/modal/CategoryModal'
-import RepeatInstallmentModal from '@/shared/components/modal/RepeatInstallmentModal'
+import IncomeModal from '@/shared/components/modal/IncomeModal'
+import ExpenseModal from '@/shared/components/modal/ExpenseModal'
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
 import { saveAccountItem } from './saveAccountItem'
 import type { RepeatInstallmentData } from './saveAccountItem'
-import { useSelectedDate } from '@/features/calendar'
+import { PickDate, useSelectedDate } from '@/features/calendar'
 import { useNavigate } from 'react-router'
 dayjs.locale('ko')
 
@@ -33,7 +34,6 @@ type Category = {
 
 function AddItem() {
   const date = useSelectedDate(s => s.date)
-  const formattedDate = dayjs(date).format('M월 D일 ddd')
 
   const [tab, setTab] = useState<'수입' | '지출'>('수입') // 탭 상태
   const [amount, setAmount] = useState('') // 금액
@@ -45,16 +45,11 @@ function AddItem() {
 
   const nav = useNavigate()
 
-  // 할부|반복 결제 설정하면 색깔 바뀌게 하려고 해서 남겨뒀습니다.
-  // const [activeOption, setActiveOption] = useState<
-  //   'none' | 'repeat' | 'installment'
-  // >('none')
 
   // 모달 열림 상태
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false) // 결제 수단 설정 모달
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false) // 분류 설정 모달
-  const [isRepeatInstallmentModalOpen, setIsRepeatInstallmentModalOpen] =
-    useState(false) // 반복|할부 설정 모달
+  const [isRepeatInstallmentModalOpen, setIsRepeatInstallmentModalOpen] = useState(false) // 반복|할부 설정 모달
 
   // 결제 수단
   const [methods, setMethods] = useState<PaymentMethod[]>([]) // 결제 수단
@@ -73,13 +68,24 @@ function AddItem() {
   // 현재 탭 상태 필터
   const filterType = tab === '수입' ? 'income' : 'expense'
 
-  // 반복|할부 모달 데이터
-  const [repeatInstallmentData, setRepeatInstallmentData] = useState<
-    RepeatInstallmentData | undefined
-  >(undefined)
+  const [incomeRepeatData, setIncomeRepeatData] = useState<RepeatInstallmentData | undefined>(undefined) // 수입 - 반복 모달 데이터
+  const [expenseRepeatInstallmentData, setExpenseRepeatInstallmentData] = useState<RepeatInstallmentData | undefined>(undefined) // 지출 - 반복|할부 모달 데이터
+
+  // 반복|할부 설정 여부에 따라 색깔 바꾸기
+  const activeOption =
+    tab === '수입'
+      ? (incomeRepeatData ? 'repeat' : 'none') // 수입에서 반복 설정을 했다면 색깔 바꾸기
+      : (expenseRepeatInstallmentData
+          ? (expenseRepeatInstallmentData.mode === '반복' ? 'repeat' : 'installment') // 지출에서 반복과 할부 여부에 따라 색깔 바꾸기
+          : 'none')
 
   // DB 저장
   const handleSubmit = async () => {
+    if (Number(amount) < 100) {
+      console.error('금액은 최소 100원 이상이어야 합니다.')
+      return
+    }
+
     try {
       const { data: userData } = await supabase.auth.getUser()
       if (!userData.user) throw new Error('로그인이 필요합니다.')
@@ -91,14 +97,18 @@ function AddItem() {
         type: tab === '수입' ? 'income' : 'expense',
         date: dayjs(date).format('YYYY-MM-DD'),
         userId,
-        groupId: 'e89513be-c9c1-4b04-bb82-b5afdc1cbc97', // 로그인 한 계정으로 만든 그룹 uuid 임시로 넣어놨음. 나중에 바꿔야됨!!!!!!!!!!!!!
+
+        groupId: localStorage.getItem('storageGroup') || '',
+
         categoryId: selectedCategoryId,
         paymentMethodId: tab === '지출' ? selectedMethodId : null,
         memo: memoRef.current?.value ?? null,
         file: selectedFile,
-        repeatInstallmentData
+        repeatInstallmentData: tab === '수입' ? incomeRepeatData : expenseRepeatInstallmentData
       })
-      nav(`/accountBook/${result.groupId}/calendar`, { replace: true })
+      nav(`/accountBook/${localStorage.getItem('storageGroup')}/calendar`, {
+        replace: true
+      })
 
       console.warn('저장 성공:', result)
     } catch (err) {
@@ -177,8 +187,10 @@ function AddItem() {
       </div>
       <div className="p-4">
         {/* 날짜 */}
-        <div className="mb-3">
-          <span className="text-neutral-dark font-bold">{formattedDate}</span>
+        <div className="mb-3 flex justify-start">
+          <span className="text-neutral-dark font-bold">
+            <PickDate isSliding={false} />
+          </span>
         </div>
 
         {/* 폼 */}
@@ -190,6 +202,7 @@ function AddItem() {
               onChange={setAmount}
               onButtonClick={() => setIsRepeatInstallmentModalOpen(true)}
               tab={tab}
+              activeOption={activeOption}
             />
           </div>
 
@@ -279,9 +292,29 @@ function AddItem() {
               rows={4}></textarea>
           </div>
 
+          {/* 안내 문구 */}
+          <p className="mt-4 text-sm text-secondary-red text-center">
+            {!amount
+              ? '금액을 입력해 주세요'
+              : Number(amount) > 0 && Number(amount) < 100
+              ? '금액은 100원 이상 1억 미만으로 입력해 주세요'
+              : tab === '수입' && Number(amount) >= 100 && !selectedCategoryId
+              ? '분류를 선택해 주세요'
+              : tab === '지출' && Number(amount) >= 100
+                ? !selectedCategoryId && !selectedMethodId
+                  ? '분류와 결제수단을 선택해 주세요'
+                  : !selectedCategoryId
+                  ? '분류를 선택해 주세요'
+                  : !selectedMethodId
+                  ? '결제수단을 선택해 주세요'
+                  : '\u00A0'
+                : '\u00A0'}
+          </p>
+
           <SubmitButton
             text="작성 완료"
             onClick={handleSubmit}
+            disabled={!amount || !selectedCategoryId || (tab === '지출' && !selectedMethodId) || Number(amount) < 100 || Number(amount) > 99999999}
           />
         </form>
       </div>
@@ -311,17 +344,33 @@ function AddItem() {
         }}
       />
 
-      {/* 반복|할부 모달 */}
-      <RepeatInstallmentModal
-        open={isRepeatInstallmentModalOpen}
-        onClose={() => setIsRepeatInstallmentModalOpen(false)}
-        tab={tab}
-        onSave={data => {
-          console.warn('반복/할부 데이터:', data)
-          setRepeatInstallmentData(data)
-          setIsRepeatInstallmentModalOpen(false)
-        }}
-      />
+      {/* 수입 - 반복 모달 */}
+      {tab === '수입' && (
+        <IncomeModal
+          open={isRepeatInstallmentModalOpen}
+          onClose={() => setIsRepeatInstallmentModalOpen(false)}
+          onSave={data => {
+            console.warn('반복 데이터:', data)
+            setIncomeRepeatData(data)
+            setIsRepeatInstallmentModalOpen(false)
+          }}
+          initialData={incomeRepeatData}
+        />
+      )}
+
+      {/* 지출 - 반복|할부 모달 */}
+      {tab === '지출' && (
+        <ExpenseModal
+          open={isRepeatInstallmentModalOpen}
+          onClose={() => setIsRepeatInstallmentModalOpen(false)}
+          onSave={data => {
+            console.warn('반복/할부 데이터:', data)
+            setExpenseRepeatInstallmentData(data)
+            setIsRepeatInstallmentModalOpen(false)
+          }}
+          initialData={expenseRepeatInstallmentData}
+        />
+      )}
     </>
   )
 }

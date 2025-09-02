@@ -3,7 +3,11 @@ import supabase from '@/supabase/supabase'
 import dayjs from 'dayjs'
 import type { AccountItem } from '../model/types'
 
-export const fetchByMonth = async (year: number, month: number) => {
+export const fetchByMonth = async (
+  year: number,
+  month: number,
+  groupId: string
+) => {
   const base = dayjs().year(year).month(month)
   const startDate = base.startOf('month').format('YYYY-MM-DD')
   const endDate = base.endOf('month').format('YYYY-MM-DD')
@@ -22,14 +26,16 @@ export const fetchByMonth = async (year: number, month: number) => {
     )
     .gte('date', startDate)
     .lte('date', endDate)
-
+    .eq('group_id', groupId)
   if (error) throw error
   return data
 }
 
-export const fetchAllItems = async () => {
-  const { data, error } = await supabase.from('account_items').select(
-    `
+export const fetchAllItems = async (groupId: string) => {
+  const { data, error } = await supabase
+    .from('account_items')
+    .select(
+      `
     *,
     category_id, recurring_rule_id, payment_method_id, installment_plan_id,
     categories:categories!account_items_category_id_fkey(name, korean_name),
@@ -37,8 +43,8 @@ export const fetchAllItems = async () => {
     payment_methods:payment_methods!account_items_payment_method_id_fkey(type),
     installment_plans:installment_plans!account_items_installment_plan_id_fkey(months, start_date, end_date)
   `
-  )
-
+    )
+    .eq('group_id', groupId)
   if (error) throw error
   return data
 }

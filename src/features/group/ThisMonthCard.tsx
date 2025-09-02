@@ -30,8 +30,6 @@ function ThisMonthCard({ type, className }: Props) {
         console.log('사용자가 속한 그룹이 없습니다.')
         setTotal(0)
         return
-      } else {
-        console.log(groupData)
       }
 
       if (groupError) {

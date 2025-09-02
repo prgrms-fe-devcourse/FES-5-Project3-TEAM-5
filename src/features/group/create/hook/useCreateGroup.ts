@@ -8,7 +8,7 @@ import type { Users } from '@/features/group/create/type/type'
 
 export function useCreateGroup() {
   const [groupName, setGroupName] = useState('')
-  const [mascot, setMascot] = useState<number | null>(1)
+  const [mascot, setMascot] = useState<number | null>(0)
   const [isMain, setIsMain] = useState<boolean | null>(null)
   const [isPersonal, setIsPersonal] = useState(true)
   const [invitedUsers, setInvitedUsers] = useState<Users[]>([])
@@ -74,7 +74,13 @@ export function useCreateGroup() {
           : [])
       ]
 
-      await supabase.from('group_members').insert(membersToInsert)
+      const { error } = await supabase
+        .from('group_members')
+        .insert(membersToInsert)
+      if (error) {
+        console.error('초대 멤버 추가 실패:', error)
+        return
+      }
 
       showSnackbar({ text: '새 가계부 생성 완료!', type: 'success' })
       navigate('/')

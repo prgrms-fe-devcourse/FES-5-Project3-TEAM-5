@@ -1,6 +1,7 @@
 import Loading from '@/shared/components/loading/Loading'
 import type { Users } from './type/type'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useUserStore } from '@/shared/stores/useUserStore'
 
 interface Props {
   userList: Users[]
@@ -8,7 +9,9 @@ interface Props {
   loading: boolean
 }
 
-function InviteList({ userList, onSelect, loading }: Props) {
+function InviteList({ userList = [], onSelect, loading }: Props) {
+  const user = useUserStore(state => state.user)
+
   const handleGetValue = async (
     e: React.MouseEvent<HTMLElement>,
     user: Users
@@ -17,8 +20,10 @@ function InviteList({ userList, onSelect, loading }: Props) {
     await onSelect(user)
   }
 
+  const filteredList = userList.filter(u => u.id !== user?.id)
+
   return (
-    <div className="absolute top-12 p-3 flex flex-wrap justify-start gap-5 bg-gray-100 w-full h-50 overflow-y-scroll rounded-lg text-neutral-dark custom-scrollbar">
+    <div className="absolute top-12 p-3 flex flex-wrap justify-start gap-5 bg-gray-200 w-full h-50 overflow-y-scroll rounded-lg text-neutral-dark custom-scrollbar">
       {loading ? (
         <Loading
           className="w-15"
@@ -32,7 +37,7 @@ function InviteList({ userList, onSelect, loading }: Props) {
         <AnimatePresence>
           <ul className="flex flex-col gap-3 w-full">
             {userList &&
-              userList.map(u => (
+              filteredList.map(u => (
                 <motion.li
                   key={u.id}
                   initial={{ opacity: 0, y: 10 }}

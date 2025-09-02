@@ -135,7 +135,9 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onPointerDown={() => {
+            onClick={e => {
+              e.preventDefault()
+              e.stopPropagation()
               if (!entering) setIsOpen(false)
             }}
           />

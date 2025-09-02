@@ -14,13 +14,13 @@ function ToggleMoreButton({ isOpen, onChangeToggle }: Props) {
       className="relative"
       onClick={handleToggle}>
       {isOpen && (
-        <div className="absolute right-0 top-5 w-20 p-2.5 shadow-md rounded-md bg-white text-center border-0.5 cursor-pointer">
-          <p className="mb-1.5 hover:translate-0.5 hover:font-bold text-black text-size-md">
+        <div className="absolute right-0 top-5 w-25  shadow-md rounded-md bg-white text-center border-0.5 cursor-pointer">
+          <button className="rounded-t-md  w-full p-2 hover:translate-y-0.5 hover:bg-neutral-light hover:font-bold text-black text-size-md">
             수정하기
-          </p>
-          <p className=" hover:translate-0.5 hover:font-bold text-red-600 text-size-md">
+          </button>
+          <button className="rounded-b-md w-full p-2 hover:translate-y-0.5 hover:bg-neutral-light hover:font-bold text-red-600 text-size-md">
             삭제하기
-          </p>
+          </button>
         </div>
       )}
       <img

@@ -73,19 +73,39 @@ export function PickDate({ isSliding }: Props) {
   const isToday = dayjs(date).isSame(dayjs(), 'day')
 
   return (
-    <div
-      className={tw(
-        ' w-full  flex justify-between border-none items-center',
-        isSliding && 'px-6'
-      )}>
-      {isSliding && (
-        <SlideBtn
-          onClick={handlePrev}
-          type="prev"
-        />
-      )}
-      <div className="relative flex-1 flex justify-center">
+    <div className={tw('w-full border-none', isSliding && 'px-6')}>
+      <div className="relative w-full flex items-center justify-between h-10">
+        <div className="flex items-center">
+          {isSliding && (
+            <SlideBtn
+              onClick={handlePrev}
+              type="prev"
+            />
+          )}
+        </div>
+
         <div className="flex items-center gap-2">
+          {isSliding && !isToday && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full"
+              onClick={() => {
+                navigateWithDate(new Date())
+                resetDate()
+              }}>
+              오늘
+            </Button>
+          )}
+          {isSliding && (
+            <SlideBtn
+              onClick={handleNext}
+              type="next"
+            />
+          )}
+        </div>
+
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
           <Popover
             open={open}
             onOpenChange={setOpen}>
@@ -93,7 +113,7 @@ export function PickDate({ isSliding }: Props) {
               <Button
                 variant="ghost"
                 id="date"
-                className="text-size-lg font-bold justify-center p-0">
+                className="text-size-lg font-bold p-0 pointer-events-auto">
                 {selectedDate}
               </Button>
             </PopoverTrigger>
@@ -114,27 +134,8 @@ export function PickDate({ isSliding }: Props) {
               />
             </PopoverContent>
           </Popover>
-
-          {isSliding && !isToday && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full"
-              onClick={() => {
-                navigateWithDate(new Date())
-                resetDate()
-              }}>
-              오늘로
-            </Button>
-          )}
         </div>
       </div>
-      {isSliding && (
-        <SlideBtn
-          onClick={handleNext}
-          type="next"
-        />
-      )}
     </div>
   )
 }

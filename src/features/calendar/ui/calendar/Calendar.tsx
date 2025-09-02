@@ -47,7 +47,7 @@ export const Calendar = ({ handleDateClick, calendarEvents }: Props) => {
         result.push({
           title: String(sums.income),
           start: d,
-          extendedProps: { type: 'income' },
+          extendedProps: { type: 'income', order: 0 },
           backgroundColor: 'transparent',
           borderColor: 'transparent'
         })
@@ -56,7 +56,7 @@ export const Calendar = ({ handleDateClick, calendarEvents }: Props) => {
         result.push({
           title: String(sums.expense),
           start: d,
-          extendedProps: { type: 'expense' },
+          extendedProps: { type: 'expense', order: 1 },
           backgroundColor: 'transparent',
           borderColor: 'transparent'
         })
@@ -76,6 +76,10 @@ export const Calendar = ({ handleDateClick, calendarEvents }: Props) => {
       height="auto"
       headerToolbar={false}
       eventContent={RenderEventContent}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      eventOrder={(a: any, b: any) =>
+        (a.extendedProps?.order ?? 0) - (b.extendedProps?.order ?? 0)
+      }
       dateClick={arg => handleDateClick(arg.date)}
       eventClick={arg => handleDateClick(arg.event.start!)}
       dayCellClassNames={arg => {

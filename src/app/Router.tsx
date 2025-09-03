@@ -139,6 +139,14 @@ export const router = createBrowserRouter([
             }
           }
         ]
+      },
+      {
+        path: '/accountBook/item/:id/edit',
+        Component: EditItem,
+        handle: {
+          title: '가계부 수정',
+          hideNav: true
+        }
       }
     ]
   },

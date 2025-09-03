@@ -1,8 +1,10 @@
-import { Link } from 'react-router'
+import { useNavigate } from 'react-router'
 import SubmitButton from '../form/SubmitButton'
 import errorImg from '/src/shared/assets/notFound/404-error.png'
 
 function NotFound() {
+  const navigate = useNavigate()
+
   return (
     <div className="flex flex-col justify-center items-center gap-5 pt-[10%] ">
       <img
@@ -15,14 +17,11 @@ function NotFound() {
         <br />
         홈으로 돌아가 볼까요?
       </p>
-      <Link
-        to={'/'}
-        className="w-full">
-        <SubmitButton
-          text="홈으로 이동"
-          type="button"
-        />
-      </Link>
+      <SubmitButton
+        text="홈으로 이동"
+        type="button"
+        onClick={() => navigate('/')}
+      />
     </div>
   )
 }

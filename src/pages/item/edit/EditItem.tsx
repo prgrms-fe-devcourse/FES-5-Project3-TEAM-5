@@ -11,6 +11,7 @@ import SubmitButton from "@/shared/components/form/SubmitButton"
 import { Badge } from "@/features/calendar/ui/overlay/Badge"
 import useEditItem from "../hooks/useEditItem"
 import cameraIcon from "@/shared/assets/icons/camera.svg"
+import { useParams } from "react-router"
 
 
 function EditItem() {
@@ -19,7 +20,8 @@ function EditItem() {
   // 수입
   // const id = "723ab28a-9db4-494b-8d3f-380017910436"
   // 지출
-  const id = "4aeca807-75fc-47f3-907f-3a8986df070f"
+  // const id = "4aeca807-75fc-47f3-907f-3a8986df070f"
+  const { id } = useParams<{ id: string }>()
 
   // 아이템 데이터 state
   const {
@@ -32,7 +34,7 @@ function EditItem() {
     selectedMethodId, setSelectedMethodId,
     hasInstallment,
     hasRecurring,
-  } = useEditItem(id)
+  } = useEditItem(id!)
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null) // 업로드한 사진 객체
   const fileInputRef = useRef<HTMLInputElement>(null) // hidden 처리된 file input 클릭하기 위한 ref
@@ -186,7 +188,7 @@ function EditItem() {
 
           <SubmitButton
             text="수정 완료"
-            onClick={()=> alert('수정 완료 버튼 눌림')} // db 저장으로 변경
+            onClick={()=> alert('수정 완료 버튼 눌림')} // db 저장으로 변경 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             disabled={!amount || !selectedCategoryId || (itemType === '지출' && !selectedMethodId) || Number(amount) < 100 || Number(amount) > 99999999}
           />
           
@@ -209,7 +211,7 @@ function EditItem() {
       <CategoryModal
         open={isCategoryModalOpen}
         categories={categories}
-        filterType={itemType === "수입" ? "income" : "expense"} // 나중에 수정하기
+        filterType={itemType === "수입" ? "income" : "expense"}
         onClose={() => setIsCategoryModalOpen(false)}
         onSelect={id => {
           console.warn('선택한 카테고리 uuid:', id) // 제대로 보이는지 콘솔에서 확인

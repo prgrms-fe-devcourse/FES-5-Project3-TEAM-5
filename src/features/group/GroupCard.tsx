@@ -48,6 +48,10 @@ function GroupCard() {
           className=" mt-17"
           imgClassName="w-30"
         />
+      ) : groups.length === 0 ? (
+        <div className="text-center text-gray-400 w-full py-6 mt-10">
+          등록된 가계부가 없습니다.
+        </div>
       ) : (
         <>
           {groups &&

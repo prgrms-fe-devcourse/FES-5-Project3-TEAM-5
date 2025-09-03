@@ -1,6 +1,6 @@
 import AddBtn from '@/features/group/AddBtn'
 import GroupCard from '@/features/group/GroupCard'
-import MainImage from '@/features/group/mainImage'
+import MainImage from '@/features/group/MainImage'
 import Name from '@/features/group/Name'
 import NumberGroup from '@/features/group/NumberGroup'
 import ThisMonthCard from '@/features/group/ThisMonthCard'

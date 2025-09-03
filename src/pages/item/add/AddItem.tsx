@@ -8,6 +8,7 @@ import supabase from '@/supabase/supabase'
 import CategoryModal from '@/shared/components/modal/CategoryModal'
 import IncomeModal from '@/shared/components/modal/IncomeModal'
 import ExpenseModal from '@/shared/components/modal/ExpenseModal'
+import cameraIcon from "@/shared/assets/icons/camera.svg"
 
 import dayjs from 'dayjs'
 import 'dayjs/locale/ko'
@@ -16,6 +17,7 @@ import type { RepeatInstallmentData } from './saveAccountItem'
 import { PickDate, useSelectedDate } from '@/features/calendar'
 import { useNavigate } from 'react-router'
 import useModalOptions from '../hooks/useModalOptions'
+import GuideMessage from '../components/GuideMessage'
 dayjs.locale('ko')
 
 
@@ -215,26 +217,7 @@ function AddItem() {
               />
             ) : (
               <div className="flex flex-col items-center justify-center text-neutral-dark">
-                <svg
-                  width="20"
-                  height="17"
-                  viewBox="0 0 20 17"
-                  className="mb-1"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M9.99967 13.4998C12.3008 13.4998 14.1663 11.6343 14.1663 9.33317C14.1663 7.032 12.3008 5.1665 9.99967 5.1665C7.69849 5.1665 5.83301 7.032 5.83301 9.33317C5.83301 11.6343 7.69849 13.4998 9.99967 13.4998ZM9.99967 11.8391C8.61567 11.8391 7.49376 10.7172 7.49376 9.33317C7.49376 7.94917 8.61567 6.82725 9.99967 6.82725C11.3837 6.82725 12.5056 7.94917 12.5056 9.33317C12.5056 10.7172 11.3837 11.8391 9.99967 11.8391Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M7.96763 0.166504C6.82047 0.166504 5.82051 0.947246 5.54227 2.06016L5.18236 3.49984H3.33301C1.9523 3.49984 0.833008 4.61913 0.833008 5.99984V14.3332C0.833008 15.7139 1.9523 16.8332 3.33301 16.8332H16.6663C18.0471 16.8332 19.1663 15.7139 19.1663 14.3332V5.99984C19.1663 4.61913 18.0471 3.49984 16.6663 3.49984H14.817L14.4571 2.06016C14.1788 0.947246 13.1789 0.166504 12.0317 0.166504H7.96763ZM7.15918 2.46439C7.25192 2.09342 7.58524 1.83317 7.96763 1.83317H12.0317C12.4141 1.83317 12.7474 2.09342 12.8402 2.46439L13.2001 3.90406C13.3856 4.64601 14.0522 5.1665 14.817 5.1665H16.6663C17.1266 5.1665 17.4997 5.5396 17.4997 5.99984V14.3332C17.4997 14.7934 17.1266 15.1665 16.6663 15.1665H3.33301C2.87277 15.1665 2.49967 14.7934 2.49967 14.3332V5.99984C2.49967 5.5396 2.87277 5.1665 3.33301 5.1665H5.18236C5.94714 5.1665 6.61377 4.64601 6.79927 3.90406L7.15918 2.46439Z"
-                    fill="currentColor"
-                  />
-                </svg>
+                <img src={cameraIcon} alt="" className="mb-1"/>
                 <p>사진 미리보기</p>
               </div>
             )}
@@ -253,23 +236,12 @@ function AddItem() {
           </div>
 
           {/* 안내 문구 */}
-          <p className="mt-4 text-sm text-secondary-red text-center">
-            {!amount
-              ? '금액을 입력해 주세요'
-              : Number(amount) > 0 && Number(amount) < 100
-              ? '금액은 100원 이상 1억 미만으로 입력해 주세요'
-              : tab === '수입' && Number(amount) >= 100 && !selectedCategoryId
-              ? '분류를 선택해 주세요'
-              : tab === '지출' && Number(amount) >= 100
-                ? !selectedCategoryId && !selectedMethodId
-                  ? '분류와 결제수단을 선택해 주세요'
-                  : !selectedCategoryId
-                  ? '분류를 선택해 주세요'
-                  : !selectedMethodId
-                  ? '결제수단을 선택해 주세요'
-                  : '\u00A0'
-                : '\u00A0'}
-          </p>
+          <GuideMessage
+            amount={amount}
+            type={tab}
+            selectedCategoryId={selectedCategoryId}
+            selectedMethodId={selectedMethodId}
+          />
 
           <SubmitButton
             text="작성 완료"

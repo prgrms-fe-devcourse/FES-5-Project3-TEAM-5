@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router'
 import DeleteModal from './deleteGroup/DeleteModal'
 import { type Group } from '../service/service'
 import { useUserStore } from '@/shared/stores/useUserStore'
+import type { Delete } from '../model/groupDelete'
 
 const serviceList = [
   { value: 'inviteUser', text: '초대하기' },
@@ -11,13 +12,15 @@ const serviceList = [
   { value: 'deleteAccountBook', text: '가계부 삭제' }
 ]
 
-export interface Delete {
-  isOwner: boolean
-  delete: boolean
+interface Props {
+  groupInfo: Group | null
+  handleExportExcel: (selectedDate: {
+    year: number
+    month: number
+  }) => Promise<void>
 }
 
-function ServiceCard({ groupInfo }: { groupInfo: Group | null }) {
-  // handleExportExcel
+function ServiceCard({ groupInfo, handleExportExcel }: Props) {
   const [isExport, setIsExport] = useState(false)
   const [isDelete, setIsDelete] = useState<Delete>({
     isOwner: false,
@@ -33,7 +36,7 @@ function ServiceCard({ groupInfo }: { groupInfo: Group | null }) {
     }
   }, [groupInfo, userId])
 
-  const handleExportExcel = () => {
+  const openExportExcel = () => {
     setIsExport(!isExport)
   }
 
@@ -48,7 +51,7 @@ function ServiceCard({ groupInfo }: { groupInfo: Group | null }) {
     const target = e.target as HTMLButtonElement
     switch (target.value) {
       case 'exportExcel':
-        handleExportExcel()
+        openExportExcel()
         break
       case 'inviteUser':
         navigate(`/edit/${groupInfo?.id}/invite`)
@@ -61,8 +64,7 @@ function ServiceCard({ groupInfo }: { groupInfo: Group | null }) {
     }
   }
 
-  useEffect(() => {}, [handleExportExcel])
-
+  useEffect(() => {}, [openExportExcel])
   return (
     <>
       <div className="flex flex-col gap-4 px-4 py-6 bg-white rounded-xl shadow-md">
@@ -91,7 +93,13 @@ function ServiceCard({ groupInfo }: { groupInfo: Group | null }) {
           setIsDelete={setIsDelete}
         />
       )}
-      {isExport && <ExportExcelModal onCancel={handleExportExcel} />}
+      {isExport && (
+        <ExportExcelModal
+          isExport={isExport}
+          onCancel={openExportExcel}
+          onExport={handleExportExcel}
+        />
+      )}
     </>
   )
 }

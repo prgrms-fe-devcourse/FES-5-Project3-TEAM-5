@@ -1,4 +1,3 @@
-import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { tw } from '@/shared/utils/tw'
 import supabase from '@/supabase/supabase'
 import type React from 'react'
@@ -11,8 +10,6 @@ interface Props {
 }
 
 function LoginCard({ iconSrc, text, provider, className }: Props) {
-  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
-
   const handleLoginWithProvider = async (
     e: React.PointerEvent<HTMLButtonElement>,
     provider: 'google' | 'kakao'
@@ -20,6 +17,7 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
     e.preventDefault()
 
     try {
+      localStorage.setItem('just-logged-in', 'true')
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
@@ -28,11 +26,6 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
         }
       })
       if (error) throw error
-
-      showSnackbar({
-        text: '로그인 되었습니다',
-        type: 'success'
-      })
     } catch (error) {
       if (error instanceof Error) {
         console.error('Login failed:', error.message)

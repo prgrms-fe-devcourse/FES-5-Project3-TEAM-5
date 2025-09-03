@@ -8,6 +8,7 @@ import { useUserStore } from '@/shared/stores/useUserStore'
 import { useShallow } from 'zustand/shallow'
 import Login from '@/pages/login/Login'
 import supabase from '@/supabase/supabase'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 
 type RouteHandle = {
   title?: string
@@ -22,6 +23,16 @@ export const Layout = () => {
       isLoading: state.isLoading
     }))
   )
+
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
+
+  useEffect(() => {
+    const justLoggedIn = localStorage.getItem('just-logged-in')
+    if (justLoggedIn) {
+      showSnackbar({ text: '로그인 되었습니다', type: 'success' })
+      localStorage.removeItem('just-logged-in')
+    }
+  }, [])
 
   useEffect(() => {
     initializeUser()

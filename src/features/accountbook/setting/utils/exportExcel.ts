@@ -4,6 +4,12 @@ import type { AccountItem } from '@/features/accountItem'
 import dayjs from 'dayjs'
 import { frequencyMap } from '../model/exportExcel'
 
+declare global {
+  interface Window {
+    MSStream?: any
+  }
+}
+
 export function getDateRange(
   year: number,
   month: number

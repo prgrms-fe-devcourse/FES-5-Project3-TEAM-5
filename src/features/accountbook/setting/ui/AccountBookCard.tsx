@@ -3,7 +3,7 @@ import { mascotList } from '@/features/group/create/data/mascots'
 
 import { useNavigate } from 'react-router'
 import { type Group } from '../service/service'
-import AccountBookCardSkeleton from '../../AccountBookCardSkeleton'
+import AccountBookCardSkeleton from './AccountBookCardSkeleton'
 
 interface Props {
   groupInfo: Group | null

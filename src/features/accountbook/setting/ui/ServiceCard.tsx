@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import ExportExcelModal from './exportExcel/ExportExcelModal'
-import { useNavigate, useParams } from 'react-router'
+import { useNavigate } from 'react-router'
 import DeleteModal from './deleteGroup/DeleteModal'
 import { type Group } from '../service/service'
 import { useUserStore } from '@/shared/stores/useUserStore'

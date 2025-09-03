@@ -36,7 +36,7 @@ function Name() {
   }, [user?.id])
 
   return (
-    <h1 className="font-semibold text-black text-xl sm:ml-5 ml-4 pt-1">
+    <h1 className="font-semibold text-black text-xl sm:ml-5 ml-4 pt-1 h-6">
       {loading
         ? ''
         : name?.trim()

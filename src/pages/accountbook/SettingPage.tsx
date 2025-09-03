@@ -23,7 +23,7 @@ function SettingPage() {
   }, [groupId])
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 p-4">
       <AccountBookCard
         groupInfo={groupInfo}
         isLoading={isLoading}

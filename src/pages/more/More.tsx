@@ -1,5 +1,6 @@
 import LogoutBtn from '@/features/more/LogoutBtn'
 import NicknameCard from '@/features/more/NicknameCard'
+import ResignBtn from '@/features/more/ResignBtn'
 import { useNavigate } from 'react-router'
 
 function More() {
@@ -37,7 +38,7 @@ function More() {
         <h2 className="text-neutral-dark">계정관리</h2>
         <ul className="flex flex-col gap-4">
           <li className="hover:text-neutral-dark transition ease-in-out">
-            <button className="cursor-pointer">회원탈퇴</button>
+            <ResignBtn />
           </li>
           <li className="hover:text-neutral-dark transition ease-in-out">
             <LogoutBtn />

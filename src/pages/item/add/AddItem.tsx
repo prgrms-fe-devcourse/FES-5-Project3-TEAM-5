@@ -15,22 +15,9 @@ import { saveAccountItem } from './saveAccountItem'
 import type { RepeatInstallmentData } from './saveAccountItem'
 import { PickDate, useSelectedDate } from '@/features/calendar'
 import { useNavigate } from 'react-router'
+import useModalOptions from '../hooks/useModalOptions'
 dayjs.locale('ko')
 
-type PaymentMethod = {
-  // 결제 수단 타입
-  id: string
-  type: string
-  index: number
-}
-
-type Category = {
-  // 카테고리 타입
-  id: string
-  name: string
-  korean_name: string
-  type: 'income' | 'expense'
-}
 
 function AddItem() {
   const date = useSelectedDate(s => s.date)
@@ -51,14 +38,15 @@ function AddItem() {
   const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false) // 분류 설정 모달
   const [isRepeatInstallmentModalOpen, setIsRepeatInstallmentModalOpen] = useState(false) // 반복|할부 설정 모달
 
+  // 결제 수단 + 카테고리 모달 데이터 패칭 커스텀 훅
+  const { methods, categories } = useModalOptions()
+
   // 결제 수단
-  const [methods, setMethods] = useState<PaymentMethod[]>([]) // 결제 수단
   const [selectedMethodId, setSelectedMethodId] = useState<string | null>(null) // 결제 수단 id
   const selectedMethodType =
     methods.find(m => m.id === selectedMethodId)?.type ?? '' // 결제 수단 uuid → type 변환
 
   // 카테고리
-  const [categories, setCategories] = useState<Category[]>([])
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null
   )
@@ -126,53 +114,20 @@ function AddItem() {
     }
   }
 
-  // 결제 수단 데이터 패칭
-  useEffect(() => {
-    ;(async () => {
-      const { data, error } = await supabase
-        .from('payment_methods')
-        .select('id, type, index')
-        .order('index', { ascending: true })
-
-      if (error) {
-        console.error('결제수단 불러오기 실패:', error)
-      } else {
-        setMethods((data as PaymentMethod[]) ?? [])
-      }
-    })()
-  }, [])
-
-  // 카테고리 데이터 패칭
-  useEffect(() => {
-    ;(async () => {
-      const { data, error } = await supabase
-        .from('categories')
-        .select('id, name, korean_name, type, index')
-        .order('index', { ascending: true })
-
-      if (error) {
-        console.error('카테고리 불러오기 실패:', error)
-      } else {
-        setCategories((data as Category[]) ?? [])
-      }
-    })()
-  }, [])
 
   // 탭 전환 시 선택된 카테고리 초기화
   useEffect(() => {
     setSelectedCategoryId(null)
   }, [tab])
 
+  // 파일 선택
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 파일 선택
     const file = e.target.files?.[0]
     if (file) {
       setSelectedFile(file)
       setImageUrl(URL.createObjectURL(file))
-    } else {
-      setSelectedFile(null)
-      setImageUrl(null)
     }
+    e.target.value = "" // 같은 파일 다시 선택 가능하게 초기화
   }
 
   return (
@@ -235,6 +190,11 @@ function AddItem() {
               value={selectedFile ? selectedFile.name : null}
               placeholder="사진을 업로드해 주세요"
               onClick={() => fileInputRef.current?.click()}
+              onButtonClick={() => {
+                setSelectedFile(null)
+                setImageUrl(null)
+              }}
+              hideButton={!(imageUrl || selectedFile)}
             />
             <input
               ref={fileInputRef}

@@ -31,6 +31,7 @@ import EditLayout from '@/features/group/edit/EditLayout'
 import Edit from '@/features/group/edit/EditGroup'
 import Invitation from '@/features/group/edit/invitation/Invitation'
 import { StatisticsDetailPage, StatisticsPage } from '@/pages/statistics'
+import EditItem from '@/pages/item/edit/EditItem'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -170,7 +171,7 @@ export const router = createBrowserRouter([
     path: '/test',
     Component: Layout,
     handle: { title: '테스트 페이지입니다', hideNav: true },
-    children: [{ index: true, Component: AddItem }]
+    children: [{ index: true, Component: EditItem }]
   },
 
   {

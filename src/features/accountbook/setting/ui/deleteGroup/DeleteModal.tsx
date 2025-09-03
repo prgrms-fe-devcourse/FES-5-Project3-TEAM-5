@@ -25,9 +25,6 @@ function DeleteModal({ isDelete, onCancel }: Props) {
 
   const handleDelete = async () => {
     if (!groupId || !user?.id) return
-
-    if (!groupId || !user?.id) return
-
     // ✅ 대표 가계부인지 직접 확인
     const { data: mainData, error: mainError } = await supabase
       .from('group_members')

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import ExportExcelModal from './exportExcel/ExportExcelModal'
 import { useNavigate, useParams } from 'react-router'
 import DeleteModal from './deleteGroup/DeleteModal'
-import { fetchGroups } from '../service/service'
+import { type Group } from '../service/service'
 import { useUserStore } from '@/shared/stores/useUserStore'
 
 const serviceList = [
@@ -16,7 +16,7 @@ export interface Delete {
   delete: boolean
 }
 
-function ServiceCard() {
+function ServiceCard({ groupInfo }: { groupInfo: Group | null }) {
   // handleExportExcel
   const [isExport, setIsExport] = useState(false)
   const [isDelete, setIsDelete] = useState<Delete>({
@@ -25,21 +25,13 @@ function ServiceCard() {
   })
 
   const navigate = useNavigate()
-  const { groupId } = useParams()
-  const user = useUserStore(state => state.user)
+  const userId = useUserStore(state => state.user?.id)
 
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await fetchGroups(groupId)
-      if (data) {
-        if (data.user_id === user?.id) {
-          setIsDelete(prev => ({ ...prev, isOwner: true }))
-        }
-      }
+    if (groupInfo && groupInfo.user_id === userId) {
+      setIsDelete(prev => ({ ...prev, isOwner: true }))
     }
-
-    fetchData()
-  }, [groupId, user?.id, isDelete])
+  }, [groupInfo, userId])
 
   const handleExportExcel = () => {
     setIsExport(!isExport)
@@ -59,7 +51,7 @@ function ServiceCard() {
         handleExportExcel()
         break
       case 'inviteUser':
-        navigate(`/edit/${groupId}/invite`)
+        navigate(`/edit/${groupInfo?.id}/invite`)
         break
       case 'deleteAccountBook':
         handleDelete()

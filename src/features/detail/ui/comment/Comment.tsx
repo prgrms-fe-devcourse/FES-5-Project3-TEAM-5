@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import ToggleMoreButton from '../ToggleMoreButton'
-import { tw } from '@/shared/utils/tw'
 
 interface Props {
   commentId: string

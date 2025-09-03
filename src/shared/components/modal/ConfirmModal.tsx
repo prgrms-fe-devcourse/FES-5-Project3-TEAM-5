@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import momo from '@/shared/assets/momo/momo-cry-loud.png'
+import momo from '@/shared/assets/momo/momo-cry-loud.png' // 기본 이미지
 import BaseModal from './BaseModal'
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
   onCancel: () => void
   confirmText?: string
   cancelText?: string
+  imageSrc?: string
 }
 
 function ConfirmModal({
@@ -19,9 +20,9 @@ function ConfirmModal({
   onConfirm,
   onCancel,
   confirmText = '확인',
-  cancelText = '취소'
+  cancelText = '취소',
+  imageSrc
 }: Props) {
-  
   // Enter 확인
   useEffect(() => {
     const handleEnter = (e: KeyboardEvent) => {
@@ -32,13 +33,15 @@ function ConfirmModal({
   }, [onConfirm])
 
   return (
-    <BaseModal isOpen={open} onClose={onCancel}>
+    <BaseModal
+      isOpen={open}
+      onClose={onCancel}>
       {/* 제목 */}
       <h2 className="text-center text-[22px] font-bold text-black">{title}</h2>
 
       {/* 이미지 */}
       <img
-        src={momo}
+        src={imageSrc || momo}
         alt=""
         className="mx-auto mt-3 w-[78px] h-auto object-contain select-none"
       />

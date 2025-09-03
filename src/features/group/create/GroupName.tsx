@@ -17,7 +17,7 @@ function GroupName({
     onChange(groupName)
 
     if (groupName.length > 15) {
-      showSnackbar({ text: '15자 이상은 안돼요', type: 'error' })
+      showSnackbar({ text: '15자 이상은 안돼요', type: 'warning' })
       return
     }
   }

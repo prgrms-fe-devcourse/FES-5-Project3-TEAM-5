@@ -16,6 +16,7 @@ export interface Group {
 interface GroupState {
   groups: Group[]
   mainGroupId: string | null
+  isLoading: boolean
   setGroups: (groups: Group[]) => void
   setMainGroupId: (id: string) => void
   fetchGroups: (userId: string) => Promise<void>
@@ -24,6 +25,7 @@ interface GroupState {
 export const useGroupStore = create<GroupState>(set => ({
   groups: [],
   mainGroupId: null,
+  isLoading: false,
   setGroups: groups => {
     const main = groups.find(g => g.is_main)
     set({ groups, mainGroupId: main?.groups.id || null })
@@ -32,12 +34,19 @@ export const useGroupStore = create<GroupState>(set => ({
   setMainGroupId: id => set({ mainGroupId: id }),
 
   fetchGroups: async userId => {
-    const data = await fetchGroupsByUser(userId)
-    const main = data.find(g => g.is_main)
+    set({ isLoading: true })
+    try {
+      const data = await fetchGroupsByUser(userId)
+      const main = data.find(g => g.is_main)
 
-    set({
-      groups: data,
-      mainGroupId: main?.groups.id || null
-    })
+      set({
+        groups: data,
+        mainGroupId: main?.groups.id || null,
+        isLoading: false //  완료 시 false
+      })
+    } catch (error) {
+      console.error('fetchGroups error:', error)
+      set({ isLoading: false }) //  실패 시도 꼭 false 해줘야 함
+    }
   }
 }))

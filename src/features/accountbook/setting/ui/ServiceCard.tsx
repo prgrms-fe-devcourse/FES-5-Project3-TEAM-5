@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import ExportExcelModal from './exportExcel/ExportExcelModal'
+import { useNavigate, useParams } from 'react-router'
+import DeleteModal from './deleteGroup/DeleteModal'
+import { fetchGroups } from '../service/service'
+import { useUserStore } from '@/shared/stores/useUserStore'
 
 const serviceList = [
   { value: 'inviteUser', text: '초대하기' },
@@ -7,12 +11,42 @@ const serviceList = [
   { value: 'deleteAccountBook', text: '가계부 삭제' }
 ]
 
+export interface Delete {
+  isOwner: boolean
+  delete: boolean
+}
+
 function ServiceCard() {
   // handleExportExcel
   const [isExport, setIsExport] = useState(false)
+  const [isDelete, setIsDelete] = useState<Delete>({
+    isOwner: false,
+    delete: false
+  })
+
+  const navigate = useNavigate()
+  const { groupId } = useParams()
+  const user = useUserStore(state => state.user)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetchGroups(groupId)
+      if (data) {
+        if (data.user_id === user?.id) {
+          setIsDelete(prev => ({ ...prev, isOwner: true }))
+        }
+      }
+    }
+
+    fetchData()
+  }, [groupId, user?.id, isDelete])
 
   const handleExportExcel = () => {
     setIsExport(!isExport)
+  }
+
+  const handleDelete = () => {
+    setIsDelete(prev => ({ ...prev, delete: !prev.delete }))
   }
 
   const handleService = (
@@ -24,7 +58,12 @@ function ServiceCard() {
       case 'exportExcel':
         handleExportExcel()
         break
-
+      case 'inviteUser':
+        navigate(`/edit/${groupId}/invite`)
+        break
+      case 'deleteAccountBook':
+        handleDelete()
+        break
       default:
         break
     }
@@ -34,7 +73,6 @@ function ServiceCard() {
 
   return (
     <>
-      {isExport && <ExportExcelModal onCancel={handleExportExcel} />}
       <div className="flex flex-col gap-4 px-4 py-6 bg-white rounded-xl shadow-md">
         <h2 className="text-neutral-dark font-bold  text-size-lg">
           가계부 서비스
@@ -54,6 +92,14 @@ function ServiceCard() {
           ))}
         </ul>
       </div>
+      {isDelete.delete && (
+        <DeleteModal
+          isDelete={isDelete}
+          onCancel={handleDelete}
+          setIsDelete={setIsDelete}
+        />
+      )}
+      {isExport && <ExportExcelModal onCancel={handleExportExcel} />}
     </>
   )
 }

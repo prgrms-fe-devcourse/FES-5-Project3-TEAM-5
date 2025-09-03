@@ -47,11 +47,11 @@ function GroupCard() {
           {groups &&
             groups.map(g => (
               <button
-                className="bg-white w-38 h-40 rounded-lg shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
+                className="bg-white w-38 pb-1 rounded-lg shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
                 onClick={e => handleCalendar(e, g.group_id)}
                 type="button"
                 key={g.group_id}>
-                <div className="bg-primary-pale h-[60%] w-full rounded-lg flex justify-center items-center relative">
+                <div className="bg-primary-pale h-[60%] w-full rounded-lg flex justify-center items-center relative p-1">
                   <img
                     src={mascotList[Number(g.groups?.mascot)].src}
                     alt={mascotList[Number(g.groups?.mascot)].alt}
@@ -67,12 +67,12 @@ function GroupCard() {
                 </div>
                 <div className="px-2 py-1">
                   <div className="flex justify-between items-center text-[13px]">
-                    <span className="text-black px-2.5 py-[0.3px] bg-primary-light rounded-lg">
+                    <span className="text-black px-2.5 py-[0.5px] bg-primary-light rounded-lg">
                       {g.groups?.is_personal === true ? '개인' : '공동'}
                     </span>
                   </div>
                   <div className="mt-1.5">
-                    <p className="text-black text-[15px] text-start pl-1 truncate max-w-[70%]">
+                    <p className="text-black text-[15px] text-start pl-1 flex-wrap">
                       {g.groups?.name}
                     </p>
                   </div>

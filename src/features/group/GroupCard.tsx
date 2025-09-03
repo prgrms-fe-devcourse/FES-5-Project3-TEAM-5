@@ -104,7 +104,7 @@ function GroupCard() {
                         대표
                       </div>
                     )}
-                    <span className="text-black px-2.5 py-[0.5px] bg-primary-light rounded-lg">
+                    <span className="text-black px-2 py-[0.5px] bg-primary-light rounded-lg">
                       {g.groups?.is_personal === true ? '개인' : '공동'}
                     </span>
                   </div>

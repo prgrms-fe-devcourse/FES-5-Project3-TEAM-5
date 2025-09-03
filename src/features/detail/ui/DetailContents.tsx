@@ -3,6 +3,7 @@ import type { Reactions } from '../model/responseBody'
 import ReactionButtonContainer from './ReactionButtonContainer'
 import ToggleMoreButton from './ToggleMoreButton'
 import { useNavigate } from 'react-router'
+import { deleteAccountItem } from '@/pages/item/delete/deleteAccountItem'
 
 interface Props {
   isArticleToggleOn: boolean
@@ -38,6 +39,16 @@ export function DetailContents({
 
   const navigate = useNavigate()
 
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteAccountItem(id)
+      navigate(-1)
+    } catch (error) {
+      console.error('삭제 에러:', error)
+      alert('삭제 중 오류가 발생했습니다.')
+    }
+  }
+
   return (
     <>
       <div className="flex flex-col w-full items-center gap-4 ">
@@ -54,6 +65,7 @@ export function DetailContents({
               isOpen={isArticleToggleOn}
               onChangeToggle={onChangeArticleToggle}
               onEdit={() => navigate(`/accountBook/item/${item_id}/edit`)}
+              onDelete={handleDelete}
             />
           </div>
         </div>

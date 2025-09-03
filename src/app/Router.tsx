@@ -29,6 +29,7 @@ import DetailAccountItemPage from '@/pages/detail/DetailAccountItemPage'
 
 import Edit from '@/features/group/edit/EditGroup'
 import { StatisticsDetailPage, StatisticsPage } from '@/pages/statistics'
+import { PlansOverview } from '@/pages/plan/PlansOverview'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -96,6 +97,11 @@ export const router = createBrowserRouter([
                 loader: eventsLoader
               }
             ]
+          },
+          {
+            path: 'plan',
+            Component: PlansOverview,
+            loader: eventsLoader
           },
           {
             path: 'settings',

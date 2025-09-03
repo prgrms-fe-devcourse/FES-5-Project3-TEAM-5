@@ -37,10 +37,15 @@ function GroupCard() {
     fetchSelect()
   }, [user?.id])
 
-  const handleCalendar = (e: React.MouseEvent, groupId: string) => {
+  const handleCalendar = (
+    e: React.MouseEvent,
+    groupId: string,
+    groupName: string
+  ) => {
     e.preventDefault()
     setStorageGroup(groupId)
     navigate(`/accountBook/${groupId}/calendar`)
+    localStorage.setItem('groupName', groupName)
   }
 
   const itemVariants: Variants = {
@@ -75,7 +80,9 @@ function GroupCard() {
             groups.map((g, i) => (
               <motion.button
                 className="bg-white w-38 pb-1 rounded-lg border-1 shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
-                onClick={e => handleCalendar(e, g.group_id)}
+                onClick={e =>
+                  handleCalendar(e, g.group_id, g.groups?.name || '')
+                }
                 type="button"
                 key={g.group_id}
                 custom={i}

@@ -1,5 +1,4 @@
 import Input from '@/shared/components/form/Input'
-import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 
 function GroupName({
   value,
@@ -10,8 +9,6 @@ function GroupName({
   onChange: (v: string) => void
   disabled?: boolean
 }) {
-  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const groupName = e.target.value
     onChange(groupName)

@@ -4,7 +4,7 @@ import { useUserStore } from '@/shared/stores/useUserStore'
 import supabase from '@/supabase/supabase'
 import { type Dispatch, type SetStateAction } from 'react'
 import { useNavigate, useParams } from 'react-router'
-import type { Delete } from '../ServiceCard'
+import type { Delete } from '../../model/groupDelete'
 
 interface Props {
   isDelete: {

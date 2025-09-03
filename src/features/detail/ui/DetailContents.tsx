@@ -2,6 +2,7 @@ import { tw } from '@/shared/utils/tw'
 import type { Reactions } from '../model/responseBody'
 import ReactionButtonContainer from './ReactionButtonContainer'
 import ToggleMoreButton from './ToggleMoreButton'
+import { useNavigate } from 'react-router'
 
 interface Props {
   isArticleToggleOn: boolean
@@ -34,6 +35,9 @@ export function DetailContents({
   onChangeArticleToggle,
   handleReactions
 }: Props) {
+
+  const navigate = useNavigate()
+
   return (
     <>
       <div className="flex flex-col w-full items-center gap-4 ">
@@ -41,8 +45,7 @@ export function DetailContents({
           className={tw(
             'relative flex  w-full  text-neutral-dark text-size-md',
             !payment_methods && 'mb-4'
-          )}
-          onClick={onChangeArticleToggle}>
+          )}>
           {payment_methods && <p>결제수단: {payment_methods}</p>}
           <div className="flex absolute right-0">
             <p>{user_id}</p>
@@ -50,6 +53,7 @@ export function DetailContents({
               deletedId={item_id}
               isOpen={isArticleToggleOn}
               onChangeToggle={onChangeArticleToggle}
+              onEdit={() => navigate(`/accountBook/item/${item_id}/edit`)}
             />
           </div>
         </div>

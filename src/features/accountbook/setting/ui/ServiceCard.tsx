@@ -86,20 +86,18 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
           ))}
         </ul>
       </div>
-      {isDelete.delete && (
-        <DeleteModal
-          isDelete={isDelete}
-          onCancel={handleDelete}
-          setIsDelete={setIsDelete}
-        />
-      )}
-      {isExport && (
-        <ExportExcelModal
-          isExport={isExport}
-          onCancel={openExportExcel}
-          onExport={handleExportExcel}
-        />
-      )}
+
+      <DeleteModal
+        isDelete={isDelete}
+        onCancel={handleDelete}
+        setIsDelete={setIsDelete}
+      />
+      
+      <ExportExcelModal
+        isExport={isExport}
+        onCancel={openExportExcel}
+        onExport={handleExportExcel}
+      />
     </>
   )
 }

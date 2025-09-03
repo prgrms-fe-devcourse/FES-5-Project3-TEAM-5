@@ -1,7 +1,7 @@
 import { formatPriceNumber } from '@/shared/utils/format'
 import { useSelectedDate } from '../../model/useSelectedDate'
-import incom from '../svg/incom.svg'
-import expnse from '../svg/expnse.svg'
+import incomeSvg from '../svg/income.svg'
+import expenseSvg from '../svg/expense.svg'
 
 interface Props {
   income: number
@@ -20,15 +20,15 @@ export const ListHeader = ({ income, expense }: Props) => {
       <div className="flex gap-6 items-center">
         <div className="flex items-center gap-1">
           <img
-            src={incom}
-            alt="incom"
+            src={incomeSvg}
+            alt="income"
           />
           <div>{formatPriceNumber(income)}원</div>
         </div>
         <div className="flex items-center gap-1">
           <img
-            src={expnse}
-            alt="down"
+            src={expenseSvg}
+            alt="expense"
           />
           <div>{formatPriceNumber(expense)}원</div>
         </div>

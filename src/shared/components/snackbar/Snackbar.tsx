@@ -145,7 +145,7 @@ export const Snackbar = () => {
                     <div className="text-neutral-900 font-semibold">
                       {cfg.title}
                     </div>
-                    <div className="text-neutral-700 text-sm mt-0.5 whitespace-pre-line">
+                    <div className="text-neutral-700 sm:text-sm mt-0.5 whitespace-pre-line text-[9px]">
                       {t.text}
                     </div>
                   </div>

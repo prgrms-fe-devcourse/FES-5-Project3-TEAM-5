@@ -126,6 +126,7 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
   }, [isOpen])
 
   if (!isOpen) return null
+
   return (
     <AnimatePresence>
       {isOpen && (

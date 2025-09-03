@@ -177,7 +177,6 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
                 <ListHeader
                   income={income}
                   expense={expense}
-                  setIsOpen={setIsOpen}
                 />
               </div>
               <div

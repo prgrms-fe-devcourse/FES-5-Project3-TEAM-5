@@ -2,15 +2,13 @@ import { formatPriceNumber } from '@/shared/utils/format'
 import { useSelectedDate } from '../../model/useSelectedDate'
 import incom from '../svg/incom.svg'
 import expnse from '../svg/expnse.svg'
-import close from '../svg/close.svg'
 
 interface Props {
   income: number
   expense: number
-  setIsOpen: (isOpen: boolean) => void
 }
 
-export const ListHeader = ({ income, expense, setIsOpen }: Props) => {
+export const ListHeader = ({ income, expense }: Props) => {
   const date = useSelectedDate(s => s.date)
 
   return (

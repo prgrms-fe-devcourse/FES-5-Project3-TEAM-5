@@ -1,40 +1,106 @@
-import Input from '@/shared/components/form/Input'
+import { useEffect, useRef, useState } from 'react'
+import BaseModal from '@/shared/components/modal/BaseModal'
 import SubmitButton from '@/shared/components/form/SubmitButton'
-import ModalPortal from '@/shared/components/modal/ModalPortal'
-import Overlay from '@/shared/components/modal/Overlay'
-import SelectDate from './SelectDate'
-import { useEffect, useState } from 'react'
-import SelectCalendar from './SelectCalendar'
-import ModalHeader from './ModalHeader'
 
 interface Props {
+  isExport: boolean
   onCancel: () => void
+  onExport: (selectedDate: { year: number; month: number }) => Promise<void>
 }
-function ExportExcelModal({ onCancel }: Props) {
-  const [isCalenderOpen, setIsCalenderOpen] = useState(false)
-  const openCalender = () => {
-    setIsCalenderOpen(!isCalenderOpen)
+
+function ExportExcelModal({ isExport, onCancel, onExport }: Props) {
+  const currentYear = new Date().getFullYear()
+  const [selectedYear, setSelectedYear] = useState<number>(currentYear)
+  const [selectedMonth, setSelectedMonth] = useState<string>('01')
+
+  const years = Array.from({ length: 11 }, (_, i) => currentYear - i)
+  const months = Array.from({ length: 12 }, (_, i) =>
+    String(i + 1).padStart(2, '0')
+  )
+  const yearListRef = useRef<HTMLUListElement>(null)
+  const monthListRef = useRef<HTMLUListElement>(null)
+
+  // 년 선택 시 스크롤 위치 조정
+  useEffect(() => {
+    if (yearListRef.current) {
+      const index = years.indexOf(selectedYear)
+      const liHeight = 40
+      yearListRef.current.scrollTop = index * liHeight
+    }
+  }, [selectedYear])
+
+  // 월 선택 시 스크롤 위치 조정
+  useEffect(() => {
+    if (monthListRef.current) {
+      const index = months.indexOf(selectedMonth)
+      const liHeight = 40
+      monthListRef.current.scrollTop = index * liHeight
+    }
+  }, [selectedMonth])
+
+  const handleExportExcel = async () => {
+    await onExport({ year: selectedYear, month: Number(selectedMonth) })
+    onCancel()
   }
-  useEffect(() => {}, [openCalender])
 
   return (
-    <ModalPortal>
-      <Overlay onCancel={onCancel}>
-        <ModalHeader closeModal={onCancel} />
-        {isCalenderOpen ? (
-          <SelectCalendar />
-        ) : (
-          <div className="flex flex-col gap-5">
-            <SelectDate openCalender={openCalender} />
-            <div className="flex flex-col gap-1.5">
-              <h3 className="text-neutral-dark text-lg font-bold">이메일</h3>
-              <Input label="이메일" />
-            </div>
-            <SubmitButton text="내보내기" />
+    <BaseModal
+      isOpen={isExport}
+      onClose={onCancel}>
+      <h2 className="text-center text-[22px] font-bold text-black">
+        엑셀 내보내기
+      </h2>
+
+      <div className="flex flex-col items-center mt-6 gap-2">
+        <div className="flex gap-16 mb-4">
+          {/* 년도 리스트 */}
+          <div className="flex flex-col items-center">
+            <ul
+              ref={yearListRef}
+              className=" max-h-40 overflow-y-auto overflow-x-hidden rounded-lg pr-4  custom-scrollbar">
+              {years.map(year => (
+                <li
+                  key={year}
+                  onClick={() => setSelectedYear(year)}
+                  className={`px-8  py-2 cursor-pointer text-center rounded-lg text-black hover:translate-0.5 hover:shadow-md ${
+                    selectedYear === year
+                      ? 'bg-primary-light '
+                      : 'hover:bg-gray-100'
+                  }`}>
+                  {year}년
+                </li>
+              ))}
+            </ul>
           </div>
-        )}
-      </Overlay>
-    </ModalPortal>
+
+          {/* 월 리스트 */}
+          <div className="flex flex-col items-center">
+            <ul
+              ref={monthListRef}
+              className="max-h-40 overflow-y-auto overflow-x-hidden  pr-4  rounded-lg custom-scrollbar">
+              {months.map(month => (
+                <li
+                  key={month}
+                  onClick={() => setSelectedMonth(month)}
+                  className={`px-8 py-2 cursor-pointer text-center rounded-lg text-black hover:translate-0.5 hover:shadow-md ${
+                    selectedMonth === month
+                      ? 'bg-primary-light'
+                      : 'hover:bg-gray-100'
+                  }`}>
+                  {month}월
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <SubmitButton
+          text="내보내기"
+          type="button"
+          onClick={handleExportExcel}
+        />
+      </div>
+    </BaseModal>
   )
 }
 export default ExportExcelModal

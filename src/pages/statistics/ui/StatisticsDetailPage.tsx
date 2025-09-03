@@ -1,4 +1,4 @@
-import { useLoaderData, useNavigate, useParams, Link } from 'react-router'
+import { useLoaderData, useNavigate, useParams } from 'react-router'
 
 import dayjs from 'dayjs'
 
@@ -35,8 +35,6 @@ export function StatisticsDetailPage() {
     navigate(-1)
   }
 
-  const storageGroup = localStorage.getItem('storageGroup') || ''
-
   return (
     <div className="w-full min-h-[618px] px-5 py-2.5 flex flex-col gap-8 ">
       <div className="flex justify-between items-center">
@@ -69,31 +67,16 @@ export function StatisticsDetailPage() {
           type={type as 'income' | 'expense'}
           data={categories}
         />
-        {categories.length === 0 ? (
-          <div className="grid place-items-center text-gray-500">
-            {storageGroup && (
-              <Button
-                asChild
-                variant="outline"
-                size="sm">
-                <Link to={`/accountBook/${storageGroup}/item/add`}>
-                  항목 추가하기
-                </Link>
-              </Button>
-            )}
-          </div>
-        ) : (
-          <div className="flex flex-col gap-2">
-            {categories.map(category => (
-              <ChartDetailsItem
-                key={category.id}
-                type={type as 'income' | 'expense'}
-                category={category}
-                categories={categories}
-              />
-            ))}
-          </div>
-        )}
+        <div className="flex flex-col gap-2">
+          {categories.map(category => (
+            <ChartDetailsItem
+              key={category.id}
+              type={type as 'income' | 'expense'}
+              category={category}
+              categories={categories}
+            />
+          ))}
+        </div>
       </div>
     </div>
   )

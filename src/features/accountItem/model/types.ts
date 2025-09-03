@@ -26,5 +26,6 @@ export interface AccountItem {
     months: number
     start_date: string
     end_date: string
+    total_amount: number
   } | null
 }

@@ -14,7 +14,7 @@ function Home() {
         </div>
         <MainImage />
         <div className="absolute bottom-3 left-[50%] transform -translate-x-[50%] w-full">
-          <div className="flex justify-between mt-7 sm:mx-7 mx-5">
+          <div className="flex justify-center gap-5 mt-7">
             <ThisMonthCard
               type="수입"
               className="text-secondary-blue"
@@ -27,11 +27,11 @@ function Home() {
         </div>
       </div>
       <div className="bg-white px-4 py-2.5 rounded-tl-2xl rounded-tr-2xl">
-        <div className="flex justify-between items-center mb-5 md:mx-4 md:mt-2">
+        <div className="flex  justify-between items-center mb-5 mx-4 mt-2">
           <NumberGroup />
           <AddBtn />
         </div>
-        <div className="flex flex-row justify-between flex-wrap gap-5 md:mx-4">
+        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(9.5rem,9.5rem))] justify-center gap-5 mx-4">
           <GroupCard />
         </div>
       </div>

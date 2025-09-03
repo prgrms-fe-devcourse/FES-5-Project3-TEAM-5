@@ -1,16 +1,14 @@
 import { formatPriceNumber } from '@/shared/utils/format'
 import { useSelectedDate } from '../../model/useSelectedDate'
-import up from '../svg/up.svg'
-import down from '../svg/down.svg'
-import close from '../svg/close.svg'
+import incomeSvg from '../svg/income.svg'
+import expenseSvg from '../svg/expense.svg'
 
 interface Props {
   income: number
   expense: number
-  setIsOpen: (isOpen: boolean) => void
 }
 
-export const ListHeader = ({ income, expense, setIsOpen }: Props) => {
+export const ListHeader = ({ income, expense }: Props) => {
   const date = useSelectedDate(s => s.date)
 
   return (
@@ -22,24 +20,18 @@ export const ListHeader = ({ income, expense, setIsOpen }: Props) => {
       <div className="flex gap-6 items-center">
         <div className="flex items-center gap-1">
           <img
-            src={up}
-            alt="up"
+            src={incomeSvg}
+            alt="income"
           />
           <div>{formatPriceNumber(income)}원</div>
         </div>
         <div className="flex items-center gap-1">
           <img
-            src={down}
-            alt="down"
+            src={expenseSvg}
+            alt="expense"
           />
           <div>{formatPriceNumber(expense)}원</div>
         </div>
-        <button onClick={() => setIsOpen(false)}>
-          <img
-            src={close}
-            alt="close"
-          />
-        </button>
       </div>
     </div>
   )

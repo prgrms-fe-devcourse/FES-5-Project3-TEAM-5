@@ -1,33 +1,62 @@
 import toggleMoreIcon from '@/shared/assets/icons/toggleMore.svg'
+import ConfirmModal from '@/shared/components/modal/ConfirmModal'
+import { useState } from 'react'
 
 interface Props {
   isOpen: boolean
+  deletedId: string
   onChangeToggle: () => void
+  onEdit?: () => void
+  onDelete?: (deletedId: string) => Promise<void>
 }
-function ToggleMoreButton({ isOpen, onChangeToggle }: Props) {
+function ToggleMoreButton({
+  isOpen,
+  deletedId,
+  onEdit,
+  onDelete,
+  onChangeToggle
+}: Props) {
+  const [isDelete, setIsDelete] = useState(false)
   const handleToggle = () => {
     onChangeToggle()
   }
 
   return (
-    <div
-      className="relative"
-      onClick={handleToggle}>
-      {isOpen && (
-        <div className="absolute right-0 top-5 w-20 p-2.5 shadow-md rounded-md bg-white text-center border-0.5 cursor-pointer">
-          <p className="mb-1.5 hover:translate-0.5 hover:font-bold text-black text-size-md">
-            수정하기
-          </p>
-          <p className=" hover:translate-0.5 hover:font-bold text-red-600 text-size-md">
-            삭제하기
-          </p>
-        </div>
+    <>
+      <div
+        className="relative"
+        onClick={handleToggle}>
+        {isOpen && (
+          <div className="absolute right-0 top-5 w-25  shadow-md rounded-md bg-white text-center border-0.5 cursor-pointer z-10">
+            <button
+              className="rounded-t-md  w-full p-2  hover:bg-neutral-light  text-black text-size-md"
+              onClick={onEdit}>
+              수정하기
+            </button>
+            <button
+              className="rounded-b-md w-full p-2  hover:bg-neutral-light  text-red-600 text-size-md"
+              onClick={() => setIsDelete(true)}>
+              삭제하기
+            </button>
+          </div>
+        )}
+        <img
+          src={toggleMoreIcon}
+          alt=""
+        />
+      </div>
+      {isDelete && (
+        <ConfirmModal
+          open={isDelete}
+          title="투표 삭제"
+          lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
+          onCancel={() => setIsDelete(false)}
+          onConfirm={() => onDelete!(deletedId)}
+          cancelText="취소"
+          confirmText="확인"
+        />
       )}
-      <img
-        src={toggleMoreIcon}
-        alt=""
-      />
-    </div>
+    </>
   )
 }
 export default ToggleMoreButton

@@ -12,7 +12,15 @@ interface Props {
   item_id: string
   reactions: Reactions[]
   onChangeArticleToggle: () => void
-  handleReactions: (itemId: string, kind: string) => Promise<void>
+  handleReactions: ({
+    itemId,
+    userId,
+    kind
+  }: {
+    itemId: string
+    userId: string
+    kind: string
+  }) => Promise<void>
 }
 
 export function DetailContents({
@@ -39,18 +47,20 @@ export function DetailContents({
           <div className="flex absolute right-0">
             <p>{user_id}</p>
             <ToggleMoreButton
+              deletedId={item_id}
               isOpen={isArticleToggleOn}
               onChangeToggle={onChangeArticleToggle}
             />
           </div>
         </div>
-        <img
-          className="rounded-lg w-full"
-          src={receipt_url}
-          alt="사진"
-        />
-        <p className=" w-full  text-black text-[16px]">{memo}</p>
-
+        {receipt_url && (
+          <img
+            className="rounded-lg w-full"
+            src={receipt_url}
+            alt="사진"
+          />
+        )}
+        <p className=" w-full  text-black text-[16px] mb-3">{memo}</p>
         <ReactionButtonContainer
           item_id={item_id}
           reactions={reactions}

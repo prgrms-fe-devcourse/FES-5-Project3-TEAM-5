@@ -2,10 +2,12 @@ import type { AccountItem } from '@/features/accountItem'
 
 interface Writer {
   id: string
+
   nickname: string
 }
 export interface Reactions {
   id: string
+  user_id: string
   kind: string
 }
 

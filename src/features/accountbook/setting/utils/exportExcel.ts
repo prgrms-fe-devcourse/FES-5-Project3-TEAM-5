@@ -70,9 +70,9 @@ export function downloadExcel(
 
   // 안전한 UA 체크
   const ua = navigator.userAgent || ''
-  // 'eslint-disable-next-line @typescript-eslint/no-explicit-any'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any)?.MSStream
-  // 'eslint-disable-next-line @typescript-eslint/no-explicit-any'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isWebView = /(wv|WebView)/i.test(ua) || /KAKAOTALK|NAVER/i.test(ua)
 
   if (isIOS && navigator.share) {

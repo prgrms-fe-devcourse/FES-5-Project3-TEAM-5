@@ -9,3 +9,13 @@ export function getCreateFormatDate(created_at: string): string {
 
   return `${year}-${month}-${day} ${hours}:${minutes}`
 }
+
+// 댓글 최신순으로 정렬
+export function sortByCreatedAtDesc<T extends { created_at: string }>(
+  data: T[]
+) {
+  return [...data].sort(
+    (a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  )
+}

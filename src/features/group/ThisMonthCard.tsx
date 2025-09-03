@@ -85,11 +85,13 @@ function ThisMonthCard({ type, className }: Props) {
   }
 
   return (
-    <div className="bg-white flex flex-col justify-center items-center px-6 py-3 rounded-lg w-40 max-w-40  h-20 max-h-20 flex-wrap">
-      <h3 className="text-md font-light">이번 달 {type}</h3>
+    <div className="bg-white/92 flex flex-col justify-center items-center px-6 py-1 rounded-lg w-40 h-17 flex-wrap">
+      <h3 className="text-[14px] font-semibold text-neutral-dark">
+        이번 달 {type}
+      </h3>
       <p
         className={tw(
-          ' text-lg text-center break-words max-w-full leading-tight ',
+          ' text-lg text-center text-semibold break-words max-w-full leading-tight',
           className,
           dynamicFontSize(formatted)
         )}>

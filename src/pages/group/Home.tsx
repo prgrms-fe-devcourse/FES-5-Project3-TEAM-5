@@ -1,26 +1,32 @@
 import AddBtn from '@/features/group/AddBtn'
 import GroupCard from '@/features/group/GroupCard'
+import MainImage from '@/features/group/mainImage'
 import Name from '@/features/group/Name'
 import NumberGroup from '@/features/group/NumberGroup'
 import ThisMonthCard from '@/features/group/ThisMonthCard'
 
 function Home() {
   return (
-    <div className="mb-20">
-      <div className="bg-primary-light w-full h-45 rounded-bl-xl rounded-br-xl px-2 py-6 shadow-lg">
-        <Name />
-        <div className="flex justify-between mt-7 sm:mx-6 mx-3">
-          <ThisMonthCard
-            type="수입"
-            className="text-secondary-blue"
-          />
-          <ThisMonthCard
-            type="지출"
-            className="text-secondary-red"
-          />
+    <div className="mb-20 bg-primary-light">
+      <div className="bg-primary-light w-full h-65 px-2 py-6 relative overflow-hidden">
+        <div className="p-1 ml-4 mt-8 absolute z-10">
+          <Name />
+        </div>
+        <MainImage />
+        <div className="absolute bottom-3 left-[50%] transform -translate-x-[50%] w-full">
+          <div className="flex justify-between mt-7 sm:mx-7 mx-5">
+            <ThisMonthCard
+              type="수입"
+              className="text-secondary-blue"
+            />
+            <ThisMonthCard
+              type="지출"
+              className="text-secondary-red"
+            />
+          </div>
         </div>
       </div>
-      <div className="px-4 py-2.5">
+      <div className="bg-white px-4 py-2.5 rounded-tl-2xl rounded-tr-2xl">
         <div className="flex justify-between items-center mb-5 md:mx-4 md:mt-2">
           <NumberGroup />
           <AddBtn />

@@ -15,11 +15,6 @@ function GroupName({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const groupName = e.target.value
     onChange(groupName)
-
-    if (groupName.length > 15) {
-      showSnackbar({ text: '15자 이상은 안돼요', type: 'warning' })
-      return
-    }
   }
 
   return (
@@ -35,7 +30,7 @@ function GroupName({
         onChange={e => handleChange(e)}
         className={`input-class ${disabled ? 'opacity-50 cursor-not-allowed' : ''} mt-2`}
         value={value}
-        maxLength={15}
+        maxLength={14}
         disabled={disabled}
       />
     </div>

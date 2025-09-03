@@ -72,6 +72,8 @@ export function PickDate({ isSliding }: Props) {
 
   const isToday = dayjs(date).isSame(dayjs(), 'day')
 
+  const year = dayjs(date).year()
+
   return (
     <div className={tw('w-full border-none', isSliding && 'px-6')}>
       <div className="w-full h-10 grid grid-cols-[1fr_auto_1fr] items-center">
@@ -103,8 +105,8 @@ export function PickDate({ isSliding }: Props) {
                 mode="single"
                 selected={date}
                 captionLayout="dropdown"
-                fromYear={2000}
-                toYear={2100}
+                fromYear={year - 10}
+                toYear={year + 10}
                 defaultMonth={date}
                 onSelect={nextDate => {
                   if (nextDate) {

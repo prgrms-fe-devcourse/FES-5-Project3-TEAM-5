@@ -87,9 +87,7 @@ function AddItem() {
         type: tab === '수입' ? 'income' : 'expense',
         date: dayjs(date).format('YYYY-MM-DD'),
         userId,
-
         groupId: localStorage.getItem('storageGroup') || '',
-
         categoryId: selectedCategoryId,
         paymentMethodId: tab === '지출' ? selectedMethodId : null,
         memo: memoRef.current?.value ?? null,

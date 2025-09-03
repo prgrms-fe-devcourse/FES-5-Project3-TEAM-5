@@ -11,17 +11,16 @@ import SubmitButton from "@/shared/components/form/SubmitButton"
 import { Badge } from "@/features/calendar/ui/overlay/Badge"
 import useEditItem from "../hooks/useEditItem"
 import cameraIcon from "@/shared/assets/icons/camera.svg"
-import { useParams } from "react-router"
+import { useNavigate, useParams } from "react-router"
+import supabase from "@/supabase/supabase"
+import { updateAccountItem } from "./updateAccountItem"
 
 
 function EditItem() {
 
-  // 임시 값 -> params 값으로 수정 예정
-  // 수입
-  // const id = "723ab28a-9db4-494b-8d3f-380017910436"
-  // 지출
-  // const id = "4aeca807-75fc-47f3-907f-3a8986df070f"
   const { id } = useParams<{ id: string }>()
+
+  const nav = useNavigate()
 
   // 아이템 데이터 state
   const {
@@ -71,6 +70,53 @@ function EditItem() {
       return fileName || null
     } catch {
       return null
+    }
+  }
+
+  // DB 업데이트
+  const handleSubmit = async () => {
+    if (Number(amount) < 100) {
+      console.error('금액은 최소 100원 이상이어야 합니다.')
+      return
+    }
+
+    try{
+      const { data: userData } = await supabase.auth.getUser()
+      if (!userData.user) throw new Error('로그인이 필요합니다.')
+
+      const userId = userData.user.id
+
+      const result = await updateAccountItem({
+        id: id!,
+        amount: Number(amount),
+        categoryId: selectedCategoryId,
+        paymentMethodId: itemType === '지출' ? selectedMethodId : null,
+        memo,
+        file: selectedFile,
+        userId,
+        prevReceiptUrl: imageUrl,
+      })
+
+      nav(-1) // 이전 히스토리로 이동
+
+      // const formattedDate = dayjs(date).format("YYYY-MM-DD")
+      // nav(`/accountBook/calendar/detail/${formattedDate}/${id}`, {
+      //   replace: true,
+      // })
+
+      console.warn('업데이트 성공:', result)
+    } catch(err) {
+      const e = err as {
+        message?: string
+        details?: string
+        hint?: string
+        code?: string
+      }
+      console.error('업데이트 실패 전체 에러:', e)
+      console.error('message:', e.message)
+      console.error('details:', e.details)
+      console.error('hint:', e.hint)
+      console.error('code:', e.code)
     }
   }
 
@@ -188,7 +234,7 @@ function EditItem() {
 
           <SubmitButton
             text="수정 완료"
-            onClick={()=> alert('수정 완료 버튼 눌림')} // db 저장으로 변경 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            onClick={handleSubmit}
             disabled={!amount || !selectedCategoryId || (itemType === '지출' && !selectedMethodId) || Number(amount) < 100 || Number(amount) > 99999999}
           />
           

@@ -15,12 +15,6 @@ interface Props {
   onClick?: () => void
 }
 
-const labelText = (props: { name: string; percent: number }) => {
-  const { name, percent } = props
-  const p = Math.round(((percent ?? 0) as number) * 100)
-  return `${name} ${isFinite(p) ? p : 0}%`
-}
-
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const renderSmallLabel: PieLabel = (props: any) => {
   const { x, y, textAnchor, name, percent } = props

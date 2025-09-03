@@ -2,7 +2,6 @@ import ArrowBtn from '@/features/group/create/ArrowBtn'
 import { mascotList } from '@/features/group/create/data/mascots'
 import { useUserStore } from '@/shared/stores/useUserStore'
 
-import supabase from '@/supabase/supabase'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import { useShallow } from 'zustand/shallow'

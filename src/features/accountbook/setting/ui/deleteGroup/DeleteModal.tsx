@@ -2,7 +2,7 @@ import ConfirmModal from '@/shared/components/modal/ConfirmModal'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import supabase from '@/supabase/supabase'
-import { useEffect, useState, type Dispatch, type SetStateAction } from 'react'
+import { type Dispatch, type SetStateAction } from 'react'
 import { useNavigate, useParams } from 'react-router'
 import type { Delete } from '../ServiceCard'
 
@@ -15,12 +15,11 @@ interface Props {
   setIsDelete: Dispatch<SetStateAction<Delete>>
 }
 
-function DeleteModal({ isDelete, onCancel, setIsDelete }: Props) {
+function DeleteModal({ isDelete, onCancel }: Props) {
   const { isOwner, delete: isDeleteFlag } = isDelete
   const navigate = useNavigate()
   const { groupId } = useParams()
   const user = useUserStore(state => state.user)
-  const [mainModal, setMainModal] = useState(false)
 
   const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 

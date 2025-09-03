@@ -1,5 +1,11 @@
 import type { AccountItem } from '@/features/accountItem'
-import { Pie, PieChart, Tooltip } from 'recharts'
+import {
+  Pie,
+  PieChart,
+  Tooltip,
+  ResponsiveContainer,
+  type PieLabel
+} from 'recharts'
 import { expenseColors, incomeColors } from '../model/constant'
 import { formatPriceNumber } from '@/shared/utils/format'
 
@@ -7,6 +13,34 @@ interface Props {
   type: 'income' | 'expense'
   data: AccountItem[]
   onClick?: () => void
+}
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const renderSmallLabel: PieLabel = (props: any) => {
+  const { x, y, textAnchor, name, percent } = props
+  const p = Math.round(((percent ?? 0) as number) * 100)
+
+  return (
+    <text
+      x={x}
+      y={y}
+      textAnchor={textAnchor}
+      dominantBaseline="central"
+      fill="#111827"
+      fontSize={12}>
+      <tspan
+        x={x}
+        dy={-6}>
+        {String(name ?? '')}
+      </tspan>
+      <tspan
+        x={x}
+        dy={12}
+        fontWeight={700}>
+        {p}%
+      </tspan>
+    </text>
+  )
 }
 
 export const PieChartItem = ({ type, data, onClick }: Props) => {
@@ -32,24 +66,27 @@ export const PieChartItem = ({ type, data, onClick }: Props) => {
   }
 
   return (
-    <PieChart
-      width={300}
-      height={300}
-      onClick={onClick}>
-      <Pie
-        data={pieData}
-        dataKey="uv"
-        stroke="none"
-        innerRadius={70}
-        outerRadius={130}
-        paddingAngle={3}
-      />
-      <Tooltip
-        formatter={(value: number, name: string) => [
-          formatPriceNumber(Number(value)),
-          name
-        ]}
-      />
-    </PieChart>
+    <ResponsiveContainer
+      width="100%"
+      height={320}>
+      <PieChart onClick={onClick}>
+        <Pie
+          data={pieData}
+          dataKey="uv"
+          stroke="none"
+          innerRadius={70}
+          outerRadius={120}
+          paddingAngle={3}
+          labelLine
+          label={renderSmallLabel as PieLabel}
+        />
+        <Tooltip
+          formatter={(value: number, name: string) => [
+            formatPriceNumber(Number(value)),
+            name
+          ]}
+        />
+      </PieChart>
+    </ResponsiveContainer>
   )
 }

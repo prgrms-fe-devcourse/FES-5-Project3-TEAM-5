@@ -21,7 +21,7 @@ export const fetchByMonth = async (
       categories:categories!account_items_category_id_fkey(name, korean_name),
       recurring_rules:recurring_rules!account_items_recurring_rule_id_fkey(frequency, end_date),
       payment_methods:payment_methods!account_items_payment_method_id_fkey(type),
-      installment_plans:installment_plans!account_items_installment_plan_id_fkey(months, start_date, end_date)
+      installment_plans:installment_plans!account_items_installment_plan_id_fkey(months, start_date, end_date, total_amount)
     `
     )
     .gte('date', startDate)
@@ -41,7 +41,7 @@ export const fetchAllItems = async (groupId: string) => {
     categories:categories!account_items_category_id_fkey(name, korean_name),
     recurring_rules:recurring_rules!account_items_recurring_rule_id_fkey(frequency, end_date),
     payment_methods:payment_methods!account_items_payment_method_id_fkey(type),
-    installment_plans:installment_plans!account_items_installment_plan_id_fkey(months, start_date, end_date)
+    installment_plans:installment_plans!account_items_installment_plan_id_fkey(months, start_date, end_date, total_amount)
   `
     )
     .eq('group_id', groupId)
@@ -70,4 +70,15 @@ export const createRecurringItem = async (recurringItems: AccountItem[]) => {
 
   if (error) throw error
   return data
+}
+
+export const deletePlanByItem = async (
+  parentItemId: string,
+  kind: 'recurring' | 'installment'
+) => {
+  if (kind === 'recurring') {
+    await supabase.from('recurring_rules').delete().eq('id', parentItemId)
+  } else {
+    await supabase.from('installment_plans').delete().eq('id', parentItemId)
+  }
 }

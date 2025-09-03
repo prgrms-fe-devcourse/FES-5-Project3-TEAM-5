@@ -31,6 +31,7 @@ import EditLayout from '@/features/group/edit/EditLayout'
 import Edit from '@/features/group/edit/EditGroup'
 import Invitation from '@/features/group/edit/invitation/Invitation'
 import { StatisticsDetailPage, StatisticsPage } from '@/pages/statistics'
+import { PlansOverview } from '@/pages/plan/PlansOverview'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -112,6 +113,11 @@ export const router = createBrowserRouter([
                 loader: eventsLoader
               }
             ]
+          },
+          {
+            path: 'plan',
+            Component: PlansOverview,
+            loader: eventsLoader
           },
           {
             path: 'settings',

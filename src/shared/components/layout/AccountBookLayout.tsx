@@ -38,6 +38,17 @@ export const AccountBookLayout = () => {
                   'text-primary-base font-bold border-b-3 border-primary-base'
               )
             }
+            to="plan">
+            반복/할부
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              tw(
+                'flex-1 py-1.5 text-center',
+                isActive &&
+                  'text-primary-base font-bold border-b-3 border-primary-base'
+              )
+            }
             to="settings">
             설정
           </NavLink>

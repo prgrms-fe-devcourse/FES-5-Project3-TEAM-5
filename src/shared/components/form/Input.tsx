@@ -5,15 +5,25 @@ interface Props {
   label: string
   className?: string
   id?: string
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   value?: string
   maxLength?: number
   disabled?: boolean
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Input = forwardRef<HTMLInputElement, Props>(
   (
-    { label, className, id, onChange, value, maxLength, disabled = false },
+    {
+      label,
+      className,
+      id,
+      onChange,
+      value,
+      maxLength,
+      disabled = false,
+      onKeyDown
+    },
     ref
   ) => {
     return (
@@ -23,6 +33,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
         name={id}
         type="text"
         onChange={onChange}
+        onKeyDown={onKeyDown}
         disabled={disabled}
         value={value}
         maxLength={maxLength}
@@ -30,7 +41,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
           'bg-white rounded-lg border-2 border-neutral-light w-full py-2 px-1 text-black focus:border-primary-light focus:outline focus:outline-primary-light',
           className
         )}
-        placeholder={`${label}를 입력해 주세요`}
+        placeholder={`${label} 입력해 주세요`}
       />
     )
   }

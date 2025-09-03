@@ -5,6 +5,7 @@ import supabase from '@/supabase/supabase'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
+import { useSpring, animated } from '@react-spring/web'
 
 interface Props {
   type: '수입' | '지출'
@@ -30,8 +31,6 @@ function ThisMonthCard({ type, className }: Props) {
         console.log('사용자가 속한 그룹이 없습니다.')
         setTotal(0)
         return
-      } else {
-        console.log(groupData)
       }
 
       if (groupError) {
@@ -86,17 +85,29 @@ function ThisMonthCard({ type, className }: Props) {
     return 'text-lg'
   }
 
+  const { number } = useSpring({
+    from: { number: 0 },
+    to: { number: total },
+    config: { tension: 50, friction: 12 },
+    reset: true,
+    immediate: total === 0
+  })
+
   return (
-    <div className="bg-white flex flex-col justify-center items-center px-6 py-3 rounded-lg w-40 max-w-40  h-20 max-h-20 flex-wrap">
-      <h3 className="text-md font-light">이번 달 {type}</h3>
+    <div className="bg-white/92 flex flex-col justify-center items-center px-6 py-1 rounded-lg w-40 h-17 flex-wrap">
+      <h3 className="text-[14px] font-semibold text-neutral-dark">
+        이번 달 {type}
+      </h3>
       <p
         className={tw(
-          ' text-lg text-center break-words max-w-full leading-tight ',
+          ' text-lg text-center text-semibold break-words max-w-full leading-tight',
           className,
           dynamicFontSize(formatted)
         )}>
         {type === '수입' ? '+' : '-'}
-        {formatted}
+        <animated.span>
+          {number.to(n => formatShortAmount(Math.floor(n)))}
+        </animated.span>
       </p>
     </div>
   )

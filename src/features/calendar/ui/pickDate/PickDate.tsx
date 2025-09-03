@@ -103,6 +103,8 @@ export function PickDate({ isSliding }: Props) {
                 mode="single"
                 selected={date}
                 captionLayout="dropdown"
+                fromYear={2000}
+                toYear={2100}
                 defaultMonth={date}
                 onSelect={nextDate => {
                   if (nextDate) {

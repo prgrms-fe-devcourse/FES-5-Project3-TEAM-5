@@ -61,7 +61,7 @@ function DetailAccountItemPage() {
       const request = {
         item_id,
         user_id,
-        content: commentRef.current?.value!
+        content: commentRef.current!.value!
       }
       await insertComment(request)
       fetchCommentData(id!)

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
 import type { GroupMembers } from './create/type/type'
 import { mascotList } from './create/data/mascots'
-import checkIcon from '@/shared/assets/checkIcon.svg'
 import Loading from '@/shared/components/loading/Loading'
 import { useNavigate } from 'react-router'
 import { getUserGroups } from './create/service/fetch'
@@ -23,7 +22,14 @@ function GroupCard() {
     const fetchSelect = async () => {
       setIsLoading(true)
       const result = await getUserGroups(user.id)
-      setGroups(result)
+
+      const sorted = result.sort((a, b) => {
+        if (a.is_main && !b.is_main) return -1
+        if (!a.is_main && b.is_main) return 1
+        return 0
+      })
+
+      setGroups(sorted)
       setIsLoading(false)
     }
     fetchSelect()
@@ -42,37 +48,39 @@ function GroupCard() {
           className=" mt-17"
           imgClassName="w-30"
         />
+      ) : groups.length === 0 ? (
+        <div className="text-center text-gray-400 w-full py-6 mt-10">
+          등록된 가계부가 없습니다.
+        </div>
       ) : (
         <>
           {groups &&
             groups.map(g => (
               <button
-                className="bg-white w-38 pb-1 rounded-lg shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
+                className="bg-white w-38 pb-1 rounded-lg border-1 shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
                 onClick={e => handleCalendar(e, g.group_id)}
                 type="button"
                 key={g.group_id}>
-                <div className="bg-primary-pale h-[60%] w-full rounded-lg flex justify-center items-center relative p-1">
+                <div className="bg-primary-pale h-[60%] w-full rounded-tl-lg rounded-tr-lg flex justify-center items-center relative p-1">
                   <img
                     src={mascotList[Number(g.groups?.mascot)].src}
                     alt={mascotList[Number(g.groups?.mascot)].alt}
-                    className="w-23"
+                    className="w-18"
                   />
-                  {g.is_main === true && (
-                    <img
-                      src={checkIcon}
-                      alt="대표아이콘"
-                      className="absolute top-2 left-2"
-                    />
-                  )}
                 </div>
                 <div className="px-2 py-1">
-                  <div className="flex justify-between items-center text-[13px]">
+                  <div className="flex justify-start gap-1 items-center text-[13px]">
+                    {g.is_main === true && (
+                      <div className="text-white px-2 py-[0.5px] bg-primary-base rounded-xl">
+                        대표
+                      </div>
+                    )}
                     <span className="text-black px-2.5 py-[0.5px] bg-primary-light rounded-lg">
                       {g.groups?.is_personal === true ? '개인' : '공동'}
                     </span>
                   </div>
                   <div className="mt-1.5">
-                    <p className="text-black text-[15px] text-start pl-1 flex-wrap">
+                    <p className="text-black text-[15px] text-start pl-1 flex-wrap truncate max-w-90">
                       {g.groups?.name}
                     </p>
                   </div>

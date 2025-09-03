@@ -84,13 +84,11 @@ function ServiceCard({ groupInfo }: { groupInfo: Group | null }) {
           ))}
         </ul>
       </div>
-      {isDelete.delete && (
         <DeleteModal
           isDelete={isDelete}
           onCancel={handleDelete}
           setIsDelete={setIsDelete}
         />
-      )}
       {isExport && <ExportExcelModal onCancel={handleExportExcel} />}
     </>
   )

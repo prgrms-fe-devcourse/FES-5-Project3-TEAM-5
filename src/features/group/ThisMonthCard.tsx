@@ -5,6 +5,7 @@ import supabase from '@/supabase/supabase'
 import dayjs from 'dayjs'
 import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
+import { useSpring, animated } from '@react-spring/web'
 
 interface Props {
   type: '수입' | '지출'
@@ -84,6 +85,14 @@ function ThisMonthCard({ type, className }: Props) {
     return 'text-lg'
   }
 
+  const { number } = useSpring({
+    from: { number: 0 },
+    to: { number: total },
+    config: { tension: 50, friction: 12 },
+    reset: true,
+    immediate: total === 0
+  })
+
   return (
     <div className="bg-white/92 flex flex-col justify-center items-center px-6 py-1 rounded-lg w-40 h-17 flex-wrap">
       <h3 className="text-[14px] font-semibold text-neutral-dark">
@@ -96,7 +105,9 @@ function ThisMonthCard({ type, className }: Props) {
           dynamicFontSize(formatted)
         )}>
         {type === '수입' ? '+' : '-'}
-        {formatted}
+        <animated.span>
+          {number.to(n => formatShortAmount(Math.floor(n)))}
+        </animated.span>
       </p>
     </div>
   )

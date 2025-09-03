@@ -71,3 +71,14 @@ export const createRecurringItem = async (recurringItems: AccountItem[]) => {
   if (error) throw error
   return data
 }
+
+export const deletePlanByItem = async (
+  parentItemId: string,
+  kind: 'recurring' | 'installment'
+) => {
+  if (kind === 'recurring') {
+    await supabase.from('recurring_rules').delete().eq('id', parentItemId)
+  } else {
+    await supabase.from('installment_plans').delete().eq('id', parentItemId)
+  }
+}

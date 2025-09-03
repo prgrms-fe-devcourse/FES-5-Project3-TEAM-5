@@ -7,6 +7,11 @@ import type { AccountItem } from '@/features/accountItem/model/types'
 import { formatPriceNumber } from '@/shared/utils/format'
 import { useRemaining } from './useRemaining'
 
+import ConfirmModal from '@/shared/components/modal/ConfirmModal'
+import deleteIcon from '@/shared/assets/icons/delete.svg'
+import { deletePlanByItem } from '@/features/accountItem/service/accountItem'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
+
 type Row = {
   id: string | number
   title: string
@@ -15,6 +20,7 @@ type Row = {
   nextDate: string | null
   remain: number
   kind: 'installment' | 'recurring'
+  ruleId: string | null
 }
 
 export const PlansOverview = () => {
@@ -22,6 +28,10 @@ export const PlansOverview = () => {
   const [loading, setLoading] = useState(true)
   const [rows, setRows] = useState<Row[]>([])
   const { nextInstallment, nextRecurring } = useRemaining()
+  const { showSnackbar } = useSnackbarStore()
+
+  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [target, setTarget] = useState<Row | null>(null)
 
   useEffect(() => {
     let mounted = true
@@ -50,7 +60,8 @@ export const PlansOverview = () => {
               type: a.type,
               nextDate: next,
               remain,
-              kind: 'installment'
+              kind: 'installment',
+              ruleId: a.installment_plan_id as string
             }
           } else {
             const { next, remain } = nextRecurring(a)
@@ -61,7 +72,8 @@ export const PlansOverview = () => {
               type: a.type,
               nextDate: next,
               remain,
-              kind: 'recurring'
+              kind: 'recurring',
+              ruleId: a.recurring_rule_id as string
             }
           }
         })
@@ -81,13 +93,17 @@ export const PlansOverview = () => {
     return () => {
       mounted = false
     }
-  }, [groupId])
+  }, [])
+
+  console.log(target)
 
   if (loading) return <Loading text="불러오는 중..." />
 
   return (
     <div className="px-5 py-4 space-y-6">
-      <h1 className="text-size-xl font-bold">할부/반복 일정</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-size-xl font-bold">할부/반복 일정</h1>
+      </div>
 
       <section>
         <h2 className="text-size-lg font-semibold mb-3">다가오는 일정</h2>
@@ -95,7 +111,7 @@ export const PlansOverview = () => {
           {rows.map(r => (
             <li
               key={`$${r.id}`}
-              className="flex items-center justify-between rounded-lg border p-3 bg-white shadow-sm">
+              className="relative flex items-center justify-between rounded-lg border p-3 bg-white shadow-sm">
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
                   <span
@@ -110,14 +126,29 @@ export const PlansOverview = () => {
                     {r.type === 'income' ? '수입' : '지출'}
                   </span>
                 </div>
+
                 <p className="mt-1 font-semibold truncate">{r.title}</p>
                 <p className="text-neutral-600 text-[13px]">
-                  다음 결제일: <b>{r.nextDate}</b> · 남은 횟수:
+                  다음 결제일: <b>{r.nextDate}</b> <br /> 남은 횟수:
                   <b>{r.remain}</b>
                 </p>
               </div>
-              <div className="text-right shrink-0">
+              <div className="text-right shrink-0 flex items-center gap-2">
                 <p className="font-bold">{formatPriceNumber(r.amount)}원</p>
+                <button
+                  type="button"
+                  aria-label="삭제"
+                  onClick={() => {
+                    setTarget(r)
+                    setConfirmOpen(true)
+                  }}
+                  className="absolute right-0 top-0 ml-1 inline-flex items-center justify-center w-8 h-8 rounded-md">
+                  <img
+                    src={deleteIcon}
+                    alt=""
+                    className="w-4 h-4"
+                  />
+                </button>
               </div>
             </li>
           ))}
@@ -128,6 +159,39 @@ export const PlansOverview = () => {
           )}
         </ul>
       </section>
+
+      <ConfirmModal
+        open={confirmOpen}
+        title="정말 삭제할까요?"
+        lines={[
+          target?.kind === 'installment'
+            ? '할부 계획이 삭제됩니다.'
+            : '반복 계획이 삭제됩니다.',
+          '이 작업은 되돌릴 수 없어요.'
+        ]}
+        confirmText="삭제"
+        cancelText="취소"
+        onCancel={() => {
+          setConfirmOpen(false)
+          setTarget(null)
+        }}
+        onConfirm={async () => {
+          if (!target) return
+          try {
+            await deletePlanByItem(
+              String(target.ruleId),
+              target.kind === 'installment' ? 'installment' : 'recurring'
+            )
+            setRows(prev => prev.filter(p => p.id !== target.id))
+            showSnackbar({ text: '삭제됐어요', type: 'success' })
+          } catch {
+            showSnackbar({ text: '삭제 중 오류가 발생했어요', type: 'error' })
+          } finally {
+            setConfirmOpen(false)
+            setTarget(null)
+          }
+        }}
+      />
     </div>
   )
 }

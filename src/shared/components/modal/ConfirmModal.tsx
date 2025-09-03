@@ -21,7 +21,6 @@ function ConfirmModal({
   confirmText = '확인',
   cancelText = '취소'
 }: Props) {
-  
   // Enter 확인
   useEffect(() => {
     const handleEnter = (e: KeyboardEvent) => {
@@ -32,7 +31,9 @@ function ConfirmModal({
   }, [onConfirm])
 
   return (
-    <BaseModal isOpen={open} onClose={onCancel}>
+    <BaseModal
+      isOpen={open}
+      onClose={onCancel}>
       {/* 제목 */}
       <h2 className="text-center text-[22px] font-bold text-black">{title}</h2>
 

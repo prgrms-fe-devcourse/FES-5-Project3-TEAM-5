@@ -176,13 +176,6 @@ export const router = createBrowserRouter([
   },
 
   {
-    path: '/test',
-    Component: Layout,
-    handle: { title: '테스트 페이지입니다', hideNav: true },
-    children: [{ index: true, Component: EditItem }]
-  },
-
-  {
     path: '/login',
     Component: Layout,
     children: [{ index: true, Component: Login }]

@@ -10,6 +10,7 @@ import { useShallow } from 'zustand/shallow'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { useParams } from 'react-router'
 import InviteCompleteBtn from './InviteCompleteBtn'
+import Loading from '@/shared/components/loading/Loading'
 
 function Invitation() {
   const [tab, setTab] = useState<'초대하기' | '초대한 사람 목록'>('초대하기') // 탭 상태
@@ -17,20 +18,20 @@ function Invitation() {
   const { invitedUsers, setInvitedUsers } = useCreateGroup()
   const { groupId } = useParams()
 
-  const { groups, fetchGroups } = useGroupStore(
+  const { groups, fetchGroups, isLoading } = useGroupStore(
     useShallow(state => ({
       groups: state.groups,
-      fetchGroups: state.fetchGroups
+      fetchGroups: state.fetchGroups,
+      isLoading: state.isLoading
     }))
   )
 
   const user = useUserStore(state => state.user)
 
   useEffect(() => {
-    if (user?.id && groups.length === 0) {
-      fetchGroups(user.id)
-    }
-  }, [user, fetchGroups, groups])
+    if (!user?.id) return
+    fetchGroups(user.id)
+  }, [user?.id])
 
   useEffect(() => {
     if (!groupId || groups.length === 0) return
@@ -60,7 +61,9 @@ function Invitation() {
         onChange={setTab}
         options={['초대하기', '초대한 사람 목록']}
       />
-      {tab === '초대하기' && (
+      {isLoading ? (
+        <Loading />
+      ) : tab === '초대하기' ? (
         <form className="px-2 py-3 relative">
           <InviteInput
             selectedUserList={invitedUsers}
@@ -78,8 +81,9 @@ function Invitation() {
             user={user}
           />
         </form>
-      )}
-      {tab === '초대한 사람 목록' && <InvitedList />}
+      ) : tab === '초대한 사람 목록' ? (
+        <InvitedList />
+      ) : null}
     </div>
   )
 }

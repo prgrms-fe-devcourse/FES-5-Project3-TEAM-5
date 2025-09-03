@@ -2,8 +2,11 @@ import type { TotalVote } from '../model/responseBody'
 
 export function filterMyVote(selections?: TotalVote[], userId?: string) {
   if (!selections || !userId) return []
+  const myVoteList = selections.filter(
+    selection => selection.user_id === userId
+  )
 
-  return selections.filter(selection => selection.user_id === userId)
+  return sortByDeadlineAsc(myVoteList)
 }
 
 function removeOverVote(selections: TotalVote[]) {

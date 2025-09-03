@@ -16,6 +16,7 @@ interface Props {
 
 export function SortButtonList({ voteList, setFilteredList }: Props) {
   const userId = useUserStore.getState().user?.id
+
   const [sortButtonData, setSortButtonData] = useState([
     { id: 'total', text: '전체', status: 'active' },
     { id: 'myVote', text: '내 투표', status: 'inactive' },

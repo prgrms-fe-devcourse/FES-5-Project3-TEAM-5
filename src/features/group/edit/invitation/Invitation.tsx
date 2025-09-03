@@ -62,7 +62,7 @@ function Invitation() {
         options={['초대하기', '초대한 사람 목록']}
       />
       {isLoading ? (
-        <Loading />
+        <Loading imgClassName="w-30" />
       ) : tab === '초대하기' ? (
         <form className="px-2 py-3 relative">
           <InviteInput

@@ -7,6 +7,8 @@ import Loading from '@/shared/components/loading/Loading'
 import { useNavigate } from 'react-router'
 import { getUserGroups } from './create/service/fetch'
 import { useStorageGroup } from './model/useStorageGroup'
+import { motion, AnimatePresence } from 'framer-motion'
+import type { Variants, TargetAndTransition } from 'framer-motion'
 
 function GroupCard() {
   const [groups, setGroups] = useState<GroupMembers[]>([])
@@ -41,6 +43,20 @@ function GroupCard() {
     navigate(`/accountBook/${groupId}/calendar`)
   }
 
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 9 },
+    visible: (i: number): TargetAndTransition => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.05,
+        type: 'spring',
+        stiffness: 60, // 강도 낮춤
+        damping: 14 // 감쇠 부드럽게
+      }
+    })
+  }
+
   return (
     <>
       {isLoading ? (
@@ -53,14 +69,20 @@ function GroupCard() {
           등록된 가계부가 없습니다.
         </div>
       ) : (
-        <>
+        <AnimatePresence>
+          {' '}
           {groups &&
-            groups.map(g => (
-              <button
+            groups.map((g, i) => (
+              <motion.button
                 className="bg-white w-38 pb-1 rounded-lg border-1 shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
                 onClick={e => handleCalendar(e, g.group_id)}
                 type="button"
-                key={g.group_id}>
+                key={g.group_id}
+                custom={i}
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={itemVariants}>
                 <div className="bg-primary-pale h-[60%] w-full rounded-tl-lg rounded-tr-lg flex justify-center items-center relative p-1">
                   <img
                     src={mascotList[Number(g.groups?.mascot)].src}
@@ -85,9 +107,9 @@ function GroupCard() {
                     </p>
                   </div>
                 </div>
-              </button>
+              </motion.button>
             ))}
-        </>
+        </AnimatePresence>
       )}
     </>
   )

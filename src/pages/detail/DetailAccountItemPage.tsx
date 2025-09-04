@@ -18,7 +18,7 @@ import { updateComment } from '@/features/detail/service/updateComment'
 import Header from '@/shared/components/header/Header'
 import dayjs from 'dayjs'
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 function DetailAccountItemPage() {
   const { id } = useParams()
@@ -31,6 +31,7 @@ function DetailAccountItemPage() {
   const itemId = detailItemData?.[0]?.id
   const itemCreatedAt = detailItemData?.[0]?.date
   const title = itemCreatedAt ? dayjs(itemCreatedAt).format('M월 D일 ddd') : ''
+  const navigate = useNavigate()
 
   const onOpenArticleToggle = () => {
     setIsArticleToggleOn(!isArticleToggleOn)
@@ -112,13 +113,27 @@ function DetailAccountItemPage() {
     const commentsData = await getCommentsData(id)
     setCommentsData(commentsData)
   }
+
   const fetchDetailData = async (id: string) => {
-    const detailData = await getDetailItemData(id)
-    setDetailItemData(detailData)
+    try {
+      const detailData = await getDetailItemData(id)
+      if (!detailData || detailData.length === 0) {
+        navigate('/404', { replace: true })
+        return
+      }
+      setDetailItemData(detailData)
+    } catch (error) {
+      console.error('게시물 데이터 로드 실패', error)
+      navigate('/404', { replace: true })
+    }
   }
 
   useEffect(() => {
-    if (!id) return
+    if (!id) {
+      navigate('/404', { replace: true })
+      return
+    }
+
     fetchDetailData(id)
     fetchCommentData(id)
   }, [])

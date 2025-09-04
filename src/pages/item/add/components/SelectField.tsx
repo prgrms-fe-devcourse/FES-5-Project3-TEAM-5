@@ -28,7 +28,7 @@ function SelectField({ label, value, placeholder, onClick, onButtonClick, hideBu
             <button
               type="button"
               onClick={onButtonClick}
-              className="flex items-center gap-1 text-secondary-red hover:cursor-pointer"
+              className="flex whitespace-nowrap items-center gap-1 text-secondary-red hover:cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

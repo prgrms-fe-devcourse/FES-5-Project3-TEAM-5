@@ -6,6 +6,7 @@ import {
   getCreateFormatDate,
   sortByCreatedAtDesc
 } from '../../utils/dateFormat'
+import { useState } from 'react'
 
 interface Props {
   commentData?: Comments[]
@@ -30,6 +31,8 @@ export function CommentContainer({
   handleCommentEdit,
   onDelete
 }: Props) {
+  const [openCommentId, setOpenCommentId] = useState<string | null>(null)
+
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       e.preventDefault()
@@ -60,15 +63,19 @@ export function CommentContainer({
       {commentData &&
         sortByCreatedAtDesc(commentData).map(item => (
           <Comment
+            key={item.id}
             userId={userId}
             commentId={item.id}
             onDelete={onDelete}
             onEdit={handleCommentEdit}
             isMine={item.user_id === userId}
-            key={item.id}
             created_at={getCreateFormatDate(item.created_at)}
             content={item.content}
             writer={item.users.nickname}
+            isOpen={openCommentId === item.id}
+            onToggle={() =>
+              setOpenCommentId(prev => (prev === item.id ? null : item.id))
+            }
           />
         ))}
     </div>

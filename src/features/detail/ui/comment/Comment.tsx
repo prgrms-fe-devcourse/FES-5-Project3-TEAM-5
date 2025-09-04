@@ -5,10 +5,11 @@ interface Props {
   commentId: string
   content: string
   userId: string
-
   writer: string
   isMine: boolean
   created_at: string
+  isOpen: boolean
+  onToggle: () => void
   onDelete: (itemId: string) => Promise<void>
   onEdit: (commentId: string, userId: string, content: string) => Promise<void>
 }
@@ -20,15 +21,13 @@ function Comment({
   created_at,
   commentId,
   userId,
+  isOpen,
+  onToggle,
   onEdit,
   onDelete
 }: Props) {
-  const [isToggleOn, setIsToggleOn] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [text, setText] = useState(content)
-  const onChangeToggle = () => {
-    setIsToggleOn(!isToggleOn)
-  }
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
@@ -55,8 +54,8 @@ function Comment({
               deletedId={commentId}
               onEdit={() => setIsEdit(true)}
               onDelete={onDelete}
-              isOpen={isToggleOn}
-              onChangeToggle={onChangeToggle}
+              isOpen={isOpen}
+              onChangeToggle={onToggle}
             />
           )}
         </div>

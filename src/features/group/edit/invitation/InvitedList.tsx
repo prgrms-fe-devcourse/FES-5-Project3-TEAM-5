@@ -46,12 +46,12 @@ function InvitedList() {
 
   return (
     <div className="mt-2">
-      <ul className="flex flex-col px-1 py-3 gap-3">
-        {invitedList.length > 0 &&
+      <ul className="flex flex-col px-1 py-3 gap-3 justify-center items-center">
+        {invitedList.length > 0 ? (
           invitedList.map(i => (
             <li
               key={i.id}
-              className="bg-primary-pale p-3 flex gap-2 rounded-lg text-sm text-black pr-0">
+              className="bg-primary-pale p-3 flex gap-2 rounded-lg text-sm text-black pr-0 w-full">
               <div className="w-full flex justify-between flex-wrap px-2">
                 <span className="truncate max-w-[50%] min-w-[40%]">
                   {i.nickname}
@@ -63,7 +63,14 @@ function InvitedList() {
                 className="cursor-pointer bg-primary-pale"
                 onClick={() => handleDeleteUser(i.id)}></button>
             </li>
-          ))}
+          ))
+        ) : (
+          <li className="text-center text-neutral-dark mt-10 text-sm">
+            <div>
+              참여자가 아직 없어요. <br /> 친구를 초대해 가계부를 함께 써보세요!
+            </div>
+          </li>
+        )}
       </ul>
     </div>
   )

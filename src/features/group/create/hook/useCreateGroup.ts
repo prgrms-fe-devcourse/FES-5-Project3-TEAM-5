@@ -5,6 +5,7 @@ import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { useInitialIsMain } from './useInitialIsMain'
 import type { Users } from '@/features/group/create/type/type'
+import { generateGroupMemberInserts } from '../service/fetch'
 
 export function useCreateGroup() {
   const [groupName, setGroupName] = useState('')
@@ -20,19 +21,34 @@ export function useCreateGroup() {
   const initialIsMain = useInitialIsMain()
 
   useEffect(() => {
-    if (initialIsMain !== null) {
+    if (initialIsMain !== null && isMain === null) {
       setIsMain(initialIsMain)
     }
-  }, [initialIsMain])
+  }, [initialIsMain, isMain])
 
   const handleSubmit = async () => {
     if (!user) return
 
+    if (isMain === null) {
+      showSnackbar({ text: '잠시만 기다려주세요...', type: 'info' })
+      return
+    }
+
+    const finalIsMain =
+    initialIsMain ? true : isMain
+
+
     try {
-      if (!groupName || mascot === null || isMain === null) {
+
+      if (!groupName || mascot === null) {
         showSnackbar({ text: '모든 필드를 입력해주세요', type: 'warning' })
         return
       }
+
+      if (!isPersonal && invitedUsers.length === 0) {
+      showSnackbar({ text: '초대한 유저가 없습니다.', type: 'warning' })
+      return
+    }
 
       // 기존 대표 가계부 초기화
       if (isMain) {
@@ -59,20 +75,13 @@ export function useCreateGroup() {
       if (groupError) throw groupError
 
       // 그룹 멤버 초대
-      const membersToInsert = [
-        {
-          group_id: groupIdRef.current,
-          user_id: user.id,
-          is_main: isMain
-        },
-        ...(!isPersonal
-          ? invitedUsers.map(invited => ({
-              group_id: groupIdRef.current,
-              user_id: invited.id,
-              is_main: false
-            }))
-          : [])
-      ]
+      const membersToInsert = await generateGroupMemberInserts({
+        groupId: groupIdRef.current,
+        userId: user.id,
+        invitedUsers,
+        isPersonal,
+        isMain: finalIsMain
+      })
 
       const { error } = await supabase
         .from('group_members')

@@ -38,7 +38,7 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
       type="button"
       onPointerDown={e => handleLoginWithProvider(e, provider)}
       className={tw(
-        'flex h-[40px] gap-3 items-center px-3 py-1 rounded-[8px] hover:bg-gray-200 duration-100 ease-in-out cursor-pointer',
+        'flex w-full h-[40px] gap-3 items-center px-3 py-1 rounded-[8px] justify-center hover:bg-gray-200 duration-100 ease-in-out cursor-pointer',
         className
       )}>
       <div>
@@ -47,7 +47,7 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
           alt={`${text} 아이콘`}
         />
       </div>
-      <div>{text} 로그인</div>
+      <div>{text}로 시작하기</div>
     </button>
   )
 }

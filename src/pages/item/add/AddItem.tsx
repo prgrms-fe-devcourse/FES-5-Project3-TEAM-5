@@ -18,6 +18,7 @@ import { PickDate, useSelectedDate } from '@/features/calendar'
 import { useNavigate } from 'react-router'
 import useModalOptions from '../hooks/useModalOptions'
 import GuideMessage from '../components/GuideMessage'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 dayjs.locale('ko')
 
 
@@ -120,10 +121,24 @@ function AddItem() {
     setSelectedCategoryId(null)
   }, [tab])
 
+  // 스낵바
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
+
   // 파일 선택
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      // 이미지 파일이 아닐 경우
+      if(!file.type.startsWith("image/")){
+        e.target.value = ""
+        setSelectedFile(null) // 선택한 파일 비우기
+        setImageUrl(null) // 미리보기 지우기
+
+        showSnackbar({ text: "이미지 파일만 업로드할 수 있습니다.", type: "error" })
+        return
+      }
+
+      // 정상적인 이미지 파일
       setSelectedFile(file)
       setImageUrl(URL.createObjectURL(file))
     }

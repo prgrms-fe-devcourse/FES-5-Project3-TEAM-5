@@ -26,7 +26,8 @@ type Row = {
 export const PlansOverview = () => {
   const { groupId } = useParams()
   const [loading, setLoading] = useState(true)
-  const [rows, setRows] = useState<Row[]>([])
+  const [upcomingRows, setUpcomingRows] = useState<Row[]>([])
+  const [pastRows, setPastRows] = useState<Row[]>([])
   const { nextInstallment, nextRecurring } = useRemaining()
   const { showSnackbar } = useSnackbarStore()
 
@@ -45,6 +46,7 @@ export const PlansOverview = () => {
             (!a.recurring_parent_id && a.recurring_rules)
         )
 
+        // 다가오는 일정
         const mapped: Row[] = src.map(a => {
           const title =
             a.memo ??
@@ -78,14 +80,61 @@ export const PlansOverview = () => {
           }
         })
 
-        const result = mapped
-          .filter(r => r.nextDate) // 종료된 건 제외
+        const upcoming = mapped
+          .filter(r => r.nextDate)
           .sort(
             (a, b) =>
               dayjs(a.nextDate!).valueOf() - dayjs(b.nextDate!).valueOf()
           )
 
-        if (mounted) setRows(result)
+        // 지난 일정
+        const mappedPast: Row[] = src
+          .map(a => {
+            const title =
+              a.memo ??
+              a.categories?.korean_name ??
+              a.categories?.name ??
+              '이름없음'
+            if (a.installment_plans) {
+              const { next } = nextInstallment(a)
+              if (next) return null
+              return {
+                id: a.id,
+                title,
+                amount: Number(a.amount) || 0,
+                type: a.type,
+                nextDate: dayjs(a.installment_plans.start_date).format(
+                  'YYYY-MM-DD'
+                ),
+                remain: 0,
+                kind: 'installment' as const,
+                ruleId: a.installment_plan_id as string
+              }
+            } else {
+              const { next } = nextRecurring(a)
+              if (next) return null
+              return {
+                id: a.id,
+                title,
+                amount: Number(a.amount) || 0,
+                type: a.type,
+                nextDate: dayjs(a.date).format('YYYY-MM-DD'),
+                remain: 0,
+                kind: 'recurring' as const,
+                ruleId: a.recurring_rule_id as string
+              }
+            }
+          })
+          .filter((r): r is NonNullable<typeof r> => r !== null)
+          .sort(
+            (a, b) =>
+              dayjs(b.nextDate!).valueOf() - dayjs(a.nextDate!).valueOf()
+          )
+
+        if (mounted) {
+          setUpcomingRows(upcoming)
+          setPastRows(mappedPast)
+        }
       } finally {
         if (mounted) setLoading(false)
       }
@@ -114,7 +163,7 @@ export const PlansOverview = () => {
       <section>
         <h2 className="text-size-lg font-semibold mb-3">다가오는 일정</h2>
         <ul className="space-y-3">
-          {rows.map(r => (
+          {upcomingRows.map(r => (
             <li
               key={`$${r.id}`}
               className="relative flex items-center justify-between rounded-lg border p-3 bg-white shadow-sm">
@@ -158,9 +207,63 @@ export const PlansOverview = () => {
               </div>
             </li>
           ))}
-          {rows.length === 0 && (
+          {upcomingRows.length === 0 && (
             <li className="text-center text-neutral-500 py-12 border rounded-lg bg-white">
               예정된 할부/반복 일정이 없어요.
+            </li>
+          )}
+        </ul>
+      </section>
+      <section>
+        <h2 className="text-size-lg font-semibold mb-3">지난 일정</h2>
+        <ul className="space-y-3">
+          {pastRows.map(r => (
+            <li
+              key={`$${r.id}`}
+              className="relative flex items-center justify-between rounded-lg border p-3 bg-white shadow-sm">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <span
+                    className={`px-2 py-[2px] text-[11px] rounded-full ${
+                      r.kind === 'installment'
+                        ? 'bg-blue-50 text-blue-700'
+                        : 'bg-emerald-50 text-emerald-700'
+                    }`}>
+                    {r.kind === 'installment' ? '할부' : '반복'}
+                  </span>
+                  <span className="text-[11px] px-2 py-[2px] rounded-full bg-neutral-100 text-neutral-700">
+                    {r.type === 'income' ? '수입' : '지출'}
+                  </span>
+                </div>
+
+                <p className="mt-1 font-semibold truncate">{r.title}</p>
+                <p className="text-neutral-600 text-[13px]">
+                  시작일: <b>{r.nextDate}</b> <br /> 남은 횟수:
+                  <b>{r.remain}</b>
+                </p>
+              </div>
+              <div className="text-right shrink-0 flex items-center gap-2">
+                <p className="font-bold">{formatPriceNumber(r.amount)}원</p>
+                <button
+                  type="button"
+                  aria-label="삭제"
+                  onClick={() => {
+                    setTarget(r)
+                    setConfirmOpen(true)
+                  }}
+                  className="absolute right-0 top-0 ml-1 inline-flex items-center justify-center w-8 h-8 rounded-md">
+                  <img
+                    src={deleteIcon}
+                    alt=""
+                    className="w-4 h-4"
+                  />
+                </button>
+              </div>
+            </li>
+          ))}
+          {pastRows.length === 0 && (
+            <li className="text-center text-neutral-500 py-12 border rounded-lg bg-white">
+              과거 할부/반복 일정이 없어요.
             </li>
           )}
         </ul>
@@ -188,7 +291,8 @@ export const PlansOverview = () => {
               String(target.ruleId),
               target.kind === 'installment' ? 'installment' : 'recurring'
             )
-            setRows(prev => prev.filter(p => p.id !== target.id))
+            setUpcomingRows(prev => prev.filter(p => p.id !== target.id))
+            setPastRows(prev => prev.filter(p => p.id !== target.id))
             showSnackbar({ text: '삭제됐어요', type: 'success' })
           } catch {
             showSnackbar({ text: '삭제 중 오류가 발생했어요', type: 'error' })

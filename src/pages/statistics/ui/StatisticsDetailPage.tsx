@@ -29,7 +29,9 @@ export function StatisticsDetailPage() {
     }, {})
   )
 
-  const categories = result.filter(event => event.type === type)
+  const categories = result
+    .filter(event => event.type === type)
+    .sort((a, b) => Number(b.amount) - Number(a.amount))
 
   const handleBack = () => {
     navigate(-1)

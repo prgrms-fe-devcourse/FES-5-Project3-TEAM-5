@@ -22,13 +22,13 @@ function SelectField({ label, value, placeholder, onClick, onButtonClick, hideBu
             value={value || ''}
             placeholder={placeholder}
             onClick={onClick}
-            className="w-full px-2.5 bg-transparent text-black focus:outline-none placeholder:text-neutral-dark"
+            className="w-full truncate px-2.5 bg-transparent text-black focus:outline-none placeholder:text-neutral-dark"
           />
           {!hideButton && onButtonClick && (
             <button
               type="button"
               onClick={onButtonClick}
-              className="flex items-center gap-1 text-secondary-red hover:cursor-pointer"
+              className="flex whitespace-nowrap items-center gap-1 text-secondary-red hover:cursor-pointer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

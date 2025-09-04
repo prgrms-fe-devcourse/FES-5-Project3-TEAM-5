@@ -42,12 +42,6 @@ function EditGroup() {
     setIsOwner(targetGroup.groups.user_id === user.id)
   }, [user?.id, targetGroup])
 
-  const handleEditGroupName = (name: string) => {
-    if (inputRef.current?.value) {
-      inputRef.current.value = name
-    }
-  }
-
   const handleEditGroupMascot = (id: number) => {
     setMascot(id)
   }

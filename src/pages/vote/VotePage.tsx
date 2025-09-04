@@ -9,6 +9,7 @@ import Loading from '@/shared/components/loading/Loading'
 import ConfirmModal from '@/shared/components/modal/ConfirmModal'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
+import { throttle } from '@/shared/utils/throttle'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 
@@ -38,18 +39,21 @@ function VotePage() {
     }
   }
 
-  const handleSelectOptions = async (vote_id: string, option_id: string) => {
-    try {
-      await insertSelectVote(vote_id, option_id)
-      await loadVotes()
-      showSnackbar({ type: 'success', text: '투표가 등록되었습니다' })
-    } catch (error) {
-      showSnackbar({
-        type: 'error',
-        text: '투표 선택 중 오류가 발생했습니다'
-      })
-    }
-  }
+  const handleSelectOptions = throttle(
+    async (vote_id: string, option_id: string) => {
+      try {
+        await insertSelectVote(vote_id, option_id)
+        await loadVotes()
+        showSnackbar({ type: 'success', text: '투표가 등록되었습니다' })
+      } catch (error) {
+        showSnackbar({
+          type: 'error',
+          text: '투표 선택 중 오류가 발생했습니다'
+        })
+      }
+    },
+    1000
+  )
 
   const loadVotes = async () => {
     setIsLoading(true)

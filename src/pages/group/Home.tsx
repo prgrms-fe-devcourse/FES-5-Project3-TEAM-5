@@ -17,7 +17,7 @@ function Home() {
         <div className="absolute bottom-3 left-[50%] transform -translate-x-[50%] w-full">
           <div
             className={tw(
-              'grid gap-10 mx-4 justify-center',
+              'grid justify-center justify-items-center',
               'grid-cols-1',
               '[@media(min-width:320px)]:grid-cols-2 gap-6 ',
               'sm:[grid-template-columns:repeat(auto-fit,minmax(9.5rem,9.5rem))]'

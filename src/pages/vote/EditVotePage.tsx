@@ -2,6 +2,7 @@ import { EditTimeButtonList, VoteOption, VoteQuestion } from '@/features/vote'
 import { getUserVoteData, updateVote } from '@/features/vote/service/updateVote'
 import { calculateHoursDiff } from '@/features/vote/utils/calcData'
 import SubmitButton from '@/shared/components/form/SubmitButton'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
 
@@ -16,12 +17,13 @@ function EditVotePage() {
   )
   const params = useParams()
   const navigate = useNavigate()
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   const loadUserVote = async () => {
     try {
       const votes = await getUserVoteData(params.editId!)
       if (!votes || votes.length === 0) {
-        alert('불러올 투표가 없습니다.')
+        showSnackbar({ type: 'error', text: '투표 데이터가 없습니다' })
         return
       }
 
@@ -37,8 +39,10 @@ function EditVotePage() {
         })
       })
     } catch (error) {
-      console.error('투표 데이터 불러오기 실패:', error)
-      alert('투표 데이터를 불러오는 중 오류가 발생했습니다.')
+      showSnackbar({
+        type: 'error',
+        text: '투표 데이터를 불러오는 중 오류가 발생했습니다'
+      })
     }
   }
 
@@ -58,9 +62,15 @@ function EditVotePage() {
         options: newOptions
       })
       navigate('/vote')
+      showSnackbar({
+        type: 'success',
+        text: '투표가 수정되었습니다'
+      })
     } catch (error) {
-      console.error('투표 수정 실패:', error)
-      alert('투표 수정 중 오류가 발생했습니다. 다시 시도해주세요.')
+      showSnackbar({
+        type: 'error',
+        text: '투표 수정 중 오류가 발생했습니다'
+      })
     }
   }
   useEffect(() => {

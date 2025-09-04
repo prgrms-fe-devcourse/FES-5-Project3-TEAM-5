@@ -7,17 +7,19 @@ import { sortByDeadlineDesc } from '@/features/vote/utils/filterVoteList'
 import AddButton from '@/shared/components/buttons/AddButton'
 import Loading from '@/shared/components/loading/Loading'
 import ConfirmModal from '@/shared/components/modal/ConfirmModal'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 
 function VotePage() {
   const [isDelete, setIsDelete] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [filteredList, setFilteredList] = useState<TotalVote[] | null>(null)
   const voteListRef = useRef<TotalVote[] | null>(null)
   const deleteIdRef = useRef<string | null>(null)
-  const [filteredList, setFilteredList] = useState<TotalVote[] | null>(null)
   const userId = useUserStore.getState().user?.id
-  const [isLoading, setIsLoading] = useState(false)
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   const openDeleteModal = (id?: string) => {
     if (id) deleteIdRef.current = id
@@ -30,9 +32,9 @@ function VotePage() {
       await deleteVote(deleteIdRef.current)
       await loadVotes()
       setIsDelete(false)
+      showSnackbar({ type: 'success', text: '투표가 삭제 되었습니다' })
     } catch (error) {
-      console.error('투표 삭제 실패:', error)
-      alert('투표 삭제 중 오류가 발생했습니다.')
+      showSnackbar({ type: 'error', text: '투표 삭제 중 오류가 발생했습니다' })
     }
   }
 
@@ -40,9 +42,12 @@ function VotePage() {
     try {
       await insertSelectVote(vote_id, option_id)
       await loadVotes()
+      showSnackbar({ type: 'success', text: '투표가 등록되었습니다' })
     } catch (error) {
-      console.error('투표 선택 실패:', error)
-      alert('투표 선택 중 오류가 발생했습니다.')
+      showSnackbar({
+        type: 'error',
+        text: '투표 선택 중 오류가 발생했습니다'
+      })
     }
   }
 
@@ -53,8 +58,10 @@ function VotePage() {
       voteListRef.current = votes
       setFilteredList(sortByDeadlineDesc(votes))
     } catch (error) {
-      console.error('투표 데이터 불러오기 실패:', error)
-      alert('투표 데이터를 불러오는 중 오류가 발생했습니다.')
+      showSnackbar({
+        type: 'error',
+        text: '투표 데이터를 불러오는 중 오류가 발생했습니다'
+      })
     } finally {
       setIsLoading(false)
     }

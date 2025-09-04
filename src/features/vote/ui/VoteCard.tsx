@@ -10,6 +10,7 @@ import { tw } from '@/shared/utils/tw'
 
 interface Props {
   voteId: string
+  userId: string
   question: string
   startsAt: string
   deadline: string
@@ -29,6 +30,7 @@ export function VoteCard({
   startsAt,
   isMine,
   voteId,
+  userId,
   totalParticipants,
   voteSelections,
   openDeleteModal,
@@ -87,7 +89,9 @@ wrap-break-word">
       </div>
       {voteOptions &&
         voteOptions.map(({ content, id }) => {
-          const isSelected = mySelect?.some(sel => sel.option_id === id)
+          const isSelected = mySelect?.some(
+            sel => sel.option_id === id && sel.user_id === userId
+          )
           const optionParticipants =
             voteSelections?.filter(sel => sel.option_id === id).length ?? 0
           const isDisabled = deadline === '투표 마감'

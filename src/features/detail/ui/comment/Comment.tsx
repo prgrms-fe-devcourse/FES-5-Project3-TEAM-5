@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ToggleMoreButton from '../ToggleMoreButton'
 
 interface Props {
@@ -28,6 +28,21 @@ function Comment({
 }: Props) {
   const [isEdit, setIsEdit] = useState(false)
   const [text, setText] = useState(content)
+  const toggleRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        isOpen &&
+        toggleRef.current &&
+        !toggleRef.current.contains(e.target as Node)
+      ) {
+        onToggle()
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen, onToggle])
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
@@ -50,14 +65,16 @@ function Comment({
         <span className="text-size-sm text-neutral-DEFAULT">{created_at}</span>
         <div className="w-5">
           {isMine && (
-            <ToggleMoreButton
-              label="댓글"
-              deletedId={commentId}
-              onEdit={() => setIsEdit(true)}
-              onDelete={onDelete}
-              isOpen={isOpen}
-              onChangeToggle={onToggle}
-            />
+            <div ref={toggleRef}>
+              <ToggleMoreButton
+                label="댓글"
+                deletedId={commentId}
+                onEdit={() => setIsEdit(true)}
+                onDelete={onDelete}
+                isOpen={isOpen}
+                onChangeToggle={onToggle}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -74,7 +91,7 @@ function Comment({
           <div className="flex justify-end ">
             <button
               type="button"
-              className=" px-2.5 py-0.5 bg-neutral-light"
+              className=" px-2.5 py-0.5 rounded-md bg-neutral-light hover:bg-neutral-DEFAULT"
               onClick={onSubmit}>
               수정
             </button>

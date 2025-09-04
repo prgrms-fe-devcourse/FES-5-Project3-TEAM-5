@@ -4,6 +4,7 @@ import ReactionButtonContainer from './ReactionButtonContainer'
 import ToggleMoreButton from './ToggleMoreButton'
 import { useNavigate } from 'react-router'
 import { deleteAccountItem } from '@/pages/item/delete/deleteAccountItem'
+import { useEffect, useRef } from 'react'
 
 interface Props {
   isArticleToggleOn: boolean
@@ -39,6 +40,21 @@ export function DetailContents({
   handleReactions
 }: Props) {
   const navigate = useNavigate()
+  const toggleRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        isArticleToggleOn &&
+        toggleRef.current &&
+        !toggleRef.current.contains(e.target as Node)
+      ) {
+        onChangeArticleToggle()
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isArticleToggleOn, onChangeArticleToggle])
 
   const handleDelete = async (id: string) => {
     try {
@@ -62,14 +78,16 @@ export function DetailContents({
           <div className="flex absolute right-0">
             <p>{writer}</p>
             {isMine && (
-              <ToggleMoreButton
-                label="일별 가계부"
-                deletedId={item_id}
-                isOpen={isArticleToggleOn}
-                onChangeToggle={onChangeArticleToggle}
-                onEdit={() => navigate(`/accountBook/item/${item_id}/edit`)}
-                onDelete={handleDelete}
-              />
+              <div ref={toggleRef}>
+                <ToggleMoreButton
+                  label="일별 가계부"
+                  deletedId={item_id}
+                  isOpen={isArticleToggleOn}
+                  onChangeToggle={onChangeArticleToggle}
+                  onEdit={() => navigate(`/accountBook/item/${item_id}/edit`)}
+                  onDelete={handleDelete}
+                />
+              </div>
             )}
           </div>
         </div>

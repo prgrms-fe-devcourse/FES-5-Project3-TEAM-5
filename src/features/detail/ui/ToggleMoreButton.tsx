@@ -19,15 +19,12 @@ function ToggleMoreButton({
   onChangeToggle
 }: Props) {
   const [isDelete, setIsDelete] = useState(false)
-  const handleToggle = () => {
-    onChangeToggle()
-  }
 
   return (
     <>
       <div
         className="relative cursor-pointer"
-        onClick={handleToggle}>
+        onClick={onChangeToggle}>
         {isOpen && (
           <div className="absolute right-0 top-5 w-25  shadow-md rounded-md bg-white text-center border-0.5 cursor-pointer z-10">
             <button

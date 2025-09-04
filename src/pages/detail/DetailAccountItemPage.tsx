@@ -108,6 +108,10 @@ function DetailAccountItemPage() {
       }
       await updateComment(request!)
       fetchCommentData(id!)
+      showSnackbar({
+        text: '댓글 수정 완료',
+        type: 'success'
+      })
     } catch (error) {
       console.error('댓글 수정 에러', error)
 

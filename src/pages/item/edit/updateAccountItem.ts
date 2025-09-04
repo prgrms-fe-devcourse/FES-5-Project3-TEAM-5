@@ -29,9 +29,12 @@ export async function updateAccountItem({
 
   // 1. 파일 업로드
   if (file) {
+    const ext = file.name.split('.').pop() // 확장자 추출
+    const safeFileName = `${Date.now()}_${Math.random().toString(36).substring(2)}.${ext}` // 랜덤 이름으로 변경
+
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('receipts')
-      .upload(`${userId}/${Date.now()}_${file.name}`, file)
+      .upload(`${userId}/${safeFileName}`, file)
 
     if (uploadError) throw uploadError
 

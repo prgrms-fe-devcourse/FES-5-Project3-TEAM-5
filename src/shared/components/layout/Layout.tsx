@@ -9,6 +9,7 @@ import { useShallow } from 'zustand/shallow'
 import Login from '@/pages/login/Login'
 import supabase from '@/supabase/supabase'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
+import Loading from '../loading/Loading'
 
 type RouteHandle = {
   title?: string
@@ -72,11 +73,9 @@ export const Layout = () => {
 
   return (
     <div className="min-h-dvh bg-zinc-100">
-      <div className="mx-auto w-full max-w-[420px] min-h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] overscroll-y-contain">
+      <div className="mx-auto w-full max-w-[420px] h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] overflow-y-auto overscroll-y-contain custom-scrollbar">
         {isLoading ? (
-          <div className="flex justify-center items-center h-full">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
-          </div>
+          <Loading className="mt-60" />
         ) : !isAuth ? (
           <Login />
         ) : (

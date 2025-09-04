@@ -43,7 +43,7 @@ function MainImage() {
     <div className="absolute right-0 top-3">
       {loading ? (
         <div className="w-50 h-50 flex items-center justify-center animate-pulse">
-          <span className="text-xs text-gray-400">로딩 중...</span>
+          <span className="text-xs text-gray-400"> </span>
         </div>
       ) : (
         <motion.img

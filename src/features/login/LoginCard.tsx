@@ -17,7 +17,6 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
     e.preventDefault()
 
     try {
-      localStorage.setItem('just-logged-in', 'true')
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
@@ -25,6 +24,7 @@ function LoginCard({ iconSrc, text, provider, className }: Props) {
           skipBrowserRedirect: false
         }
       })
+      localStorage.setItem('just-logged-in', 'true')
       if (error) throw error
     } catch (error) {
       if (error instanceof Error) {

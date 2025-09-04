@@ -2,15 +2,16 @@ import Input from '@/shared/components/form/Input'
 import Comment from './Comment'
 import type { Comments } from '../../model/responseBody'
 import sendIcon from '@/shared/assets/icons/send.svg'
-import { useUserStore } from '@/shared/stores/useUserStore'
 import {
   getCreateFormatDate,
   sortByCreatedAtDesc
 } from '../../utils/dateFormat'
+import { useState } from 'react'
 
 interface Props {
   commentData?: Comments[]
   itemId: string
+  userId: string
   commentRef: React.RefObject<HTMLInputElement | null>
   handleComments: (item_id: string, user_id: string) => Promise<void>
   onDelete: (itemId: string) => Promise<void>
@@ -25,19 +26,20 @@ export function CommentContainer({
   commentData,
   commentRef,
   itemId,
+  userId,
   handleComments,
   handleCommentEdit,
   onDelete
 }: Props) {
-  const userId = useUserStore.getState().user!.id
+  const [openCommentId, setOpenCommentId] = useState<string | null>(null)
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       e.preventDefault()
+      e.stopPropagation()
       handleComments(itemId, userId)
     }
   }
-
   const onSubmit = () => {
     handleComments(itemId, userId)
   }
@@ -61,15 +63,19 @@ export function CommentContainer({
       {commentData &&
         sortByCreatedAtDesc(commentData).map(item => (
           <Comment
+            key={item.id}
             userId={userId}
             commentId={item.id}
             onDelete={onDelete}
             onEdit={handleCommentEdit}
             isMine={item.user_id === userId}
-            key={item.id}
             created_at={getCreateFormatDate(item.created_at)}
             content={item.content}
             writer={item.users.nickname}
+            isOpen={openCommentId === item.id}
+            onToggle={() =>
+              setOpenCommentId(prev => (prev === item.id ? null : item.id))
+            }
           />
         ))}
     </div>

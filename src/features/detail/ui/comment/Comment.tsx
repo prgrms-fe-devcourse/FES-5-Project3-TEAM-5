@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ToggleMoreButton from '../ToggleMoreButton'
 
 interface Props {
   commentId: string
   content: string
   userId: string
-
   writer: string
   isMine: boolean
   created_at: string
+  isOpen: boolean
+  onToggle: () => void
   onDelete: (itemId: string) => Promise<void>
   onEdit: (commentId: string, userId: string, content: string) => Promise<void>
 }
@@ -19,25 +20,35 @@ function Comment({
   isMine,
   created_at,
   commentId,
-
   userId,
+  isOpen,
+  onToggle,
   onEdit,
   onDelete
 }: Props) {
-  const [isToggleOn, setIsToggleOn] = useState(false)
   const [isEdit, setIsEdit] = useState(false)
   const [text, setText] = useState(content)
-  const onChangeToggle = () => {
-    setIsToggleOn(!isToggleOn)
-  }
+  const toggleRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        isOpen &&
+        toggleRef.current &&
+        !toggleRef.current.contains(e.target as Node)
+      ) {
+        onToggle()
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isOpen, onToggle])
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
-      // 줄바꿈 허용
-      if (e.shiftKey) {
-        return
-      }
+      if (e.shiftKey) return
       e.preventDefault()
+      e.stopPropagation()
       onSubmit()
     }
   }
@@ -54,13 +65,16 @@ function Comment({
         <span className="text-size-sm text-neutral-DEFAULT">{created_at}</span>
         <div className="w-5">
           {isMine && (
-            <ToggleMoreButton
-              deletedId={commentId}
-              onEdit={() => setIsEdit(true)}
-              onDelete={onDelete}
-              isOpen={isToggleOn}
-              onChangeToggle={onChangeToggle}
-            />
+            <div ref={toggleRef}>
+              <ToggleMoreButton
+                label="댓글"
+                deletedId={commentId}
+                onEdit={() => setIsEdit(true)}
+                onDelete={onDelete}
+                isOpen={isOpen}
+                onChangeToggle={onToggle}
+              />
+            </div>
           )}
         </div>
       </div>
@@ -77,7 +91,7 @@ function Comment({
           <div className="flex justify-end ">
             <button
               type="button"
-              className=" px-2.5 py-0.5 bg-neutral-light"
+              className=" px-2.5 py-0.5 rounded-md bg-neutral-light hover:bg-neutral-DEFAULT"
               onClick={onSubmit}>
               수정
             </button>

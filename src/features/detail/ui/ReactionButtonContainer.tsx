@@ -8,6 +8,7 @@ import {
 import type { Reactions } from '../model/responseBody'
 import { getReactionCount, getUserReaction } from '../utils/getReaction'
 import { useUserStore } from '@/shared/stores/useUserStore'
+import { throttle } from '../../../shared/utils/throttle'
 
 interface Props {
   reactions: Reactions[]
@@ -30,39 +31,49 @@ function ReactionButtonContainer({
 }: Props) {
   const [isLikeActive, setIsLikeActive] = useState(false)
   const [isDislikeActive, setIsDislikeClicked] = useState(false)
-  const { dislike, like } = getReactionCount(reactions)
+  const { dislikeCount, likeCount } = getReactionCount(reactions)
   const userId = useUserStore.getState().user!.id
 
+  // 서버 요청만 throttle 적용
+  const throttledChangeReaction = throttle(kind => {
+    onChangeReaction({ itemId: item_id, kind, userId })
+  }, 500)
+
   const handleReactions = (kind: string) => {
-    onChangeReaction({ itemId: item_id, kind, userId: userId! })
+    if (kind === 'like') {
+      setIsLikeActive(true)
+      setIsDislikeClicked(false)
+    }
+    if (kind === 'dislike') {
+      setIsLikeActive(false)
+      setIsDislikeClicked(true)
+    }
+    throttledChangeReaction(kind)
   }
+
   useEffect(() => {
     const { kind } = getUserReaction(reactions, userId)
     if (kind === 'dislike') setIsDislikeClicked(true)
     if (kind === 'like') setIsLikeActive(true)
-  }, [])
+  }, [reactions])
 
   return (
     <div className="flex gap-7">
       <div
         className="flex flex-col items-center gap-2"
         onClick={() => {
-          setIsLikeActive(!isLikeActive)
-          setIsDislikeClicked(false)
           handleReactions('like')
         }}>
         {isLikeActive ? <ActiveLikeIcon /> : <InactiveLikeIcon />}
-        <p>{like}</p>
+        <p>{likeCount}</p>
       </div>
       <div
         className="flex flex-col items-center gap-2"
         onClick={() => {
-          setIsLikeActive(false)
-          setIsDislikeClicked(!isDislikeActive)
           handleReactions('dislike')
         }}>
         {isDislikeActive ? <ActiveDislikeIcon /> : <InactiveDislikeIcon />}
-        <p>{dislike}</p>
+        <p>{dislikeCount}</p>
       </div>
     </div>
   )

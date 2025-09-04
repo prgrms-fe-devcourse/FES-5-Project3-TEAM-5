@@ -4,12 +4,14 @@ import ReactionButtonContainer from './ReactionButtonContainer'
 import ToggleMoreButton from './ToggleMoreButton'
 import { useNavigate } from 'react-router'
 import { deleteAccountItem } from '@/pages/item/delete/deleteAccountItem'
+import { useEffect, useRef } from 'react'
 
 interface Props {
   isArticleToggleOn: boolean
   receipt_url?: string
   payment_methods?: string
-  user_id: string
+  writer: string
+  isMine: boolean
   memo?: string
   item_id: string
   reactions: Reactions[]
@@ -29,8 +31,9 @@ interface Props {
 export function DetailContents({
   isArticleToggleOn,
   item_id,
+  isMine,
   payment_methods,
-  user_id,
+  writer,
   receipt_url,
   memo,
   reactions,
@@ -39,6 +42,21 @@ export function DetailContents({
   noDeleteItem
 }: Props) {
   const navigate = useNavigate()
+  const toggleRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        isArticleToggleOn &&
+        toggleRef.current &&
+        !toggleRef.current.contains(e.target as Node)
+      ) {
+        onChangeArticleToggle()
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isArticleToggleOn, onChangeArticleToggle])
 
   const handleDelete = async (id: string) => {
     try {
@@ -64,14 +82,19 @@ export function DetailContents({
           )}>
           {payment_methods && <p>결제수단: {payment_methods}</p>}
           <div className="flex absolute right-0">
-            <p>{user_id}</p>
-            <ToggleMoreButton
-              deletedId={item_id}
-              isOpen={isArticleToggleOn}
-              onChangeToggle={onChangeArticleToggle}
-              onEdit={() => navigate(`/accountBook/item/${item_id}/edit`)}
-              onDelete={handleDelete}
-            />
+            <p>{writer}</p>
+            {isMine && (
+              <div ref={toggleRef}>
+                <ToggleMoreButton
+                  label="일별 가계부"
+                  deletedId={item_id}
+                  isOpen={isArticleToggleOn}
+                  onChangeToggle={onChangeArticleToggle}
+                  onEdit={() => navigate(`/accountBook/item/${item_id}/edit`)}
+                  onDelete={handleDelete}
+                />
+              </div>
+            )}
           </div>
         </div>
         {receipt_url && (

@@ -1,5 +1,14 @@
 import supabase from '@/supabase/supabase'
-import type { GroupMembers } from '../type/type'
+import type { GroupMembers, Users } from '../type/type'
+
+type GenerateGroupMemberInsertsParams = {
+  groupId: string
+  userId: string
+  invitedUsers: Users[]
+  isPersonal: boolean
+  isMain: boolean
+}
+
 
 export async function getUserGroups(userId: string): Promise<GroupMembers[]> {
   try {
@@ -70,4 +79,47 @@ export const updateMainStatus = async (groupId: string, userId: string) => {
   if (setMainError) {
     throw new Error('대표 가계부 설정 실패: ' + setMainError.message)
   }
+}
+
+export const generateGroupMemberInserts = async ({
+  groupId,
+  userId,
+  invitedUsers,
+  isPersonal,
+  isMain,
+  includeBaseMember = true
+}: GenerateGroupMemberInsertsParams & { includeBaseMember?: boolean }) => {
+  const baseMember = {
+    group_id: groupId,
+    user_id: userId,
+    is_main: isMain
+  }
+
+  if (isPersonal) {
+    return [baseMember]
+  }
+
+  // 초대한 유저 중 이미 대표 가계부 있는지 검사
+  const invitedUserIds = invitedUsers.map(u => u.id)
+
+  const { data: mainUsers, error } = await supabase
+    .from('group_members')
+    .select('user_id')
+    .in('user_id', invitedUserIds)
+    .eq('is_main', true)
+
+  if (error) {
+    console.error('대표 가계부 검사 실패', error)
+     return includeBaseMember ? [baseMember] : []
+  }
+
+  const hasMain = new Set(mainUsers.map(m => m.user_id))
+
+  const invitedInserts = invitedUsers.map(user => ({
+    group_id: groupId,
+    user_id: user.id,
+    is_main: !hasMain.has(user.id) // 대표 가계부 없으면 true
+  }))
+
+  return includeBaseMember ? [baseMember, ...invitedInserts] : invitedInserts
 }

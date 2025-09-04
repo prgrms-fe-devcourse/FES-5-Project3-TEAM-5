@@ -23,14 +23,18 @@ function ConfirmModal({
   cancelText = '취소',
   imageSrc
 }: Props) {
-  // Enter 확인
   useEffect(() => {
     const handleEnter = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') onConfirm()
+      if (!open) return
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        e.stopPropagation()
+        onConfirm()
+      }
     }
     window.addEventListener('keydown', handleEnter)
     return () => window.removeEventListener('keydown', handleEnter)
-  }, [onConfirm])
+  }, [open, onConfirm])
 
   return (
     <BaseModal

@@ -4,6 +4,7 @@ import supabase from '@/supabase/supabase'
 import type { User } from '@supabase/supabase-js'
 import { useNavigate } from 'react-router'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
+import { generateGroupMemberInserts } from '../../create/service/fetch'
 
 interface Props {
   personal: boolean
@@ -61,27 +62,15 @@ function InviteCompleteBtn({ personal, invitedUsers, groupId, user }: Props) {
       return
     }
 
-    const filteredUserIds = filteredUsers.map(u => u.id)
-
-    const { data: mainData, error: mainError } = await supabase
-      .from('group_members')
-      .select('user_id')
-      .in('user_id', filteredUserIds)
-      .eq('is_main', true)
-
-    if (mainError) {
-      console.error('대표 가계부 확인 실패:', mainError)
-      return
-    }
-
-    const hasMainSet = new Set(mainData.map(m => m.user_id))
-
-    // Step 2: 초대한 유저들 insert
-    const inserts = filteredUsers.map(u => ({
-      group_id: groupId,
-      user_id: u.id,
-      is_main: !hasMainSet.has(u.id)
-    }))
+    //초대한 유저들 insert
+    const inserts = await generateGroupMemberInserts({
+      groupId,
+      userId: user.id,
+      invitedUsers: filteredUsers,
+      isPersonal: false,
+      isMain: false, // 본인은 이미 들어가 있으므로
+      includeBaseMember: false
+    })
 
     const { error: insertError } = await supabase
       .from('group_members')
@@ -101,6 +90,7 @@ function InviteCompleteBtn({ personal, invitedUsers, groupId, user }: Props) {
       <SubmitButton
         text="초대 완료"
         onClick={handleInviteComplete}
+        disabled={invitedUsers.length === 0}
       />
     </div>
   )

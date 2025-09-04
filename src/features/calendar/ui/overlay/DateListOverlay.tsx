@@ -5,15 +5,16 @@ import { ListHeader } from './ListHeader'
 import type { AccountItem } from '@/features/accountItem/index'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useNavigate } from 'react-router'
+
 import dayjs from 'dayjs'
 import { FocusTrap } from 'focus-trap-react'
 
 interface Props {
   isOpen: boolean
+  groupId: string
   setIsOpen: (isOpen: boolean) => void
   events: AccountItem[]
 }
-
 export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
   const [entering, setEntering] = useState(false)
   const navigate = useNavigate()

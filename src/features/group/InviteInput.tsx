@@ -31,6 +31,11 @@ function InviteInput({
   })
 
   const showSnackbar = useSnackbarStore(state => state.showSnackbar)
+  const selectedUserListRef = useRef(selectedUserList)
+
+  useEffect(() => {
+    selectedUserListRef.current = selectedUserList
+  }, [selectedUserList])
 
   const debouncedFetchUserList = useRef(
     debounce(async (value: string) => {
@@ -79,7 +84,7 @@ function InviteInput({
   }
 
   const addUserToList = (user: Users) => {
-    const alreadyAdded = selectedUserList.some(u => u.id === user.id)
+    const alreadyAdded = selectedUserListRef.current.some(u => u.id === user.id)
     if (alreadyAdded) {
       showSnackbar({ text: '이미 추가된 유저입니다', type: 'error' })
       return

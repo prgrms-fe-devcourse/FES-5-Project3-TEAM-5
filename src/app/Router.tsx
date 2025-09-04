@@ -127,7 +127,7 @@ export const router = createBrowserRouter([
         ]
       },
       {
-        path: '/accountBook/calendar/detail/:date/:id',
+        path: '/accountBook/:groupId/calendar/:id',
         Component: DetailAccountItemPage,
         handle: {
           hideNav: true

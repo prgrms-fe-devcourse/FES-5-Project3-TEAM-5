@@ -18,9 +18,8 @@ async function getTotalVoteData() {
   return data ?? []
 }
 
-export async function fetchVoteData(): Promise<TotalVote[]> {
+export async function fetchVoteData(userId: string): Promise<TotalVote[]> {
   const response = await getTotalVoteData()
-  const userId = useUserStore.getState().user?.id
 
   const data = await Promise.all(
     response!.map(async vote => {

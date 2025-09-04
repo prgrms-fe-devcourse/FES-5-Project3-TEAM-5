@@ -19,7 +19,6 @@ function Comment({
   isMine,
   created_at,
   commentId,
-
   userId,
   onEdit,
   onDelete

@@ -16,6 +16,7 @@ import {
 } from '@/features/detail/service/fetchDetailData'
 import { updateComment } from '@/features/detail/service/updateComment'
 import Header from '@/shared/components/header/Header'
+import { useUserStore } from '@/shared/stores/useUserStore'
 import dayjs from 'dayjs'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router'
@@ -32,6 +33,7 @@ function DetailAccountItemPage() {
   const itemCreatedAt = detailItemData?.[0]?.date
   const title = itemCreatedAt ? dayjs(itemCreatedAt).format('M월 D일 ddd') : ''
   const navigate = useNavigate()
+  const userId = useUserStore.getState().user!.id
 
   const onOpenArticleToggle = () => {
     setIsArticleToggleOn(!isArticleToggleOn)
@@ -158,8 +160,9 @@ function DetailAccountItemPage() {
                 type={item.type}
               />
               <DetailContents
+                isMine={item.users.id === userId}
                 item_id={String(item.id)}
-                user_id={item.users.nickname}
+                writer={item.users.nickname}
                 receipt_url={item.receipt_url!}
                 payment_methods={item.payment_methods?.type}
                 memo={item.memo ?? ''}
@@ -172,6 +175,7 @@ function DetailAccountItemPage() {
           ))}
 
         <CommentContainer
+          userId={userId}
           onDelete={handleCommentDelete}
           itemId={String(itemId)}
           handleComments={handleComments}

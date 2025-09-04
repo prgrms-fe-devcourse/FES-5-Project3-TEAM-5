@@ -19,7 +19,7 @@ function Home() {
             className={tw(
               'grid justify-center justify-items-center',
               'grid-cols-1',
-              '[@media(min-width:320px)]:grid-cols-2 gap-6 ',
+              '[@media(min-width:310px)]:grid-cols-2 gap-2 ',
               'sm:[grid-template-columns:repeat(auto-fit,minmax(9.5rem,9.5rem))]'
             )}>
             <ThisMonthCard

@@ -61,18 +61,6 @@ function EditItem() {
     e.target.value = "" // 같은 파일 다시 선택 가능하게 초기화
   }
 
-  // 파일명 추출
-  const getFileNameFromUrl = (url: string | null) => {
-    if (!url) return null
-    try {
-      const parts = url.split("/") // 경로 분리
-      const fileName = parts[parts.length - 1] // 마지막만 추출
-      return fileName || null
-    } catch {
-      return null
-    }
-  }
-
   // DB 업데이트
   const handleSubmit = async () => {
     if (Number(amount) < 100) {
@@ -176,7 +164,7 @@ function EditItem() {
           <div>
             <SelectField
               label="사진"
-              value={selectedFile ? selectedFile.name : getFileNameFromUrl(imageUrl) ?? null}
+              value={selectedFile ? selectedFile.name : (imageUrl ? "기존 첨부 파일" : null)}
               placeholder="사진을 업로드해 주세요"
               onClick={() => fileInputRef.current?.click()}
               onButtonClick={() => {

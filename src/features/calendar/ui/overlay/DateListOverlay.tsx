@@ -5,7 +5,6 @@ import { ListHeader } from './ListHeader'
 import type { AccountItem } from '@/features/accountItem/index'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useNavigate } from 'react-router'
-import dayjs from 'dayjs'
 
 interface Props {
   isOpen: boolean

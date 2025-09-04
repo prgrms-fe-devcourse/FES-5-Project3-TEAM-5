@@ -104,7 +104,9 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
                     expense={expense}
                   />
                 </div>
-                <div className="flex-1 overscroll-y-auto custom-scrollbar">
+                <div
+                  className="flex-1 overflow-y-auto custom-scrollbar"
+                  style={{ WebkitOverflowScrolling: 'touch' }}>
                   {events.map(item => (
                     <ListItem
                       key={item.id}

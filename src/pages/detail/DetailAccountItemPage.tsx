@@ -84,7 +84,6 @@ function DetailAccountItemPage() {
         commentRef.current.value = ''
       }
     } catch (error) {
-      console.error(' 댓글 업로드  에러', error)
       showSnackbar({
         text: '댓글 업로드 중 오류가 발생했습니다',
         type: 'error'
@@ -112,7 +111,7 @@ function DetailAccountItemPage() {
       await updateComment(request!)
       fetchCommentData(id!)
       showSnackbar({
-        text: '댓글 수정 완료',
+        text: '댓글이 수정되었습니다',
         type: 'success'
       })
     } catch (error) {
@@ -130,7 +129,7 @@ function DetailAccountItemPage() {
       await deleteComment(deletedId)
       fetchCommentData(id!)
       showSnackbar({
-        text: '댓글 삭제 완료',
+        text: '댓글이 삭제 되었습니다',
         type: 'success'
       })
     } catch (error) {
@@ -170,7 +169,6 @@ function DetailAccountItemPage() {
     fetchDetailData(id)
     fetchCommentData(id)
   }, [])
-  console.log(detailItemData)
 
   return (
     <>

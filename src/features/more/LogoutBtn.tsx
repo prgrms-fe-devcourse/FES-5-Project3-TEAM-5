@@ -10,7 +10,7 @@ function LogoutBtn() {
   const handleLogout = async () => {
     await logout()
     clearStorageGroup()
-    showSnackbar({ text: '로그아웃 되었습니다', type: 'error' })
+    showSnackbar({ text: '로그아웃 되었습니다', type: 'success' })
   }
 
   return (

@@ -23,12 +23,9 @@ function InviteList({ userList = [], onSelect, loading }: Props) {
   const filteredList = userList.filter(u => u.id !== user?.id)
 
   return (
-    <div className="absolute top-12 p-3 flex flex-wrap justify-start gap-5 bg-gray-200 w-full h-50 overflow-y-scroll rounded-lg text-neutral-dark custom-scrollbar">
+    <div className="absolute top-12 p-3 flex flex-wrap justify-start gap-5 bg-gray-100 w-full h-50 overflow-y-scroll rounded-lg text-neutral-dark custom-scrollbar">
       {loading ? (
-        <Loading
-          className="w-15"
-          text="로딩 중"
-        />
+        <Loading size={38} />
       ) : userList.length === 0 ? (
         <span className="w-full text-sm text-center text-neutral-500 py-4">
           찾으시는 결과가 없어요 🫤

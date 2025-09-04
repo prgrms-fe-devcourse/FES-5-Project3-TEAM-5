@@ -61,8 +61,8 @@ function GroupCard() {
     <>
       {isLoading ? (
         <Loading
-          className=" mt-17"
-          imgClassName="w-30"
+          className="pt-30"
+          size={38}
         />
       ) : groups.length === 0 ? (
         <div className="text-center text-gray-400 w-full py-6 mt-10">

@@ -97,7 +97,13 @@ export const PlansOverview = () => {
 
   console.log(target)
 
-  if (loading) return <Loading text="불러오는 중..." />
+  if (loading)
+    return (
+      <Loading
+        text="불러오는 중..."
+        className="mt-50"
+      />
+    )
 
   return (
     <div className="px-5 py-4 space-y-6">

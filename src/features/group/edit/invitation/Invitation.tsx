@@ -13,7 +13,7 @@ import InviteCompleteBtn from './InviteCompleteBtn'
 import Loading from '@/shared/components/loading/Loading'
 
 function Invitation() {
-  const [tab, setTab] = useState<'초대하기' | '초대한 사람 목록'>('초대하기') // 탭 상태
+  const [tab, setTab] = useState<'초대하기' | '참여자 목록'>('초대하기') // 탭 상태
   const [personal, setPersonal] = useState(false)
   const { invitedUsers, setInvitedUsers } = useCreateGroup()
   const { groupId } = useParams()
@@ -59,10 +59,13 @@ function Invitation() {
       <BinaryTabs
         value={tab}
         onChange={setTab}
-        options={['초대하기', '초대한 사람 목록']}
+        options={['초대하기', '참여자 목록']}
       />
       {isLoading ? (
-        <Loading imgClassName="w-30" />
+        <Loading
+          size={40}
+          className="mt-30"
+        />
       ) : tab === '초대하기' ? (
         <form className="px-2 py-3 relative">
           <InviteInput
@@ -81,7 +84,7 @@ function Invitation() {
             user={user}
           />
         </form>
-      ) : tab === '초대한 사람 목록' ? (
+      ) : tab === '참여자 목록' ? (
         <InvitedList />
       ) : null}
     </div>

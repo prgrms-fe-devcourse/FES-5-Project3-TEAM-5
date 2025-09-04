@@ -1,6 +1,9 @@
 import SubmitButton from '@/shared/components/form/SubmitButton'
+import { useEffect } from 'react'
 
 function CreateBtn({ onClick }: { onClick: () => void }) {
+  useEffect(() => {})
+
   return (
     <div>
       <SubmitButton

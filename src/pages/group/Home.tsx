@@ -19,7 +19,7 @@ function Home() {
             className={tw(
               'grid justify-center justify-items-center',
               'grid-cols-1',
-              '[@media(min-width:320px)]:grid-cols-2 gap-6 ',
+              '[@media(min-width:310px)]:grid-cols-2 gap-2 ',
               'sm:[grid-template-columns:repeat(auto-fit,minmax(9.5rem,9.5rem))]'
             )}>
             <ThisMonthCard
@@ -40,7 +40,7 @@ function Home() {
         </div>
         <div
           className={tw(
-            'grid justify-center gap-9 mx-4',
+            'grid justify-center gap-9 mx-4 justify-items-center',
             // 기본: 1개
             'grid-cols-1',
             // 320px 이상일 땐 2개

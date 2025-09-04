@@ -94,7 +94,7 @@ function ThisMonthCard({ type, className }: Props) {
   })
 
   return (
-    <div className="bg-white/92 flex flex-col justify-center items-center px-6 py-1 rounded-lg w-40 h-17 flex-wrap">
+    <div className="bg-white/92 flex flex-col justify-center items-center px-6 py-1 rounded-lg sm:w-42.5 w-39 h-17 flex-wrap">
       <h3 className="text-[14px] font-semibold text-neutral-dark">
         이번 달 {type}
       </h3>

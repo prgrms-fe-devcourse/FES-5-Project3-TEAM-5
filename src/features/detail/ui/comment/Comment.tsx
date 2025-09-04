@@ -33,11 +33,9 @@ function Comment({
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
-      // 줄바꿈 허용
-      if (e.shiftKey) {
-        return
-      }
+      if (e.shiftKey) return
       e.preventDefault()
+      e.stopPropagation()
       onSubmit()
     }
   }

@@ -34,10 +34,10 @@ export function CommentContainer({
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
       e.preventDefault()
+      e.stopPropagation()
       handleComments(itemId, userId)
     }
   }
-
   const onSubmit = () => {
     handleComments(itemId, userId)
   }

@@ -45,20 +45,20 @@ function ToggleMoreButton({
           alt=""
         />
       </div>
-        <ConfirmModal
-          open={isDelete}
-          title="가계부 삭제"
-          lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
-          onCancel={() => setIsDelete(false)}
-          onConfirm={async () => {
-            if (onDelete) {
-              await onDelete(deletedId)
-            }
-            setIsDelete(false)
-          }}
-          cancelText="취소"
-          confirmText="확인"
-        />
+      <ConfirmModal
+        open={isDelete}
+        title="가계부 삭제"
+        lines={['삭제 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
+        onCancel={() => setIsDelete(false)}
+        onConfirm={async () => {
+          if (onDelete) {
+            await onDelete(deletedId)
+          }
+          setIsDelete(false)
+        }}
+        cancelText="취소"
+        confirmText="확인"
+      />
     </>
   )
 }

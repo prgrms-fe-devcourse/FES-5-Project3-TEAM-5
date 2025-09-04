@@ -167,6 +167,7 @@ function DetailAccountItemPage() {
     fetchDetailData(id)
     fetchCommentData(id)
   }, [])
+  console.log(detailItemData)
 
   return (
     <>

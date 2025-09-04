@@ -10,11 +10,5 @@ export function getReactionCount(reactions: Reactions[]) {
 
 // 유저가 클릭한 버튼 반환
 export function getUserReaction(reactions: Reactions[], userId: string) {
-  const userReaction = reactions.filter(item => item.user_id === userId)
-
-  if (!userReaction || reactions.length === 0) {
-    return { kind: 'none' }
-  }
-
-  return userReaction[0]
+  return reactions.find(item => item.user_id === userId) ?? { kind: 'none' }
 }

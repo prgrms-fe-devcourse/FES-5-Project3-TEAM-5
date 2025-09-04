@@ -6,6 +6,9 @@ export const AccountBookLayout = () => {
   return (
     <div className="flex flex-col h-full py-4">
       <div className="flex flex-col justify-between items-center">
+        <div className="text-size-2xl font-bold">
+          {localStorage.getItem('groupName')}
+        </div>
         <PickDate isSliding={true} />
         <div className="w-full flex gap-2 justify-between">
           <NavLink

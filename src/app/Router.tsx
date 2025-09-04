@@ -32,6 +32,7 @@ import Edit from '@/features/group/edit/EditGroup'
 import Invitation from '@/features/group/edit/invitation/Invitation'
 import { StatisticsDetailPage, StatisticsPage } from '@/pages/statistics'
 import { PlansOverview } from '@/pages/plan/PlansOverview'
+import EditItem from '@/pages/item/edit/EditItem'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -144,6 +145,14 @@ export const router = createBrowserRouter([
             }
           }
         ]
+      },
+      {
+        path: '/accountBook/item/:id/edit',
+        Component: EditItem,
+        handle: {
+          title: '가계부 수정',
+          hideNav: true
+        }
       }
     ]
   },
@@ -170,13 +179,6 @@ export const router = createBrowserRouter([
         handle: { title: '투표 수정', hideNav: true }
       }
     ]
-  },
-
-  {
-    path: '/test',
-    Component: Layout,
-    handle: { title: '테스트 페이지입니다', hideNav: true },
-    children: [{ index: true, Component: AddItem }]
   },
 
   {

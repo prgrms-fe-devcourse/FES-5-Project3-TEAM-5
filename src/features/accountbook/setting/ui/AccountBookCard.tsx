@@ -1,9 +1,9 @@
-import ArrowBtn from '@/features/group/create/ArrowBtn'
 import { mascotList } from '@/features/group/create/data/mascots'
 
 import { useNavigate } from 'react-router'
 import { type Group } from '../service/service'
 import AccountBookCardSkeleton from './AccountBookCardSkeleton'
+import ArrowButton from '@/shared/components/buttons/ArrowButton'
 
 interface Props {
   groupInfo: Group | null
@@ -40,9 +40,9 @@ function AccountBookCard({ groupInfo, isLoading }: Props) {
               {groupInfo.name}
             </p>
             <div className="flex text-neutral-dark">
-              <p>정보 수정</p>
-              <ArrowBtn
+              <ArrowButton
                 type="right"
+                text="정보 수정"
                 onClick={handleClick}
               />
             </div>

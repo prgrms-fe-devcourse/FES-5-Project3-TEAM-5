@@ -7,6 +7,7 @@ import { sortByDeadlineDesc } from '@/features/vote/utils/filterVoteList'
 import AddButton from '@/shared/components/buttons/AddButton'
 import Loading from '@/shared/components/loading/Loading'
 import ConfirmModal from '@/shared/components/modal/ConfirmModal'
+import { useUserStore } from '@/shared/stores/useUserStore'
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 
@@ -15,7 +16,7 @@ function VotePage() {
   const voteListRef = useRef<TotalVote[] | null>(null)
   const deleteIdRef = useRef<string | null>(null)
   const [filteredList, setFilteredList] = useState<TotalVote[] | null>(null)
-
+  const userId = useUserStore.getState().user?.id
   const [isLoading, setIsLoading] = useState(false)
 
   const openDeleteModal = (id?: string) => {
@@ -48,7 +49,7 @@ function VotePage() {
   const loadVotes = async () => {
     setIsLoading(true)
     try {
-      const votes = await fetchVoteData()
+      const votes = await fetchVoteData(userId!)
       voteListRef.current = votes
       setFilteredList(sortByDeadlineDesc(votes))
     } catch (error) {
@@ -102,6 +103,7 @@ function VotePage() {
                 vote_selections
               }) => (
                 <VoteCard
+                  userId={userId!}
                   key={id}
                   voteId={id}
                   isMine={vote_summary!.isOwner}

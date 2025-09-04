@@ -37,10 +37,15 @@ function GroupCard() {
     fetchSelect()
   }, [user?.id])
 
-  const handleCalendar = (e: React.MouseEvent, groupId: string) => {
+  const handleCalendar = (
+    e: React.MouseEvent,
+    groupId: string,
+    groupName: string
+  ) => {
     e.preventDefault()
     setStorageGroup(groupId)
     navigate(`/accountBook/${groupId}/calendar`)
+    localStorage.setItem('groupName', groupName)
   }
 
   const itemVariants: Variants = {
@@ -74,8 +79,10 @@ function GroupCard() {
           {groups &&
             groups.map((g, i) => (
               <motion.button
-                className="bg-white w-38 pb-1 rounded-lg border-1 shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
-                onClick={e => handleCalendar(e, g.group_id)}
+                className="bg-white w-38 pb-1 rounded-lg border-1 overflow-hidden shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
+                onClick={e =>
+                  handleCalendar(e, g.group_id, g.groups?.name || '')
+                }
                 type="button"
                 key={g.group_id}
                 custom={i}
@@ -83,21 +90,21 @@ function GroupCard() {
                 animate="visible"
                 exit="hidden"
                 variants={itemVariants}>
-                <div className="bg-primary-pale h-[60%] w-full rounded-tl-lg rounded-tr-lg flex justify-center items-center relative p-1">
+                <div className="bg-primary-pale w-full flex justify-center items-center">
                   <img
                     src={mascotList[Number(g.groups?.mascot)].src}
                     alt={mascotList[Number(g.groups?.mascot)].alt}
-                    className="w-18"
+                    className="w-18 block"
                   />
                 </div>
                 <div className="px-2 py-1">
                   <div className="flex justify-start gap-1 items-center text-[13px]">
                     {g.is_main === true && (
-                      <div className="text-white px-2 py-[0.5px] bg-primary-base rounded-xl">
+                      <div className="text-white px-2 py-[0.5px] bg-primary-base rounded-lg">
                         대표
                       </div>
                     )}
-                    <span className="text-black px-2.5 py-[0.5px] bg-primary-light rounded-lg">
+                    <span className="text-black px-2 py-[0.5px] bg-primary-light rounded-lg">
                       {g.groups?.is_personal === true ? '개인' : '공동'}
                     </span>
                   </div>

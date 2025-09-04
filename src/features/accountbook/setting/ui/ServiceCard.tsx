@@ -5,6 +5,7 @@ import DeleteModal from './deleteGroup/DeleteModal'
 import { type Group } from '../service/service'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import type { Delete } from '../model/groupDelete'
+import { useStorageGroup } from '@/features/group/model/useStorageGroup'
 
 const serviceList = [
   { value: 'inviteUser', text: '초대하기' },
@@ -30,6 +31,8 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
   const navigate = useNavigate()
   const userId = useUserStore(state => state.user?.id)
 
+  const clearStorageGroup = useStorageGroup(state => state.clearStorageGroup)
+
   useEffect(() => {
     if (groupInfo && groupInfo.user_id === userId) {
       setIsDelete(prev => ({ ...prev, isOwner: true }))
@@ -42,6 +45,7 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
 
   const handleDelete = () => {
     setIsDelete(prev => ({ ...prev, delete: !prev.delete }))
+    clearStorageGroup()
   }
 
   const handleService = (
@@ -86,20 +90,18 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
           ))}
         </ul>
       </div>
-      {isDelete.delete && (
-        <DeleteModal
-          isDelete={isDelete}
-          onCancel={handleDelete}
-          setIsDelete={setIsDelete}
-        />
-      )}
-      {isExport && (
-        <ExportExcelModal
-          isExport={isExport}
-          onCancel={openExportExcel}
-          onExport={handleExportExcel}
-        />
-      )}
+
+      <DeleteModal
+        isDelete={isDelete}
+        onCancel={handleDelete}
+        setIsDelete={setIsDelete}
+      />
+      
+      <ExportExcelModal
+        isExport={isExport}
+        onCancel={openExportExcel}
+        onExport={handleExportExcel}
+      />
     </>
   )
 }

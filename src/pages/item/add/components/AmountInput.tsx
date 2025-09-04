@@ -10,9 +10,10 @@ type Props = {
   placeholder?: string
   label?: string
   name?: string
-  onButtonClick: () => void // 반복|할부 버튼 클릭 이벤트
+  onButtonClick?: () => void // 반복|할부 버튼 클릭 이벤트
   activeOption?: 'none' | 'repeat' | 'installment'; // 반복|할부 상태
   tab: '수입' | '지출'
+  hideButton?: boolean
 }
 
 function AmountInput({
@@ -24,7 +25,8 @@ function AmountInput({
   name = 'amount',
   onButtonClick,
   activeOption = 'none',
-  tab
+  tab,
+  hideButton = false
 }: Props) {
   const [focused, setFocused] = useState(false) // 포커스 여부에 따라 숫자 포맷을 다르게 보여줌
   const displayText =
@@ -76,10 +78,11 @@ function AmountInput({
               )}
             </div>
           </div>
-
-          <div className="ml-2 z-10">
-            <RepeatButton onClick={onButtonClick} activeOption={activeOption} tab={tab} />
-          </div>
+          {!hideButton && onButtonClick && (
+            <div className="ml-2 z-10">
+              <RepeatButton onClick={onButtonClick} activeOption={activeOption} tab={tab} />
+            </div>
+          )}
         </div>
       </div>
     </div>

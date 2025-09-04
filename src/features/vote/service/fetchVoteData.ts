@@ -1,7 +1,6 @@
 import supabase from '@/supabase/supabase'
 import type { TotalVote } from '@/features/vote/model/responseBody'
 import { getDeadline } from '../utils/Date'
-import { useUserStore } from '@/shared/stores/useUserStore'
 import { countParticipants } from '../utils/calcData'
 
 async function getTotalVoteData() {
@@ -18,9 +17,8 @@ async function getTotalVoteData() {
   return data ?? []
 }
 
-export async function fetchVoteData(): Promise<TotalVote[]> {
+export async function fetchVoteData(userId: string): Promise<TotalVote[]> {
   const response = await getTotalVoteData()
-  const userId = useUserStore.getState().user?.id
 
   const data = await Promise.all(
     response!.map(async vote => {

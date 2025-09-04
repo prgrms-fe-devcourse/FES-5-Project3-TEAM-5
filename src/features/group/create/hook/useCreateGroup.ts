@@ -8,7 +8,7 @@ import type { Users } from '@/features/group/create/type/type'
 import { generateGroupMemberInserts } from '../service/fetch'
 
 export function useCreateGroup() {
-  const [groupName, setGroupName] = useState('')
+  const nameInputRef = useRef<HTMLInputElement>(null)
   const [mascot, setMascot] = useState<number | null>(0)
   const [isMain, setIsMain] = useState<boolean | null>(null)
   const [isPersonal, setIsPersonal] = useState(true)
@@ -40,7 +40,7 @@ export function useCreateGroup() {
 
     try {
 
-      if (!groupName || mascot === null) {
+      if (!nameInputRef.current?.value || mascot === null) {
         showSnackbar({ text: '모든 필드를 입력해주세요', type: 'warning' })
         return
       }
@@ -67,7 +67,7 @@ export function useCreateGroup() {
           user_id: user.id,
           is_personal: isPersonal,
           mascot,
-          name: groupName
+          name: nameInputRef.current.value
         })
         .select()
         .single()
@@ -98,7 +98,10 @@ export function useCreateGroup() {
     }
 
     // 초기화
-    setGroupName('')
+    if (nameInputRef.current) {
+      nameInputRef.current.value = '' 
+    }
+
     setMascot(1)
     setIsMain(null)
     setIsPersonal(true)
@@ -106,8 +109,7 @@ export function useCreateGroup() {
   }
 
   return {
-    groupName,
-    setGroupName,
+    nameInputRef,
     mascot,
     setMascot,
     isMain,

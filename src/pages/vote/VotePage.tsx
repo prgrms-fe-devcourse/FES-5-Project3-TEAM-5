@@ -5,6 +5,7 @@ import { fetchVoteData } from '@/features/vote/service/fetchVoteData'
 import { insertSelectVote } from '@/features/vote/service/selectVote'
 import { sortByDeadlineDesc } from '@/features/vote/utils/filterVoteList'
 import AddButton from '@/shared/components/buttons/AddButton'
+import ScrollToTopButton from '@/shared/components/buttons/ScrollToTopButton'
 import Loading from '@/shared/components/loading/Loading'
 import ConfirmModal from '@/shared/components/modal/ConfirmModal'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
@@ -134,7 +135,8 @@ function VotePage() {
             <EmptyData />
           )}
 
-          <div className="flex justify-end items-end sticky z-50 bottom-18">
+          <div className="flex flex-col justify-end items-end sticky z-50 bottom-18">
+            <ScrollToTopButton />
             <Link to="/vote/add">
               <AddButton />
             </Link>

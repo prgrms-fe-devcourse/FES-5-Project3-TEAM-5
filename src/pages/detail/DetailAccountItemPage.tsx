@@ -16,13 +16,14 @@ import {
 } from '@/features/detail/service/fetchDetailData'
 import { updateComment } from '@/features/detail/service/updateComment'
 import Header from '@/shared/components/header/Header'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
+import { useUserStore } from '@/shared/stores/useUserStore'
 import dayjs from 'dayjs'
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 
 function DetailAccountItemPage() {
-  const { date, id } = useParams()
-  const title = date ? dayjs(date).format('M월 D일 ddd') : ''
+  const { id } = useParams()
   const [isArticleToggleOn, setIsArticleToggleOn] = useState(false)
   const [detailItemData, setDetailItemData] = useState<
     DetailAccountItem[] | null
@@ -30,6 +31,11 @@ function DetailAccountItemPage() {
   const [commentsData, setCommentsData] = useState<Comments[] | null>(null)
   const commentRef = useRef<HTMLInputElement>(null)
   const itemId = detailItemData?.[0]?.id
+  const itemCreatedAt = detailItemData?.[0]?.date
+  const title = itemCreatedAt ? dayjs(itemCreatedAt).format('M월 D일 ddd') : ''
+  const navigate = useNavigate()
+  const userId = useUserStore.getState().user!.id
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   const onOpenArticleToggle = () => {
     setIsArticleToggleOn(!isArticleToggleOn)
@@ -48,14 +54,20 @@ function DetailAccountItemPage() {
       await insertReaction(itemId, userId, kind)
       fetchDetailData(id!)
     } catch (error) {
-      console.log('리액션 에러', error)
-      alert('리액션 중 오류가 발생했습니다.')
+      console.error('리액트 업로드  에러', error)
+      showSnackbar({
+        text: '리액션 중 오류가 발생했습니다',
+        type: 'error'
+      })
     }
   }
 
   const handleComments = async (item_id: string, user_id: string) => {
     if (commentRef.current?.value.trim() === '') {
-      return alert('공백은 입력할 수 없습니다!')
+      return showSnackbar({
+        text: '공백은 입력할 수 없습니다',
+        type: 'error'
+      })
     }
     try {
       const request = {
@@ -69,9 +81,11 @@ function DetailAccountItemPage() {
         commentRef.current.value = ''
       }
     } catch (error) {
-      console.log(' 댓글 업로드  에러', error)
-
-      alert('댓글 업로드 중 오류가 발생했습니다.')
+      console.error(' 댓글 업로드  에러', error)
+      showSnackbar({
+        text: '댓글 업로드 중 오류가 발생했습니다',
+        type: 'error'
+      })
     }
   }
 
@@ -81,7 +95,10 @@ function DetailAccountItemPage() {
     content: string
   ) => {
     if (!commentId || !userId)
-      return alert('댓글 수정 중, 필요한 정보가 부족합니다')
+      showSnackbar({
+        text: '댓글을 수정할 수 없습니다',
+        type: 'error'
+      })
     try {
       const request = {
         id: commentId,
@@ -91,10 +108,17 @@ function DetailAccountItemPage() {
       }
       await updateComment(request!)
       fetchCommentData(id!)
+      showSnackbar({
+        text: '댓글 수정 완료',
+        type: 'success'
+      })
     } catch (error) {
-      console.log('댓글 수정 에러', error)
+      console.error('댓글 수정 에러', error)
 
-      alert('댓글 수정 중 오류가 발생했습니다.')
+      showSnackbar({
+        text: '댓글 수정 중 오류가 발생했습니다',
+        type: 'error'
+      })
     }
   }
 
@@ -102,9 +126,16 @@ function DetailAccountItemPage() {
     try {
       await deleteComment(deletedId)
       fetchCommentData(id!)
+      showSnackbar({
+        text: '댓글 삭제 완료',
+        type: 'success'
+      })
     } catch (error) {
       console.error('댓글 삭제 실패:', error)
-      alert('댓글 삭제 중 오류가 발생했습니다.')
+      showSnackbar({
+        text: '댓글 삭제 중 오류가 발생했습니다',
+        type: 'error'
+      })
     }
   }
 
@@ -112,13 +143,27 @@ function DetailAccountItemPage() {
     const commentsData = await getCommentsData(id)
     setCommentsData(commentsData)
   }
+
   const fetchDetailData = async (id: string) => {
-    const detailData = await getDetailItemData(id)
-    setDetailItemData(detailData)
+    try {
+      const detailData = await getDetailItemData(id)
+      if (!detailData || detailData.length === 0) {
+        navigate('/404', { replace: true })
+        return
+      }
+      setDetailItemData(detailData)
+    } catch (error) {
+      console.error('게시물 데이터 로드 실패', error)
+      navigate('/404', { replace: true })
+    }
   }
 
   useEffect(() => {
-    if (!id) return
+    if (!id) {
+      navigate('/404', { replace: true })
+      return
+    }
+
     fetchDetailData(id)
     fetchCommentData(id)
   }, [])
@@ -143,8 +188,9 @@ function DetailAccountItemPage() {
                 type={item.type}
               />
               <DetailContents
+                isMine={item.users.id === userId}
                 item_id={String(item.id)}
-                user_id={item.users.nickname}
+                writer={item.users.nickname}
                 receipt_url={item.receipt_url!}
                 payment_methods={item.payment_methods?.type}
                 memo={item.memo ?? ''}
@@ -157,6 +203,7 @@ function DetailAccountItemPage() {
           ))}
 
         <CommentContainer
+          userId={userId}
           onDelete={handleCommentDelete}
           itemId={String(itemId)}
           handleComments={handleComments}

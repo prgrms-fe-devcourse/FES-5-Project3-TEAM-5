@@ -21,7 +21,7 @@ function InviteInput({
   personal
 }: Props) {
   const [userList, setUserList] = useState<Users[]>([])
-  const [inputValue, setInputValue] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
   const [drop, setDrop] = useState(false)
   const [loading, setLoading] = useState(false)
   const [convertState, setConvertState] = useState({
@@ -70,17 +70,18 @@ function InviteInput({
   ).current
 
   useEffect(() => {
-    debouncedFetchUserList(inputValue)
-  }, [inputValue])
+    if (!inputRef.current?.value) return
+    debouncedFetchUserList(inputRef.current.value)
+  }, [inputRef.current?.value])
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.currentTarget.value)
+  const handleInputChange = () => {
     setDrop(true)
   }
 
   const handleSelectUser = async (user: Users) => {
     setDrop(false)
-    setInputValue(user.email)
+    if (!inputRef.current?.value) return
+    inputRef.current.value = user.email
   }
 
   const addUserToList = (user: Users) => {
@@ -99,12 +100,16 @@ function InviteInput({
         created_at: user.created_at
       }
     ])
+    if (!inputRef.current?.value) return
+    inputRef.current.value = ''
 
-    setInputValue('')
     setDrop(false)
   }
 
-  const handleAddUser = (inputValue: string, personal: boolean | undefined) => {
+  const handleAddUser = (
+    inputValue: string | undefined,
+    personal: boolean | undefined
+  ) => {
     const user = userList.find(u => u.email === inputValue)
     if (!user) {
       return
@@ -144,7 +149,8 @@ function InviteInput({
       pendingUser: null
     }))
 
-    setInputValue('') // 인풋 비우기
+    if (!inputRef.current?.value) return
+    inputRef.current.value = ''
   }
 
   return (
@@ -154,15 +160,15 @@ function InviteInput({
           label="이메일"
           className=""
           onChange={handleInputChange}
-          value={inputValue}
+          ref={inputRef}
           id="inviteUser"
         />
         <AddButton
           size="sm"
-          onClick={() => handleAddUser(inputValue, personal)}
+          onClick={() => handleAddUser(inputRef.current?.value, personal)}
           className="absolute z-1 right-4"
         />
-        {drop && inputValue && (
+        {drop && inputRef.current?.value && (
           <InviteList
             userList={userList}
             onSelect={handleSelectUser}

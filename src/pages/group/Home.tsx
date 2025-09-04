@@ -31,7 +31,7 @@ function Home() {
           <NumberGroup />
           <AddBtn />
         </div>
-        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(9.5rem,9.5rem))] justify-center gap-5 mx-4">
+        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(9.5rem,9.5rem))] justify-center gap-9 mx-4">
           <GroupCard />
         </div>
       </div>

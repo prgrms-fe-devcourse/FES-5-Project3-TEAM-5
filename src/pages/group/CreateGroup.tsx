@@ -24,7 +24,7 @@ function CreateGroup() {
   return (
     <div>
       {isMain === null ? (
-        <Loading />
+        <Loading className="mt-52" />
       ) : (
         <form className="p-4 flex flex-col gap-7">
           <GroupName

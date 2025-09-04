@@ -79,7 +79,7 @@ function VotePage() {
       />
 
       {isLoading ? (
-        <Loading />
+        <Loading className="" />
       ) : (
         <div className="flex flex-col gap-5 p-4 ">
           <SearchBar

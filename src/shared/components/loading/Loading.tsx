@@ -19,7 +19,7 @@ export const Loading = ({
   return (
     <div
       className={tw(
-        `flex flex-col items-center justify-center relative w-full h-full`,
+        `flex flex-col items-center justify-center w-full h-full`,
         className
       )}>
       {text && (

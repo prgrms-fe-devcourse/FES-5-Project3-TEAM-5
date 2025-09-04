@@ -4,14 +4,20 @@ import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
 import type { GroupMembers } from './create/type/type'
 import type { User } from '@supabase/supabase-js'
+import { getRandomMessage, welcomeMessages } from './data/welcome'
 
 function Name() {
   const [name, setName] = useState<string>('')
   const [loading, setLoading] = useState(false)
   const [groupId, setGroupId] = useState<string | undefined>('')
   const [userName, setUserName] = useState('')
+  const [randomMessage, setRandomMessage] = useState('')
 
   const user = useUserStore(useShallow(state => state.user))
+
+  useEffect(() => {
+    setRandomMessage(getRandomMessage())
+  }, [])
 
   const extractUserName = (user: User | null): string => {
     if (!user) return ''
@@ -67,7 +73,7 @@ function Name() {
           `환영합니다 ${userName}님, \n 오늘부터 또 모아볼까요?`
         ) : (
           <>
-            <span>오늘도 또 모아볼까요?</span>
+            <span>{randomMessage}</span>
             <br />
             <span className="font-semibold">{loading ? '' : name.trim()}</span>
           </>

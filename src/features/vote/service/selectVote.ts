@@ -2,7 +2,7 @@ import { useUserStore } from '@/shared/stores/useUserStore'
 import supabase from '@/supabase/supabase'
 
 export async function deleteSelectVote(vote_id: string, userId: string) {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('vote_selections')
     .delete()
     .eq('vote_id', vote_id)

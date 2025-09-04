@@ -21,8 +21,7 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router'
 
 function DetailAccountItemPage() {
-  const { date, id } = useParams()
-  const title = date ? dayjs(date).format('M월 D일 ddd') : ''
+  const { id } = useParams()
   const [isArticleToggleOn, setIsArticleToggleOn] = useState(false)
   const [detailItemData, setDetailItemData] = useState<
     DetailAccountItem[] | null
@@ -30,6 +29,8 @@ function DetailAccountItemPage() {
   const [commentsData, setCommentsData] = useState<Comments[] | null>(null)
   const commentRef = useRef<HTMLInputElement>(null)
   const itemId = detailItemData?.[0]?.id
+  const itemCreatedAt = detailItemData?.[0]?.date
+  const title = itemCreatedAt ? dayjs(itemCreatedAt).format('M월 D일 ddd') : ''
 
   const onOpenArticleToggle = () => {
     setIsArticleToggleOn(!isArticleToggleOn)
@@ -48,7 +49,6 @@ function DetailAccountItemPage() {
       await insertReaction(itemId, userId, kind)
       fetchDetailData(id!)
     } catch (error) {
-      console.log('리액션 에러', error)
       alert('리액션 중 오류가 발생했습니다.')
     }
   }

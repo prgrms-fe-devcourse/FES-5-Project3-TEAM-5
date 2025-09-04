@@ -9,11 +9,17 @@ import dayjs from 'dayjs'
 
 interface Props {
   isOpen: boolean
+  groupId: string
   setIsOpen: (isOpen: boolean) => void
   events: AccountItem[]
 }
 
-export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
+export const DateListOverlay = ({
+  isOpen,
+  setIsOpen,
+  events,
+  groupId
+}: Props) => {
   const ref = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const [entering, setEntering] = useState(false)
@@ -198,9 +204,7 @@ export const DateListOverlay = ({ isOpen, setIsOpen, events }: Props) => {
                     amount={Number(item.amount)}
                     type={item.type}
                     gotoDetail={() =>
-                      navigate(
-                        `/accountBook/calendar/detail/${dayjs(item.date).format('YYYY-MM-DD')}/${item.id}`
-                      )
+                      navigate(`/accountBook/${groupId}/calendar/${item.id}`)
                     }
                   />
                 ))}

@@ -36,11 +36,12 @@ function ReactionButtonContainer({
   const handleReactions = (kind: string) => {
     onChangeReaction({ itemId: item_id, kind, userId: userId! })
   }
+
   useEffect(() => {
     const { kind } = getUserReaction(reactions, userId)
     if (kind === 'dislike') setIsDislikeClicked(true)
     if (kind === 'like') setIsLikeActive(true)
-  }, [])
+  }, [reactions])
 
   return (
     <div className="flex gap-7">

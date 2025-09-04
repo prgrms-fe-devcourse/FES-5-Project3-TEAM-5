@@ -28,8 +28,7 @@ export const PlansOverview = () => {
   const [loading, setLoading] = useState(true)
   const [upcomingRows, setUpcomingRows] = useState<Row[]>([])
   const [pastRows, setPastRows] = useState<Row[]>([])
-  const { nextInstallment, nextRecurring, pastInstallment, pastRecurring } =
-    useRemaining()
+  const { nextInstallment, nextRecurring } = useRemaining()
   const { showSnackbar } = useSnackbarStore()
 
   const [confirmOpen, setConfirmOpen] = useState(false)

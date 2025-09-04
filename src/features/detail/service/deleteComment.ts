@@ -5,7 +5,5 @@ export async function deleteComment(deletedId: string) {
 
   if (error) {
     alert(`삭제 실패: ${error.message}`)
-  } else {
-    alert('삭제 성공!')
   }
 }

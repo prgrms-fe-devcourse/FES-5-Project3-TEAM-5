@@ -14,6 +14,7 @@ import cameraIcon from "@/shared/assets/icons/camera.svg"
 import { useNavigate, useParams } from "react-router"
 import supabase from "@/supabase/supabase"
 import { updateAccountItem } from "./updateAccountItem"
+import { useSnackbarStore } from "@/shared/stores/useSnackbarStore"
 
 
 function EditItem() {
@@ -51,26 +52,28 @@ function EditItem() {
   // 카테고리 uuid → korean_name 변환
   const selectedCategoryName = categories.find(c => c.id === selectedCategoryId)?.korean_name ?? ''
 
+  // 스낵바
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
+
   // 파일 선택
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
+      // 이미지 파일이 아닐 경우
+      if(!file.type.startsWith("image/")){
+        e.target.value = ""
+        // setSelectedFile(null) 마지막 성공한 사진을 지우지 않기 위해 주석 처리
+        // setImageUrl(null) 마지막 성공한 사진 미리보기를 지우기 않기 위해 주석 처리
+
+        showSnackbar({ text: "이미지 파일만 업로드할 수 있습니다.", type: "error" })
+        return
+      }
+
+      // 정상적인 이미지 파일
       setSelectedFile(file)
       setImageUrl(URL.createObjectURL(file))
     }
     e.target.value = "" // 같은 파일 다시 선택 가능하게 초기화
-  }
-
-  // 파일명 추출
-  const getFileNameFromUrl = (url: string | null) => {
-    if (!url) return null
-    try {
-      const parts = url.split("/") // 경로 분리
-      const fileName = parts[parts.length - 1] // 마지막만 추출
-      return fileName || null
-    } catch {
-      return null
-    }
   }
 
   // DB 업데이트
@@ -176,7 +179,7 @@ function EditItem() {
           <div>
             <SelectField
               label="사진"
-              value={selectedFile ? selectedFile.name : getFileNameFromUrl(imageUrl) ?? null}
+              value={selectedFile ? selectedFile.name : (imageUrl ? "기존 첨부 파일" : null)}
               placeholder="사진을 업로드해 주세요"
               onClick={() => fileInputRef.current?.click()}
               onButtonClick={() => {

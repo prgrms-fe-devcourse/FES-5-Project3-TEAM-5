@@ -65,19 +65,26 @@
   height: 100%;
 }
 
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--color-primary-base) var(--color-neutral-light);
+  scrollbar-gutter: stable both-edges; /* 지원 브라우저에서 스크롤 공간 고정 */
+}
+
 .custom-scrollbar::-webkit-scrollbar {
-  width: 6px; /* 스크롤바 두께 */
+  width: 8px;
+  height: 8px;
 }
 
 .custom-scrollbar::-webkit-scrollbar-track {
-  background: var(--color-neutral-light); /* 트랙 색상 */
-  margin: 20px;
-  border-radius: 3px;
+  background: var(--color-neutral-light);
+  /* margin: 20px;  <- 이건 제거 권장 (브라우저별 적용 불안정) */
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: var(--color-primary-base); /* 스크롤바 색상 */
-  border-radius: 3px;
+  background-color: var(--color-primary-base);
+  border-radius: 6px;
+  border: 2px solid var(--color-neutral-light); /* 트랙과 간격 효과 */
 }
 
 @theme inline {

@@ -126,6 +126,7 @@ export const CalendarPage = () => {
           handleDateClick={handleDateClick}
         />
         <DateListOverlay
+          groupId={storageGroup}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           events={calendarEventsByDate}

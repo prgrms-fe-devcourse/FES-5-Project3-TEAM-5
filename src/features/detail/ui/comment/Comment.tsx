@@ -51,6 +51,7 @@ function Comment({
         <div className="w-5">
           {isMine && (
             <ToggleMoreButton
+              label="댓글"
               deletedId={commentId}
               onEdit={() => setIsEdit(true)}
               onDelete={onDelete}

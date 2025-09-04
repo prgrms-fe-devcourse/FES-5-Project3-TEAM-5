@@ -16,6 +16,7 @@ import {
 } from '@/features/detail/service/fetchDetailData'
 import { updateComment } from '@/features/detail/service/updateComment'
 import Header from '@/shared/components/header/Header'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import dayjs from 'dayjs'
 import { Fragment, useEffect, useRef, useState } from 'react'
@@ -34,6 +35,7 @@ function DetailAccountItemPage() {
   const title = itemCreatedAt ? dayjs(itemCreatedAt).format('M월 D일 ddd') : ''
   const navigate = useNavigate()
   const userId = useUserStore.getState().user!.id
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   const onOpenArticleToggle = () => {
     setIsArticleToggleOn(!isArticleToggleOn)
@@ -52,13 +54,20 @@ function DetailAccountItemPage() {
       await insertReaction(itemId, userId, kind)
       fetchDetailData(id!)
     } catch (error) {
-      alert('리액션 중 오류가 발생했습니다.')
+      console.error('리액트 업로드  에러', error)
+      showSnackbar({
+        text: '리액션 중 오류가 발생했습니다',
+        type: 'error'
+      })
     }
   }
 
   const handleComments = async (item_id: string, user_id: string) => {
     if (commentRef.current?.value.trim() === '') {
-      return alert('공백은 입력할 수 없습니다!')
+      return showSnackbar({
+        text: '공백은 입력할 수 없습니다',
+        type: 'error'
+      })
     }
     try {
       const request = {
@@ -72,9 +81,11 @@ function DetailAccountItemPage() {
         commentRef.current.value = ''
       }
     } catch (error) {
-      console.log(' 댓글 업로드  에러', error)
-
-      alert('댓글 업로드 중 오류가 발생했습니다.')
+      console.error(' 댓글 업로드  에러', error)
+      showSnackbar({
+        text: '댓글 업로드 중 오류가 발생했습니다',
+        type: 'error'
+      })
     }
   }
 
@@ -84,7 +95,10 @@ function DetailAccountItemPage() {
     content: string
   ) => {
     if (!commentId || !userId)
-      return alert('댓글 수정 중, 필요한 정보가 부족합니다')
+      showSnackbar({
+        text: '댓글을 수정할 수 없습니다',
+        type: 'error'
+      })
     try {
       const request = {
         id: commentId,
@@ -95,9 +109,12 @@ function DetailAccountItemPage() {
       await updateComment(request!)
       fetchCommentData(id!)
     } catch (error) {
-      console.log('댓글 수정 에러', error)
+      console.error('댓글 수정 에러', error)
 
-      alert('댓글 수정 중 오류가 발생했습니다.')
+      showSnackbar({
+        text: '댓글 수정 중 오류가 발생했습니다',
+        type: 'error'
+      })
     }
   }
 
@@ -105,9 +122,16 @@ function DetailAccountItemPage() {
     try {
       await deleteComment(deletedId)
       fetchCommentData(id!)
+      showSnackbar({
+        text: '댓글 삭제 완료',
+        type: 'success'
+      })
     } catch (error) {
       console.error('댓글 삭제 실패:', error)
-      alert('댓글 삭제 중 오류가 발생했습니다.')
+      showSnackbar({
+        text: '댓글 삭제 중 오류가 발생했습니다',
+        type: 'error'
+      })
     }
   }
 

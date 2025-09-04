@@ -63,6 +63,7 @@ export function DetailContents({
             <p>{writer}</p>
             {isMine && (
               <ToggleMoreButton
+                label="일별 가계부"
                 deletedId={item_id}
                 isOpen={isArticleToggleOn}
                 onChangeToggle={onChangeArticleToggle}

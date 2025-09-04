@@ -4,7 +4,7 @@ import { TotalReportItem } from './TotalReportItem'
 export const TotalReport = () => {
   const amountList = useSelectedDate(s => s.amountList)
   return (
-    <div className="w-full h-13 bg-primary-pale flex justify-between items-center px-6 py-9">
+    <div className="w-full bg-primary-pale grid grid-cols-3 justify-center items-center py-5">
       <TotalReportItem
         title="수입"
         amount={amountList.income}

@@ -73,7 +73,7 @@ export const Layout = () => {
 
   return (
     <div className="min-h-dvh bg-zinc-100">
-      <div className="mx-auto w-full max-w-[420px] min-h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] overscroll-y-contain">
+      <div className="mx-auto w-full max-w-[420px] h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] overflow-y-auto overscroll-y-contain custom-scrollbar">
         {isLoading ? (
           <Loading className="mt-60" />
         ) : !isAuth ? (

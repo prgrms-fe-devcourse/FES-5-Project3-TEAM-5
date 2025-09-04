@@ -30,7 +30,7 @@ export const useSnackbarStore = create<SnackbarState>((set, get) => ({
       ? crypto.randomUUID()
       : `${Date.now()}-${Math.random()}`
     const toast: Toast = { id, text, type, duration }
-    set(state => ({ toasts: [toast] }))
+    set(({ toasts: [toast] }))
     // auto hide
     window.setTimeout(() => {
       const { hideSnackbar } = get()

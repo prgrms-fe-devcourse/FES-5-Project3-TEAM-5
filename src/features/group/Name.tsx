@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useShallow } from 'zustand/shallow'
 import type { GroupMembers } from './create/type/type'
 import type { User } from '@supabase/supabase-js'
-import { getRandomMessage, welcomeMessages } from './data/welcome'
+import { getRandomMessage } from './data/welcome'
 
 function Name() {
   const [name, setName] = useState<string>('')

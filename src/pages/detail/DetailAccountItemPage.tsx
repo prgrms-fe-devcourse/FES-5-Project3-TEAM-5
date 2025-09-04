@@ -34,6 +34,9 @@ function DetailAccountItemPage() {
   const onOpenArticleToggle = () => {
     setIsArticleToggleOn(!isArticleToggleOn)
   }
+  const noDeleteItem =
+    detailItemData?.[0]?.recurring_rule_id ||
+    detailItemData?.[0]?.installment_plan_id
 
   const handleReactions = async ({
     itemId,
@@ -152,6 +155,7 @@ function DetailAccountItemPage() {
                 isArticleToggleOn={isArticleToggleOn}
                 onChangeArticleToggle={onOpenArticleToggle}
                 handleReactions={handleReactions}
+                noDeleteItem={!!noDeleteItem}
               />
             </Fragment>
           ))}

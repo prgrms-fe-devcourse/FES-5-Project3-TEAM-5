@@ -23,6 +23,7 @@ interface Props {
     userId: string
     kind: string
   }) => Promise<void>
+  noDeleteItem: boolean
 }
 
 export function DetailContents({
@@ -34,13 +35,17 @@ export function DetailContents({
   memo,
   reactions,
   onChangeArticleToggle,
-  handleReactions
+  handleReactions,
+  noDeleteItem
 }: Props) {
-
   const navigate = useNavigate()
 
   const handleDelete = async (id: string) => {
     try {
+      if (noDeleteItem) {
+        alert('할부 또는 반복 일정은 삭제할 수 없어요.')
+        return
+      }
       await deleteAccountItem(id)
       navigate(-1)
     } catch (error) {

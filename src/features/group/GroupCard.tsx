@@ -66,7 +66,7 @@ function GroupCard() {
     <>
       {isLoading ? (
         <Loading
-          className="pt-30"
+          className="mt-80"
           size={38}
         />
       ) : groups.length === 0 ? (

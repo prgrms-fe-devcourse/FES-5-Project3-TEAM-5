@@ -69,13 +69,28 @@ function Name() {
   return (
     <>
       <h1 className=" text-[#100E14] text-xl pt-1 mt-2 whitespace-pre-line">
-        {!groupId ? (
-          `환영합니다 ${userName}님, \n 오늘부터 또 모아볼까요?`
+        {loading ? (
+          <>
+            {/* 🔸 로딩 시 스켈레톤 */}
+            <span className="w-[120px] h-[20px] mb-1 rounded-md bg-primary-pale/60 animate-pulse inline-block opacity-40" />
+            <br />
+            <span className="w-[150px] h-[30px] mt-1 rounded-md bg-primary-pale/60 animate-pulse inline-block opacity-40" />
+          </>
+        ) : !groupId ? (
+          <>
+            {/* 🔸 그룹 없음 (로딩 끝나고도 groupId 없음) */}
+            <span className="text-[16px]">환영합니다 {userName}님</span>
+            <br />
+            <span className="font-semibold text-[25px]">
+              오늘부터 또 모아볼까요?
+            </span>
+          </>
         ) : (
           <>
-            <span>{randomMessage}</span>
+            {/* 🔸 그룹 있음 */}
+            <span className="text-[16px]">{randomMessage}</span>
             <br />
-            <span className="font-semibold">{loading ? '' : name.trim()}</span>
+            <span className="font-semibold text-[25px]">{name.trim()}</span>
           </>
         )}
       </h1>

@@ -4,6 +4,7 @@ import MainImage from '@/features/group/MainImage'
 import Name from '@/features/group/Name'
 import NumberGroup from '@/features/group/NumberGroup'
 import ThisMonthCard from '@/features/group/ThisMonthCard'
+import { tw } from '@/shared/utils/tw'
 
 function Home() {
   return (
@@ -14,7 +15,13 @@ function Home() {
         </div>
         <MainImage />
         <div className="absolute bottom-3 left-[50%] transform -translate-x-[50%] w-full">
-          <div className="flex justify-center gap-5 mt-7">
+          <div
+            className={tw(
+              'grid gap-10 mx-4 justify-center',
+              'grid-cols-1',
+              '[@media(min-width:320px)]:grid-cols-2 gap-6 ',
+              'sm:[grid-template-columns:repeat(auto-fit,minmax(9.5rem,9.5rem))]'
+            )}>
             <ThisMonthCard
               type="수입"
               className="text-secondary-blue"
@@ -31,7 +38,16 @@ function Home() {
           <NumberGroup />
           <AddBtn />
         </div>
-        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(9.5rem,9.5rem))] justify-center gap-9 mx-4">
+        <div
+          className={tw(
+            'grid justify-center gap-9 mx-4',
+            // 기본: 1개
+            'grid-cols-1',
+            // 320px 이상일 땐 2개
+            '[@media(min-width:320px)]:grid-cols-2',
+            // 768px 이상일 땐 자동 fit
+            'sm:[grid-template-columns:repeat(auto-fit,minmax(9.5rem,9.5rem))]'
+          )}>
           <GroupCard />
         </div>
       </div>

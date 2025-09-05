@@ -10,7 +10,7 @@ import Login from '@/pages/login/Login'
 import supabase from '@/supabase/supabase'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import Loading from '../loading/Loading'
-import ScrollToTopButton from '@/shared/components/buttons/ScrollToTopButton'
+
 type RouteHandle = {
   title?: string
   hideNav?: boolean

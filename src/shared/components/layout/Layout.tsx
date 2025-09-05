@@ -75,7 +75,7 @@ export const Layout = () => {
     <div className="min-h-dvh bg-zinc-100">
       <div className="mx-auto w-full max-w-[420px] relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] min-h-dvh">
         {isLoading ? (
-          <Loading className="mt-60" />
+          <Loading className="" />
         ) : !isAuth ? (
           <LoginEntry />
         ) : (

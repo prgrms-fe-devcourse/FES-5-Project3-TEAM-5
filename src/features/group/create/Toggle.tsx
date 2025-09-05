@@ -29,13 +29,13 @@ function Toggle({
         <button
           type="button"
           onClick={() => onChange(true)}
-          className={`bg-gray-200 rounded-md w-25 h-7 text-md cursor-pointer hover:bg-primary-pale ${value === true ? 'bg-primary-light' : ''}`}>
+          className={`bg-neutral-light rounded-md w-25 h-7 text-md cursor-pointer ${value === true ? 'bg-primary-light' : 'hover:brightness-90'}`}>
           {btn1}
         </button>
         <button
           type="button"
           onClick={() => onChange(false)}
-          className={`bg-gray-200 rounded-md w-25 h-7 text-md cursor-pointer hover:bg-primary-pale ${value === false ? 'bg-primary-light' : ''}`}>
+          className={`bg-neutral-light rounded-md w-25 h-7 text-md cursor-pointer ${value === false ? 'bg-primary-light' : 'hover:brightness-90'}`}>
           {btn2}
         </button>
       </div>

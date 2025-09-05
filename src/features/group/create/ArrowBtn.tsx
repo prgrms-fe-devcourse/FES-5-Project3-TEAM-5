@@ -11,7 +11,7 @@ function ArrowBtn({ onClick, disabled, type }: Props) {
       onClick={onClick}
       disabled={disabled}
       aria-label="이전 이미지"
-      className="cursor-pointer">
+      className="cursor-pointer rounded-full bg-transparent">
       {type === 'left' ? (
         <svg
           width="24"

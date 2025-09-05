@@ -140,7 +140,7 @@ export const Snackbar = () => {
                 className="relative w-[250px] sm:w-[350px]">
                 <div className="relative rounded-xl bg-white shadow-lg border border-neutral-200 pl-4 pr-3 py-3">
                   <div
-                    className={`absolute left-0 top-0 h-full w-2 rounded-l-xl ${cfg.stripe}`}
+                    className={`absolute -left-1 top-0 h-full w-2.5 rounded-l-xl ${cfg.stripe}`}
                   />
                   <div className="flex items-center gap-3">
                     <Icon type={t.type} />

@@ -43,8 +43,12 @@ function VotePage() {
   const handleSelectOptions = throttle(
     async (vote_id: string, option_id: string) => {
       try {
+        const scrollY = window.scrollY
         await insertSelectVote(vote_id, option_id)
         await loadVotes()
+        requestAnimationFrame(() => {
+          window.scrollTo(0, scrollY)
+        })
         showSnackbar({ type: 'success', text: '투표가 등록되었습니다' })
       } catch (error) {
         showSnackbar({

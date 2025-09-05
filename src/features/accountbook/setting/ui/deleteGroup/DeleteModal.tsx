@@ -8,7 +8,7 @@ import type { Delete } from '../../model/groupDelete'
 
 interface Props {
   isDelete: {
-    isOwner: boolean
+    isOwner: boolean | null
     delete: boolean
   }
   onCancel: () => void

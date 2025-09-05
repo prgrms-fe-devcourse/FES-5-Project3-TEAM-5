@@ -1,4 +1,4 @@
 export interface Delete {
-  isOwner: boolean
+  isOwner: boolean | null
   delete: boolean
 }

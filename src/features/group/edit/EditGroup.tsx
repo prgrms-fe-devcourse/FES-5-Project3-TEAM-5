@@ -67,11 +67,12 @@ function EditGroup() {
         await updateGroupInfo(groupId, inputRef.current?.value, mascot)
       }
 
-      await updateMainStatus(groupId, user.id)
+      if (isMain) {
+        await updateMainStatus(groupId, user.id)
+      }
 
-      // ✅ 갱신
       await fetchGroups(user.id)
-      showSnackbar({ text: '수정 완료!', type: 'success' })
+      showSnackbar({ text: '가계부가 수정되었습니다.', type: 'success' })
       navigate(`/accountBook/${groupId}/settings`)
     } catch (err) {
       console.error(err)

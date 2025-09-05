@@ -35,6 +35,8 @@ function AddItem() {
 
   const nav = useNavigate()
 
+  const [isSubmitting, setIsSubmitting] = useState(false) // 중복 생성 방지 상태
+
 
   // 모달 열림 상태
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false) // 결제 수단 설정 모달
@@ -77,6 +79,9 @@ function AddItem() {
       return
     }
 
+    if (isSubmitting) return // 중복 생성 방지
+    setIsSubmitting(true) // 버튼 클릭 시 잠금
+
     try {
       const { data: userData } = await supabase.auth.getUser()
       if (!userData.user) throw new Error('로그인이 필요합니다.')
@@ -112,6 +117,8 @@ function AddItem() {
       console.error('details:', e.details)
       console.error('hint:', e.hint)
       console.error('code:', e.code)
+    } finally {
+      setIsSubmitting(false) // 다시 활성화
     }
   }
 
@@ -257,9 +264,9 @@ function AddItem() {
           />
 
           <SubmitButton
-            text="작성 완료"
+            text={isSubmitting ? "저장 중..." : "작성 완료"}
             onClick={handleSubmit}
-            disabled={!amount || !selectedCategoryId || (tab === '지출' && !selectedMethodId) || Number(amount) < 100 || Number(amount) > 99999999}
+            disabled={isSubmitting || !amount || !selectedCategoryId || (tab === '지출' && !selectedMethodId) || Number(amount) < 100 || Number(amount) > 99999999}
           />
         </form>
       </div>

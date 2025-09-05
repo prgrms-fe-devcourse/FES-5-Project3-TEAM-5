@@ -77,7 +77,6 @@ function AddItem() {
   // DB 저장
   const handleSubmit = async () => {
     if (Number(amount) < 100) {
-      console.error('금액은 최소 100원 이상이어야 합니다.')
       return
     }
 
@@ -90,7 +89,7 @@ function AddItem() {
 
       const userId = userData.user.id
 
-      const result = await saveAccountItem({
+      await saveAccountItem({
         amount: Number(amount),
         type: tab === '수입' ? 'income' : 'expense',
         date: dayjs(date).format('YYYY-MM-DD'),
@@ -108,21 +107,9 @@ function AddItem() {
         replace: true
       })
 
-      console.warn('저장 성공:', result)
-    } catch (err) {
-      const e = err as {
-        message?: string
-        details?: string
-        hint?: string
-        code?: string
+    } catch {
+        setIsSubmitting(false) // 다시 활성화
       }
-      console.error('저장 실패 전체 에러:', e)
-      console.error('message:', e.message)
-      console.error('details:', e.details)
-      console.error('hint:', e.hint)
-      console.error('code:', e.code)
-      setIsSubmitting(false) // 다시 활성화
-    }
   }
 
 
@@ -277,7 +264,6 @@ function AddItem() {
         methods={methods}
         onClose={() => setIsPaymentModalOpen(false)}
         onSelect={id => {
-          console.warn('선택한 결제수단 uuid:', id) // 제대로 보이는지 콘솔에서 확인
           setSelectedMethodId(id) // 선택한 결제 수단 uuid 저장
           setIsPaymentModalOpen(false)
         }}
@@ -290,7 +276,6 @@ function AddItem() {
         filterType={filterType}
         onClose={() => setIsCategoryModalOpen(false)}
         onSelect={id => {
-          console.warn('선택한 카테고리 uuid:', id) // 제대로 보이는지 콘솔에서 확인
           setSelectedCategoryId(id) // 선택한 카테고리 uuid 저장
           setIsCategoryModalOpen(false)
         }}
@@ -302,7 +287,6 @@ function AddItem() {
           open={isRepeatInstallmentModalOpen}
           onClose={() => setIsRepeatInstallmentModalOpen(false)}
           onSave={data => {
-            console.warn('반복 데이터:', data)
             setIncomeRepeatData(data)
             setIsRepeatInstallmentModalOpen(false)
           }}
@@ -316,7 +300,6 @@ function AddItem() {
           open={isRepeatInstallmentModalOpen}
           onClose={() => setIsRepeatInstallmentModalOpen(false)}
           onSave={data => {
-            console.warn('반복/할부 데이터:', data)
             setExpenseRepeatInstallmentData(data)
             setIsRepeatInstallmentModalOpen(false)
           }}

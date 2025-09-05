@@ -38,7 +38,7 @@ export function StatisticsDetailPage() {
   }
 
   return (
-    <div className="w-full min-h-[618px] px-5 py-2.5 flex flex-col gap-8 ">
+    <div className="w-full min-h-[618px] px-4 py-2.5 flex flex-col gap-8 ">
       <div className="flex justify-between items-center">
         <p className="text-size-xl font-bold">
           {startDate} ~ {endDate}

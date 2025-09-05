@@ -56,7 +56,7 @@ export function SortButtonList({ voteList, setFilteredList }: Props) {
   }
 
   return (
-    <div className="flex gap-x-4">
+    <div className="flex justify-around ">
       {sortButtonData.map(item => (
         <ButtonLayout
           key={item.id}

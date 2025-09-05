@@ -37,8 +37,13 @@ export function sortByDeadlineAsc(selections?: TotalVote[]) {
 export function sortByDeadlineDesc(selections?: TotalVote[]) {
   if (!selections) return []
 
-  return [...selections].sort(
-    (a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-  )
+  return [...selections].sort((a, b) => {
+    const aClosed = a.vote_summary?.deadline.text === '투표 마감'
+    const bClosed = b.vote_summary?.deadline.text === '투표 마감'
+
+    if (aClosed && !bClosed) return 1
+    if (!aClosed && bClosed) return -1
+
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  })
 }

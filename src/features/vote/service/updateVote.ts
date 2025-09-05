@@ -11,7 +11,7 @@ export async function getUserVoteData(vote_id: string) {
     )
     .eq('id', vote_id)
   if (error) {
-    alert(`데이터 불러오기 실패: ${error.message}`)
+    console.error(`데이터 불러오기 실패: ${error.message}`)
   }
   return data
 }

@@ -30,25 +30,22 @@ export function useCreateGroup() {
     if (!user) return
 
     if (isMain === null) {
-      showSnackbar({ text: '잠시만 기다려주세요...', type: 'info' })
+      showSnackbar({ text: '잠시만 기다려 주시길 바랍니다', type: 'info' })
       return
     }
 
-    const finalIsMain =
-    initialIsMain ? true : isMain
-
+    const finalIsMain = initialIsMain ? true : isMain
 
     try {
-
       if (!nameInputRef.current?.value || mascot === null) {
-        showSnackbar({ text: '모든 필드를 입력해주세요', type: 'warning' })
+        showSnackbar({ text: '모든 필드를 입력해야 합니다', type: 'warning' })
         return
       }
 
       if (!isPersonal && invitedUsers.length === 0) {
-      showSnackbar({ text: '초대한 유저가 없습니다.', type: 'warning' })
-      return
-    }
+        showSnackbar({ text: '초대한 유저가 없습니다', type: 'warning' })
+        return
+      }
 
       // 기존 대표 가계부 초기화
       if (isMain) {
@@ -99,7 +96,7 @@ export function useCreateGroup() {
 
     // 초기화
     if (nameInputRef.current) {
-      nameInputRef.current.value = '' 
+      nameInputRef.current.value = ''
     }
 
     setMascot(1)

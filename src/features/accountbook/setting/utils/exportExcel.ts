@@ -3,25 +3,32 @@ import { saveAs } from 'file-saver'
 import type { AccountItem } from '@/features/accountItem'
 import dayjs from 'dayjs'
 import { frequencyMap } from '../model/exportExcel'
+import type { SnackbarType } from '@/shared/stores/useSnackbarStore'
+
+interface ExcelOptions {
+  showSnackbar: (payload: { text: string; type: SnackbarType }) => void
+  fileNamePrefix?: string
+  serverUrlFallback?: string
+}
 
 export function getDateRange(
   year: number,
   month: number
 ): { startDate: string; endDate: string } {
-  // 시작일 (해당 월의 첫째 날)
   const start = dayjs(`${year}-${month}-01`).startOf('month')
-  // 마지막일 (해당 월의 마지막 날)
   const end = start.endOf('month')
-
   return {
     startDate: start.format('YYYY-MM-DD'),
     endDate: end.format('YYYY-MM-DD')
   }
 }
 
-function getMappingData(data: AccountItem[]) {
+function getMappingData(
+  data: AccountItem[],
+  showSnackbar: ExcelOptions['showSnackbar']
+) {
   if (!data || data.length === 0) {
-    alert('데이터가 없습니다.')
+    showSnackbar({ text: '데이터가 없습니다.', type: 'error' })
     return []
   }
 
@@ -44,12 +51,16 @@ function getMappingData(data: AccountItem[]) {
     }
   })
 }
+
 export function downloadExcel(
   data: AccountItem[],
-  fileNamePrefix: string = 'account_items',
-  serverUrlFallback: string = ''
+  {
+    showSnackbar,
+    fileNamePrefix = 'account_items',
+    serverUrlFallback = ''
+  }: ExcelOptions
 ) {
-  const mappedData = getMappingData(data)
+  const mappedData = getMappingData(data, showSnackbar)
   if (mappedData.length === 0) return
 
   const worksheet = XLSX.utils.json_to_sheet(mappedData)
@@ -68,15 +79,12 @@ export function downloadExcel(
 
   const fileName = `${fileNamePrefix}_${new Date().toISOString().slice(0, 10)}.xlsx`
 
-  // 안전한 UA 체크
   const ua = navigator.userAgent || ''
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any)?.MSStream
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isWebView = /(wv|WebView)/i.test(ua) || /KAKAOTALK|NAVER/i.test(ua)
 
   if (isIOS && navigator.share) {
-    // iOS WebView: 공유 UI
     const file = new File([blob], fileName, { type: blob.type })
     navigator.share({
       files: [file],
@@ -84,16 +92,16 @@ export function downloadExcel(
       text: '엑셀 파일을 확인하세요.'
     })
   } else if (!isWebView) {
-    // 일반 웹 브라우저
     saveAs(blob, fileName)
+    showSnackbar({ text: '파일이 다운로드 되었습니다', type: 'success' })
   } else {
-    // 앱 WebView fallback
     if (serverUrlFallback) {
       window.location.href = serverUrlFallback
     } else {
-      alert(
-        '앱 WebView에서는 직접 다운로드가 지원되지 않습니다. 서버 URL을 제공해주세요.'
-      )
+      showSnackbar({
+        text: '앱 WebView에서는 직접 다운로드가 지원되지 않습니다. 서버 URL을 제공해주세요',
+        type: 'error'
+      })
     }
   }
 }

@@ -12,28 +12,29 @@ import {
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 
 function SettingPage() {
   const { groupId } = useParams()
   const [groupInfo, setGroupInfo] = useState<Group | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
+
   const handleExportExcel = async (selectedDate: {
     year: number
     month: number
   }) => {
     const { year, month } = selectedDate
-    console.log(selectedDate)
     const { startDate, endDate } = getDateRange(year, month)
 
-    // 데이터
     const data = await getExcelData({
       groupId: String(groupId),
       startDate,
       endDate
     })
 
-    downloadExcel(data)
+    downloadExcel(data, { showSnackbar })
   }
 
   useEffect(() => {

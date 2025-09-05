@@ -9,10 +9,12 @@ import { getUserGroups } from './create/service/fetch'
 import { useStorageGroup } from './model/useStorageGroup'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Variants, TargetAndTransition } from 'framer-motion'
+import { tw } from '@/shared/utils/tw'
 
 function GroupCard() {
   const [groups, setGroups] = useState<GroupMembers[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
   const navigate = useNavigate()
   const user = useUserStore(useShallow(state => state.user))
@@ -79,7 +81,14 @@ function GroupCard() {
           {groups &&
             groups.map((g, i) => (
               <motion.button
-                className="bg-white w-38  pb-1 rounded-lg border-1 overflow-hidden shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
+                className={tw(
+                  'bg-white w-38 pb-1 rounded-lg border-1 overflow-hidden shadow-lg shadow-gray-300 cursor-pointer transition ease-in-out',
+                  'hover:scale-98',
+                  activeIndex === i ? 'scale-98' : ''
+                )}
+                onTouchStart={() => setActiveIndex(i)}
+                onTouchEnd={() => setActiveIndex(null)}
+                onTouchCancel={() => setActiveIndex(null)} //  iOS 등에서 cancel 처리
                 onClick={e =>
                   handleCalendar(e, g.group_id, g.groups?.name || '')
                 }

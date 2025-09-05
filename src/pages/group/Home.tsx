@@ -5,11 +5,15 @@ import Name from '@/features/group/Name'
 import NumberGroup from '@/features/group/NumberGroup'
 import ThisMonthCard from '@/features/group/ThisMonthCard'
 import { tw } from '@/shared/utils/tw'
+import Logo from '@/shared/assets/TTOMO.png'
 
 function Home() {
   return (
     <div className="mb-20 bg-primary-light">
-      <div className="bg-primary-light w-full h-65 px-2 py-6 relative overflow-hidden">
+      <div className="bg-primary-light w-full h-65 py-6 relative overflow-hidden">
+        <div className="text-white w-20 absolute -top-3 left-2">
+          <img src={Logo} />
+        </div>
         <div className="p-1 ml-4 mt-8 absolute z-10">
           <Name />
         </div>
@@ -40,7 +44,7 @@ function Home() {
         </div>
         <div
           className={tw(
-            'grid justify-center gap-9 mx-4 justify-items-center',
+            'grid justify-center gap-9 justify-items-center',
             // 기본: 1개
             'grid-cols-1',
             // 320px 이상일 땐 2개

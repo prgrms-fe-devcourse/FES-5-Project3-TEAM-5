@@ -37,7 +37,7 @@ export function StatisticsPage() {
   const expenseCategories = result.filter(event => event.type === 'expense')
 
   return (
-    <div className="w-full min-h-[618px] px-5 py-2.5 flex flex-col gap-8">
+    <div className="w-full min-h-[618px] px-4 py-2.5 flex flex-col gap-8">
       <p className="text-size-xl font-bold">
         {startDate} ~ {endDate}
       </p>

@@ -155,7 +155,7 @@ export const PlansOverview = () => {
     )
 
   return (
-    <div className="px-5 py-4 space-y-6">
+    <div className="px-4 py-4 space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-size-xl font-bold">할부/반복 일정</h1>
       </div>

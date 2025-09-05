@@ -140,7 +140,7 @@ function VotePage() {
           )}
 
           <div className="flex flex-col justify-end items-end sticky z-50 bottom-18">
-            <ScrollToTopButton />
+            <ScrollToTopButton className={'mb-4'} />
             <Link to="/vote/add">
               <AddButton />
             </Link>

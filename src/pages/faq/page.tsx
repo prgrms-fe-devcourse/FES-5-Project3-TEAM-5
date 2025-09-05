@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import momoStudy from '@/shared/assets/momo/momo-study.png'
+import ScrollToTopButton from '@/shared/components/buttons/ScrollToTopButton'
 
 interface FAQItem {
   question: string
@@ -45,7 +46,7 @@ export default function FAQPage() {
   }
 
   return (
-    <div className="min-h-dvh p-4 space-y-4 pb-20">
+    <div className="min-h-dvh p-4 space-y-4">
       <div className="flex items-center justify-between mb-8">
         <div className="space-y-2">
           <h1 className="text-size-2xl font-bold text-primary-base">
@@ -118,6 +119,9 @@ export default function FAQPage() {
             </motion.div>
           ))}
         </div>
+          <div className="flex flex-col justify-end items-end sticky z-50 bottom-3">
+            <ScrollToTopButton/>
+          </div>
       </div>
     </div>
   )

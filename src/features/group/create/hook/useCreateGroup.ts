@@ -91,7 +91,7 @@ export function useCreateGroup() {
         return
       }
 
-      showSnackbar({ text: '새 가계부 생성 완료!', type: 'success' })
+      showSnackbar({ text: '새 가계부가 생성되었습니다', type: 'success' })
       navigate('/')
     } catch (error) {
       console.error('폼 제출 중 오류 발생:', error)

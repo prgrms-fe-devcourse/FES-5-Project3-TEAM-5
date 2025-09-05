@@ -10,7 +10,6 @@ const GroupName = forwardRef<HTMLInputElement, GroupNameProps>((props, ref) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
-
   return (
     <div>
       <label

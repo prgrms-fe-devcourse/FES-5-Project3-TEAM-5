@@ -28,6 +28,8 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
     delete: false
   })
 
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
+
   const navigate = useNavigate()
   const userId = useUserStore(state => state.user?.id)
 
@@ -49,7 +51,7 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
   }
 
   const handleService = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    e: React.MouseEvent<HTMLButtonElement> | React.TouchEvent<HTMLButtonElement>
   ) => {
     e.preventDefault()
     const target = e.target as HTMLButtonElement
@@ -76,10 +78,17 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
           가계부 서비스
         </h2>
         <ul className="flex flex-col gap-3">
-          {serviceList.map(({ value, text }) => (
+          {serviceList.map(({ value, text }, index) => (
             <li
               key={value}
-              className="hover:black  hover:font-bold transition ease-in-out">
+              className={`transition ease-in-out ${
+                activeIndex === index
+                  ? 'text-neutral-dark'
+                  : 'hover:text-neutral-dark'
+              }`}
+              onTouchStart={() => setActiveIndex(index)}
+              onTouchEnd={() => setActiveIndex(null)}
+              onTouchCancel={() => setActiveIndex(null)}>
               <button
                 value={value}
                 className="cursor-pointer text-size-lg"
@@ -96,7 +105,7 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
         onCancel={handleDelete}
         setIsDelete={setIsDelete}
       />
-      
+
       <ExportExcelModal
         isExport={isExport}
         onCancel={openExportExcel}

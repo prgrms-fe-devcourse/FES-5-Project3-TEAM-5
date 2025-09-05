@@ -7,7 +7,7 @@ import { AccountBookLayout } from '@/shared/components/layout/AccountBookLayout'
 
 // pages
 import Home from '@/pages/group/Home'
-import Login from '@/pages/login/Login'
+import LoginEntry from '@/pages/login/LoginEntry'
 import More from '@/pages/more/More'
 import { CalendarPage } from '@/pages/calendar'
 import NotificationPage from '@/pages/notification/NotificationPage'
@@ -184,7 +184,7 @@ export const router = createBrowserRouter([
   {
     path: '/login',
     Component: Layout,
-    children: [{ index: true, Component: Login }]
+    children: [{ index: true, Component: LoginEntry }]
   },
 
   {

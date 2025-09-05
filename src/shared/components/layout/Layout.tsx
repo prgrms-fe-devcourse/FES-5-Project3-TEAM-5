@@ -6,10 +6,10 @@ import Header from '../header/Header'
 import { useEffect } from 'react'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { useShallow } from 'zustand/shallow'
-import Login from '@/pages/login/Login'
 import supabase from '@/supabase/supabase'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import Loading from '../loading/Loading'
+import LoginEntry from '@/pages/login/LoginEntry'
 
 type RouteHandle = {
   title?: string
@@ -73,11 +73,11 @@ export const Layout = () => {
 
   return (
     <div className="min-h-dvh bg-zinc-100">
-      <div className="mx-auto w-full max-w-[420px] min-h-dvh relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]   ">
+      <div className="mx-auto w-full max-w-[420px] relative bg-white pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] min-h-dvh">
         {isLoading ? (
           <Loading className="mt-60" />
         ) : !isAuth ? (
-          <Login />
+          <LoginEntry />
         ) : (
           <>
             {headerTitle && <Header title={headerTitle} />}

@@ -9,10 +9,12 @@ import { getUserGroups } from './create/service/fetch'
 import { useStorageGroup } from './model/useStorageGroup'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Variants, TargetAndTransition } from 'framer-motion'
+import { tw } from '@/shared/utils/tw'
 
 function GroupCard() {
   const [groups, setGroups] = useState<GroupMembers[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
   const navigate = useNavigate()
   const user = useUserStore(useShallow(state => state.user))
@@ -79,7 +81,14 @@ function GroupCard() {
           {groups &&
             groups.map((g, i) => (
               <motion.button
-                className="bg-white w-38 pb-1 rounded-lg border-1 overflow-hidden shadow-lg shadow-gray-300 cursor-pointer hover:scale-98 transition ease-in-out"
+                className={tw(
+                  'bg-white w-38 pb-1 rounded-lg border-1 overflow-hidden shadow-lg shadow-gray-300 cursor-pointer transition ease-in-out',
+                  'hover:scale-98',
+                  activeIndex === i ? 'scale-98' : ''
+                )}
+                onTouchStart={() => setActiveIndex(i)}
+                onTouchEnd={() => setActiveIndex(null)}
+                onTouchCancel={() => setActiveIndex(null)} //  iOS 등에서 cancel 처리
                 onClick={e =>
                   handleCalendar(e, g.group_id, g.groups?.name || '')
                 }
@@ -90,14 +99,14 @@ function GroupCard() {
                 animate="visible"
                 exit="hidden"
                 variants={itemVariants}>
-                <div className="bg-primary-pale w-full flex justify-center items-center">
+                <div className="bg-primary-pale w-full h-21 flex justify-center items-center">
                   <img
                     src={mascotList[Number(g.groups?.mascot)].src}
                     alt={mascotList[Number(g.groups?.mascot)].alt}
                     className="w-18 block"
                   />
                 </div>
-                <div className="px-2 py-1">
+                <div className="px-2 py-1 mt-2">
                   <div className="flex justify-start gap-1 items-center text-[13px]">
                     {g.is_main === true && (
                       <div className="text-white px-2 py-[0.5px] bg-primary-base rounded-lg">

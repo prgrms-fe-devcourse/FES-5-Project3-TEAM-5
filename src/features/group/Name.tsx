@@ -90,7 +90,9 @@ function Name() {
             {/* 🔸 그룹 있음 */}
             <span className="text-[16px]">{randomMessage}</span>
             <br />
-            <span className="font-semibold text-[25px]">{name.trim()}</span>
+            <div className="font-semibold text-[25px] max-w-[220px] break-words">
+              {name.trim()}
+            </div>
           </>
         )}
       </h1>

@@ -1,6 +1,6 @@
 import { useGroupStore } from '@/shared/stores/useGroupStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import GroupName from '../create/GroupName'
 import Mascot from '../create/Mascot'
 import { useNavigate, useParams } from 'react-router'
@@ -11,7 +11,7 @@ import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 
 function EditGroup() {
   const [isOwner, setIsOwner] = useState(false)
-  const [groupName, setGroupName] = useState('')
+  const inputRef = useRef<HTMLInputElement>(null)
   const [mascot, setMascot] = useState(0)
   const [isMain, setIsMain] = useState(false)
 
@@ -32,16 +32,15 @@ function EditGroup() {
   useEffect(() => {
     if (!targetGroup || !user?.id) return
 
-    setGroupName(targetGroup.groups.name)
+    if (inputRef.current?.value) {
+      inputRef.current.value = targetGroup.groups.name
+    }
+
     setMascot(targetGroup.groups.mascot)
     setIsMain(targetGroup.is_main)
 
     setIsOwner(targetGroup.groups.user_id === user.id)
   }, [user?.id, targetGroup])
-
-  const handleEditGroupName = (name: string) => {
-    setGroupName(name)
-  }
 
   const handleEditGroupMascot = (id: number) => {
     setMascot(id)
@@ -56,7 +55,8 @@ function EditGroup() {
 
     try {
       if (isOwner) {
-        await updateGroupInfo(groupId, groupName, mascot)
+        if (!inputRef.current?.value) return
+        await updateGroupInfo(groupId, inputRef.current?.value, mascot)
       }
 
       await updateMainStatus(groupId, user.id)
@@ -74,8 +74,7 @@ function EditGroup() {
   return (
     <form className="p-4 flex flex-col gap-7">
       <GroupName
-        value={groupName}
-        onChange={handleEditGroupName}
+        ref={inputRef}
         disabled={!isOwner}
       />
       <Mascot

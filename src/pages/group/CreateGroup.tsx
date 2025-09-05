@@ -8,8 +8,7 @@ import Loading from '@/shared/components/loading/Loading'
 
 function CreateGroup() {
   const {
-    groupName,
-    setGroupName,
+    nameInputRef,
     mascot,
     setMascot,
     isMain,
@@ -27,10 +26,7 @@ function CreateGroup() {
         <Loading className="mt-52" />
       ) : (
         <form className="p-4 flex flex-col gap-7">
-          <GroupName
-            value={groupName}
-            onChange={setGroupName}
-          />
+          <GroupName ref={nameInputRef} />
           <Mascot
             value={mascot}
             onChange={setMascot}

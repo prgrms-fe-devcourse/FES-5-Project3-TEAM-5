@@ -1,18 +1,15 @@
 import Input from '@/shared/components/form/Input'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 
-function GroupName({
-  value,
-  onChange,
-  disabled = false
-}: {
-  value: string
-  onChange: (v: string) => void
+interface GroupNameProps {
   disabled?: boolean
-}) {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const groupName = e.target.value
-    onChange(groupName)
-  }
+}
+
+const GroupName = forwardRef<HTMLInputElement, GroupNameProps>((props, ref) => {
+  const { disabled = false } = props
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  useImperativeHandle(ref, () => inputRef.current as HTMLInputElement)
 
   return (
     <div>
@@ -22,16 +19,15 @@ function GroupName({
         이름
       </label>
       <Input
+        ref={inputRef}
         label="가계부 이름"
         id="groupName"
-        onChange={e => handleChange(e)}
         className={`input-class ${disabled ? 'opacity-50 cursor-not-allowed' : ''} mt-2`}
-        value={value}
         maxLength={14}
         disabled={disabled}
       />
     </div>
   )
-}
+})
 
 export default GroupName

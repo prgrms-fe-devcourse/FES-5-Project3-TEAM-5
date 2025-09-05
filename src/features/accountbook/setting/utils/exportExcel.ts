@@ -80,6 +80,7 @@ export function downloadExcel(
   const fileName = `${fileNamePrefix}_${new Date().toISOString().slice(0, 10)}.xlsx`
 
   const ua = navigator.userAgent || ''
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any)?.MSStream
   const isWebView = /(wv|WebView)/i.test(ua) || /KAKAOTALK|NAVER/i.test(ua)
 

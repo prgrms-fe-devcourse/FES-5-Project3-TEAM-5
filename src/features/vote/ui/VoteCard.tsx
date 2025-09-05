@@ -88,7 +88,7 @@ wrap-break-word">
         <p>{question}</p>
       </div>
       {voteOptions &&
-        voteOptions.map(({ content, id }) => {
+        voteOptions.map(({ content, id, vote_id }) => {
           const isSelected = mySelect?.some(
             sel => sel.option_id === id && sel.user_id === userId
           )
@@ -96,9 +96,7 @@ wrap-break-word">
             voteSelections?.filter(sel => sel.option_id === id).length ?? 0
           const isDisabled = deadline === '투표 마감'
           const isParticipant =
-            mySelect?.some(sel =>
-              voteSelections?.some(vs => vs.vote_id === sel.vote_id)
-            ) ?? false
+            mySelect?.some(sel => vote_id === sel.vote_id) ?? false
 
           return (
             <ResultOption

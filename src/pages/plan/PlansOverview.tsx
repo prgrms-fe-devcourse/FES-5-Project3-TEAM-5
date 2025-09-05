@@ -293,9 +293,9 @@ export const PlansOverview = () => {
             )
             setUpcomingRows(prev => prev.filter(p => p.id !== target.id))
             setPastRows(prev => prev.filter(p => p.id !== target.id))
-            showSnackbar({ text: '삭제됐어요', type: 'success' })
+            showSnackbar({ text: '삭제 되었습니다', type: 'success' })
           } catch {
-            showSnackbar({ text: '삭제 중 오류가 발생했어요', type: 'error' })
+            showSnackbar({ text: '삭제 중 오류가 발생했습니다', type: 'error' })
           } finally {
             setConfirmOpen(false)
             setTarget(null)

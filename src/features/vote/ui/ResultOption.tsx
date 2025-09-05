@@ -2,6 +2,7 @@ import inactiveCharacter from '@/shared/assets/vote/inactiveCharacter.png'
 import activeCharacter from '@/shared/assets/vote/activeCharacter.png'
 import { motion } from 'framer-motion'
 import { tw } from '@/shared/utils/tw'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 
 interface Props {
   selectionText: string
@@ -26,11 +27,16 @@ export function ResultOption({
   optionParticipants,
   onSelect
 }: Props) {
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
+
   const handleSelect = (voteId: string, optionId: string) => {
     if (!isDisabled) {
       onSelect(voteId, optionId)
     } else {
-      alert('투표 기간이 종료되어 현재는 참여가 불가능합니다.')
+      showSnackbar({
+        type: 'warning',
+        text: '투표 기간이 종료되어 현재 참여가 불가능합니다'
+      })
     }
   }
   const percentage =

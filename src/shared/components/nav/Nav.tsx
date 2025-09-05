@@ -42,7 +42,7 @@ function Nav() {
                     ? e => {
                         e.preventDefault()
                         showSnackbar({
-                          text: '그룹을 먼저 선택해 주세요',
+                          text: '그룹을 먼저 선택해야 합니다',
                           type: 'error'
                         })
                       }

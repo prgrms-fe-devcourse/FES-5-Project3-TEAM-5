@@ -70,11 +70,14 @@ function EditGroup() {
       }
 
       await fetchGroups(user.id)
-      showSnackbar({ text: '가계부가 수정되었습니다.', type: 'success' })
+      showSnackbar({ text: '가계부가 수정되었습니다', type: 'success' })
       navigate(`/accountBook/${groupId}/settings`)
     } catch (err) {
       console.error(err)
-      alert('수정 중 오류가 발생했습니다.')
+      showSnackbar({
+        text: '수정 중 오류가 발생했습니다',
+        type: 'error'
+      })
     }
   }
 

@@ -54,12 +54,18 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
   }
 
   return (
-    <BaseModal isOpen={open} onClose={onClose}>
+    <BaseModal
+      isOpen={open}
+      onClose={onClose}>
       <div className="min-h-[130px]">
         {/* 상단 탭 */}
         <div className="mt-5">
           {tab === '지출' ? (
-            <BinaryTabs value={mode} onChange={setMode} options={['반복', '할부']} />
+            <BinaryTabs
+              value={mode}
+              onChange={setMode}
+              options={['반복', '할부']}
+            />
           ) : (
             <SingleTab label="반복" />
           )}
@@ -85,7 +91,9 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
                     fill="#BBBBBB"
                   />
                 </svg>
-                {endDate ? dayjs(endDate).format('YYYY.MM.DD') : '종료일 미설정'}
+                {endDate
+                  ? dayjs(endDate).format('YYYY.MM.DD')
+                  : '종료일 미설정'}
               </button>
 
               <div>
@@ -131,49 +139,51 @@ function RepeatInstallmentModal({ open, onClose, tab, onSave }: Props) {
               value={installment}
               onChange={e => {
                 const value = e.target.value
-                if(value.length <= 2) {
+                if (value.length <= 2) {
                   setInstallment(value)
                 }
               }}
             />
           </div>
         )}
-
       </div>
 
-        {/* 안내 문구 */}
-        <p className="mt-4 text-sm text-secondary-red text-center">
-          {mode === '반복' && !endDate
-            ? '종료일을 선택해주세요'
-            : mode === '할부' && !installment
+      {/* 안내 문구 */}
+      <p className="mt-4 text-sm text-secondary-red text-center">
+        {mode === '반복' && !endDate
+          ? '종료일을 선택해주세요'
+          : mode === '할부' && !installment
             ? '개월 수를 입력해주세요'
-            : mode === '할부' && (Number(installment) < 2 || Number(installment) > 60)
-            ? '2 ~ 60개월 사이로 입력해주세요'
-            : '\u00A0'}
-        </p>
+            : mode === '할부' &&
+                (Number(installment) < 2 || Number(installment) > 60)
+              ? '2 ~ 60개월 사이로 입력해주세요'
+              : '\u00A0'}
+      </p>
 
-        {/* 완료 버튼 */}
-        <div className="mt-2">
-          <SubmitButton
-            text={mode === '반복' ? '반복 설정' : '할부 설정'}
-            disabled={
-              (mode === '반복' && !endDate) ||
-              (mode === '할부' && (!installment || Number(installment) < 2 || Number(installment) > 60))
-            }
-            onClick={() => {
-              onSave({ mode, selectedPeriod, isBiMonthly, endDate, installment })
-            }}
-          />
-        </div>
-
-        {/* 종료일 모달 */}
-        <EndDateModal
-          open={isEndDateModalOpen}
-          onClose={() => setIsEndDateModalOpen(false)}
-          onSelect={date => setEndDate(date)}
-          selectedDate={endDate}  // 이미 선택된 날짜를 넘김
+      {/* 완료 버튼 */}
+      <div className="mt-2">
+        <SubmitButton
+          text={mode === '반복' ? '반복 설정' : '할부 설정'}
+          disabled={
+            (mode === '반복' && !endDate) ||
+            (mode === '할부' &&
+              (!installment ||
+                Number(installment) < 2 ||
+                Number(installment) > 60))
+          }
+          onClick={() => {
+            onSave({ mode, selectedPeriod, isBiMonthly, endDate, installment })
+          }}
         />
+      </div>
 
+      {/* 종료일 모달 */}
+      <EndDateModal
+        open={isEndDateModalOpen}
+        onClose={() => setIsEndDateModalOpen(false)}
+        onSelect={date => setEndDate(date)}
+        selectedDate={endDate} // 이미 선택된 날짜를 넘김
+      />
     </BaseModal>
   )
 }

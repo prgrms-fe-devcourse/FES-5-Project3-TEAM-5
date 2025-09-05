@@ -19,7 +19,7 @@ import { useSnackbarStore } from "@/shared/stores/useSnackbarStore"
 
 function EditItem() {
 
-  const { id, groupId } = useParams<{ id: string; groupId: string }>()
+  const { id } = useParams<{ id: string }>()
 
   const nav = useNavigate()
 
@@ -226,7 +226,7 @@ function EditItem() {
           />
 
           <SubmitButton
-            text={isEditing ? "수정 중..." : "수정 완료"}
+            text={isEditing ? "저장 중..." : "수정 완료"}
             onClick={handleSubmit}
             disabled={isEditing || !amount || !selectedCategoryId || (itemType === '지출' && !selectedMethodId) || Number(amount) < 100 || Number(amount) > 99999999}
           />

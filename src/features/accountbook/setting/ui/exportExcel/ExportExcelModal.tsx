@@ -10,8 +10,10 @@ interface Props {
 
 function ExportExcelModal({ isExport, onCancel, onExport }: Props) {
   const currentYear = new Date().getFullYear()
+  const currentMonth = String(new Date().getMonth() + 1).padStart(2, '0')
+
   const [selectedYear, setSelectedYear] = useState<number>(currentYear)
-  const [selectedMonth, setSelectedMonth] = useState<string>('01')
+  const [selectedMonth, setSelectedMonth] = useState<string>(currentMonth)
 
   const years = Array.from({ length: 11 }, (_, i) => currentYear - i)
   const months = Array.from({ length: 12 }, (_, i) =>
@@ -20,23 +22,23 @@ function ExportExcelModal({ isExport, onCancel, onExport }: Props) {
   const yearListRef = useRef<HTMLUListElement>(null)
   const monthListRef = useRef<HTMLUListElement>(null)
 
-  // 년 선택 시 스크롤 위치 조정
+  // 년 스크롤 조정
   useEffect(() => {
     if (yearListRef.current) {
       const index = years.indexOf(selectedYear)
       const liHeight = 40
       yearListRef.current.scrollTop = index * liHeight
     }
-  }, [selectedYear])
+  }, [selectedYear, isExport])
 
-  // 월 선택 시 스크롤 위치 조정
+  // 월 스크롤 조정
   useEffect(() => {
     if (monthListRef.current) {
       const index = months.indexOf(selectedMonth)
       const liHeight = 40
       monthListRef.current.scrollTop = index * liHeight
     }
-  }, [selectedMonth])
+  }, [selectedMonth, isExport])
 
   const handleExportExcel = async () => {
     await onExport({ year: selectedYear, month: Number(selectedMonth) })

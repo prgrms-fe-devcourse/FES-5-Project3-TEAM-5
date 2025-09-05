@@ -56,7 +56,7 @@ export function downloadExcel(
   data: AccountItem[],
   {
     showSnackbar,
-    fileNamePrefix = 'account_items',
+    fileNamePrefix = 'TTOMO',
     serverUrlFallback = ''
   }: ExcelOptions
 ) {

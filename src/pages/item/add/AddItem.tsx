@@ -29,6 +29,8 @@ function AddItem() {
   const [amount, setAmount] = useState('') // 금액
   const memoRef = useRef<HTMLTextAreaElement>(null) // 메모 내용
 
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar) // 스낵바
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null) // 업로드한 사진 객체
   const [imageUrl, setImageUrl] = useState<string | null>(null) // 미리보기 사진 url
   const fileInputRef = useRef<HTMLInputElement>(null) // hidden 처리된 file input 클릭하기 위한 ref
@@ -100,6 +102,8 @@ function AddItem() {
         file: selectedFile,
         repeatInstallmentData: tab === '수입' ? incomeRepeatData : expenseRepeatInstallmentData
       })
+      showSnackbar({ type: "success", text: `${tab} 내역이 작성되었습니다` })
+
       nav(`/accountBook/${localStorage.getItem('storageGroup')}/calendar`, {
         replace: true
       })
@@ -117,7 +121,6 @@ function AddItem() {
       console.error('details:', e.details)
       console.error('hint:', e.hint)
       console.error('code:', e.code)
-    } finally {
       setIsSubmitting(false) // 다시 활성화
     }
   }
@@ -127,9 +130,6 @@ function AddItem() {
   useEffect(() => {
     setSelectedCategoryId(null)
   }, [tab])
-
-  // 스낵바
-  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   // 파일 선택
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

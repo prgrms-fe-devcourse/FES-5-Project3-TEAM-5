@@ -110,6 +110,10 @@ function EditItem() {
 
     } catch {
         setIsEditing(false) // 다시 활성화
+        showSnackbar({
+          text: '저장 중 오류가 발생했습니다',
+          type: 'error'
+        })
       }
   }
 

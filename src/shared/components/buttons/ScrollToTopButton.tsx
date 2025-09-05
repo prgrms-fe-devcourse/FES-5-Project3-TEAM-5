@@ -28,7 +28,7 @@ export default function ScrollToTopButton() {
           onClick={scrollToTop}
           onMouseEnter={() => setHovered(true)}
           onMouseLeave={() => setHovered(false)}
-          className="mb-4 mr-0.5">
+          className="mb-4  ml-0.5 cursor-pointer ">
           {hovered ? <HoverTopButton /> : <TopButton />}
         </button>
       )}

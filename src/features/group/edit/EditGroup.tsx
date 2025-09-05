@@ -15,7 +15,7 @@ function EditGroup() {
   const inputRef = useRef<HTMLInputElement>(null)
   const [mascot, setMascot] = useState(0)
   const [isMain, setIsMain] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean | null>(null)
 
   const { groupId } = useParams<{ groupId: string }>()
   const user = useUserStore(state => state.user)
@@ -29,8 +29,8 @@ function EditGroup() {
     const fetchData = async () => {
       if (!user?.id) return
       setLoading(true)
-      await fetchGroups(user.id) // ✅ 기다려야 로딩이 유지됨
-      setLoading(false)
+      await fetchGroups(user.id)
+      setLoading(false) // ✅ 기다려야 로딩이 유지됨
     }
     fetchData()
   }, [user?.id, fetchGroups])
@@ -38,11 +38,9 @@ function EditGroup() {
   useEffect(() => {
     if (!targetGroup || !user?.id) return
 
-    setTimeout(() => {
-      if (inputRef.current) {
-        inputRef.current.value = targetGroup.groups.name
-      }
-    }, 0)
+    if (inputRef.current) {
+      inputRef.current.value = targetGroup.groups.name
+    }
 
     setMascot(targetGroup.groups.mascot)
     setIsMain(targetGroup.is_main)
@@ -80,7 +78,7 @@ function EditGroup() {
     }
   }
 
-  return loading ? (
+  return loading && !targetGroup ? (
     <Loading />
   ) : (
     <form className="p-4 flex flex-col gap-7">

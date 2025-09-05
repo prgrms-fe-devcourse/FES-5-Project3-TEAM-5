@@ -53,12 +53,14 @@ export const CalendarPage = () => {
 
   useEffect(() => {
     const run = async () => {
+      if (!storageGroup) return
+
       const {
         recurringParents,
         installmentParents,
         existingRecurringKeys,
         existingInstallmentKeys
-      } = await fetchExistingKey(storageGroup) // 이렇게 안에 넣어도 되나?
+      } = await fetchExistingKey(storageGroup)
 
       const toCreate: AccountItem[] = []
 
@@ -79,10 +81,12 @@ export const CalendarPage = () => {
 
       if (toCreate.length) {
         await createRecurringItem(toCreate)
+        // 새로운 항목이 생성되었으면 페이지 새로고침
+        window.location.reload()
       }
     }
     run()
-  }, [])
+  }, [storageGroup, initialDate])
 
   const calc = (events: AccountItem[]) =>
     events.reduce(

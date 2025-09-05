@@ -84,6 +84,8 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
               className={`transition ease-in-out ${
                 activeIndex === index
                   ? 'text-neutral-dark'
+                  : value === 'deleteAccountBook'
+                  ? 'hover:text-secondary-red' 
                   : 'hover:text-neutral-dark'
               }`}
               onTouchStart={() => setActiveIndex(index)}

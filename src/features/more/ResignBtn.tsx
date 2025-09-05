@@ -64,7 +64,7 @@ function ResignBtn() {
   return (
     <>
       <button
-        className="cursor-pointer hover:text-neutral-dark transition ease-in-out"
+        className="cursor-pointer hover:text-secondary-red transition ease-in-out"
         onClick={handleResignModal}>
         회원탈퇴
       </button>

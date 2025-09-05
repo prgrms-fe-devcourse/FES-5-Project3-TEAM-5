@@ -87,9 +87,9 @@ export function ActiveNotificationIcon() {
 export function TopButton() {
   return (
     <svg
-      width="40"
-      height="40"
-      viewBox="0 0 34 34"
+      width="42"
+      height="42"
+      viewBox="0 0 35 35"
       fill="none"
       xmlns="http://www.w3.org/2000/svg">
       <path
@@ -107,9 +107,9 @@ export function TopButton() {
 export function HoverTopButton() {
   return (
     <svg
-      width="40"
-      height="40"
-      viewBox="0 0 34 34"
+      width="42"
+      height="42"
+      viewBox="0 0 35 35"
       fill="none"
       xmlns="http://www.w3.org/2000/svg">
       <path

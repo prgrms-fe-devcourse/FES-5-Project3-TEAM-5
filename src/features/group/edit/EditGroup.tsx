@@ -8,12 +8,14 @@ import Toggle from '../create/Toggle'
 import EditBtn from './EditBtn'
 import { updateGroupInfo, updateMainStatus } from '../create/service/fetch'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
+import Loading from '@/shared/components/loading/Loading'
 
 function EditGroup() {
   const [isOwner, setIsOwner] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const [mascot, setMascot] = useState(0)
   const [isMain, setIsMain] = useState(false)
+  const [loading, setLoading] = useState<boolean | null>(null)
 
   const { groupId } = useParams<{ groupId: string }>()
   const user = useUserStore(state => state.user)
@@ -24,15 +26,19 @@ function EditGroup() {
   const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   useEffect(() => {
-    if (user?.id) {
-      fetchGroups(user.id)
+    const fetchData = async () => {
+      if (!user?.id) return
+      setLoading(true)
+      await fetchGroups(user.id)
+      setLoading(false) // ✅ 기다려야 로딩이 유지됨
     }
+    fetchData()
   }, [user?.id, fetchGroups])
 
   useEffect(() => {
     if (!targetGroup || !user?.id) return
 
-    if (inputRef.current?.value) {
+    if (inputRef.current) {
       inputRef.current.value = targetGroup.groups.name
     }
 
@@ -59,11 +65,12 @@ function EditGroup() {
         await updateGroupInfo(groupId, inputRef.current?.value, mascot)
       }
 
-      await updateMainStatus(groupId, user.id)
+      if (isMain) {
+        await updateMainStatus(groupId, user.id)
+      }
 
-      // ✅ 갱신
       await fetchGroups(user.id)
-      showSnackbar({ text: '수정 완료!', type: 'success' })
+      showSnackbar({ text: '가계부가 수정되었습니다.', type: 'success' })
       navigate(`/accountBook/${groupId}/settings`)
     } catch (err) {
       console.error(err)
@@ -71,7 +78,9 @@ function EditGroup() {
     }
   }
 
-  return (
+  return loading && !targetGroup ? (
+    <Loading />
+  ) : (
     <form className="p-4 flex flex-col gap-7">
       <GroupName
         ref={inputRef}

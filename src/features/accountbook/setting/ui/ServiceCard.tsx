@@ -10,7 +10,11 @@ import { useStorageGroup } from '@/features/group/model/useStorageGroup'
 const serviceList = [
   { value: 'inviteUser', text: '초대하기' },
   { value: 'exportExcel', text: '엑셀 내보내기' },
-  { value: 'deleteAccountBook', text: '가계부 삭제' }
+  {
+    value: 'deleteAccountBook',
+    text: (isOwner: boolean | null) =>
+      isOwner ? '가계부 삭제' : '가계부 나가기'
+  }
 ]
 
 interface Props {
@@ -24,7 +28,7 @@ interface Props {
 function ServiceCard({ groupInfo, handleExportExcel }: Props) {
   const [isExport, setIsExport] = useState(false)
   const [isDelete, setIsDelete] = useState<Delete>({
-    isOwner: false,
+    isOwner: null,
     delete: false
   })
 
@@ -36,8 +40,10 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
   const clearStorageGroup = useStorageGroup(state => state.clearStorageGroup)
 
   useEffect(() => {
-    if (groupInfo && groupInfo.user_id === userId) {
-      setIsDelete(prev => ({ ...prev, isOwner: true }))
+    if (groupInfo) {
+      setIsDelete(prev => ({ ...prev, isOwner: groupInfo.user_id === userId }))
+    } else {
+      setIsDelete(prev => ({ ...prev, isOwner: null }))
     }
   }, [groupInfo, userId])
 
@@ -78,27 +84,46 @@ function ServiceCard({ groupInfo, handleExportExcel }: Props) {
           가계부 서비스
         </h2>
         <ul className="flex flex-col gap-3">
-          {serviceList.map(({ value, text }, index) => (
-            <li
-              key={value}
-              className={`transition ease-in-out ${
-                activeIndex === index
-                  ? 'text-neutral-dark'
-                  : value === 'deleteAccountBook'
-                  ? 'hover:text-secondary-red' 
-                  : 'hover:text-neutral-dark'
-              }`}
-              onTouchStart={() => setActiveIndex(index)}
-              onTouchEnd={() => setActiveIndex(null)}
-              onTouchCancel={() => setActiveIndex(null)}>
-              <button
-                value={value}
-                className="cursor-pointer text-size-lg"
-                onClick={handleService}>
-                {text}
-              </button>
-            </li>
-          ))}
+          {serviceList.map(({ value, text }, index) => {
+            if (isDelete.isOwner === null) {
+              // 로딩 중이니 렌더하지 않거나 로딩 스피너 표시 가능
+              return (
+                <li
+                  key={value}
+                  className={`transition ease-in-out ${
+                    activeIndex === index
+                      ? 'text-neutral-dark'
+                      : 'hover:text-neutral-dark'
+                  }`}
+                  onTouchStart={() => setActiveIndex(index)}
+                  onTouchEnd={() => setActiveIndex(null)}
+                  onTouchCancel={() => setActiveIndex(null)}>
+                  <div className="w-24 h-6 bg-gray-100/80 rounded animate-pulse"></div>
+                </li>
+              )
+            }
+            return (
+              <li
+                key={value}
+                className={`transition ease-in-out ${
+                  activeIndex === index
+                    ? 'text-neutral-dark'
+                    : value === 'deleteAccountBook'
+                    ? 'hover:text-secondary-red' 
+                    : 'hover:text-neutral-dark'
+                }`}
+                onTouchStart={() => setActiveIndex(index)}
+                onTouchEnd={() => setActiveIndex(null)}
+                onTouchCancel={() => setActiveIndex(null)}>
+                <button
+                  value={value}
+                  className="cursor-pointer text-size-lg"
+                  onClick={handleService}>
+                  {typeof text === 'function' ? text(isDelete.isOwner) : text}
+                </button>
+              </li>
+            )
+          })}
         </ul>
       </div>
 

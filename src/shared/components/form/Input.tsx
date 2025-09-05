@@ -8,6 +8,7 @@ interface Props {
   value?: string
   maxLength?: number
   disabled?: boolean
+
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }

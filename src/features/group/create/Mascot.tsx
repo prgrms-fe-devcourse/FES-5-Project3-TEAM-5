@@ -13,10 +13,17 @@ function Mascot({
   disabled?: boolean
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
+  const touchStartXRef = useRef<number | null>(null)
+
   const [visibleCount, setVisibleCount] = useState(4)
   const [startIndex, setStartIndex] = useState(0)
 
   const selectedId = value ?? mascotList[0].id ?? 1
+
+  const imageWidth = 70 + 5 // 이미지 너비 + gap(px)
+  const offsetX = startIndex * imageWidth
+
+  const maxStartIndex = Math.max(mascotList.length - visibleCount, 0)
 
   useEffect(() => {
     const updateVisibleCount = () => {
@@ -33,21 +40,39 @@ function Mascot({
     return () => window.removeEventListener('resize', updateVisibleCount)
   }, [])
 
-  const imageWidth = 70 + 5 // 이미지 너비 + gap(px)
-  const offsetX = startIndex * imageWidth
-
-  const maxStartIndex = Math.max(mascotList.length - visibleCount, 0)
-
   const handlePrev = () => {
-    setStartIndex(prev => Math.max(prev - 1, 0))
+    setStartIndex(prev => Math.max(prev - 3, 0))
   }
 
   const handleNext = () => {
-    setStartIndex(prev => Math.min(prev + 1, maxStartIndex))
+    setStartIndex(prev => Math.min(prev + 3, maxStartIndex))
   }
 
   const handleSelect = (id: number) => {
     onChange(id)
+  }
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    touchStartXRef.current = e.touches[0].clientX
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (touchStartXRef.current === null) return
+
+    const touchEndX = e.changedTouches[0].clientX
+    const diffX = touchStartXRef.current - touchEndX
+
+    const swipeThreshold = 30 // 최소 스와이프 거리 (px)
+
+    if (diffX > swipeThreshold) {
+      // 👉 왼쪽으로 스와이프 → 다음
+      handleNext()
+    } else if (diffX < -swipeThreshold) {
+      // 👈 오른쪽으로 스와이프 → 이전
+      handlePrev()
+    }
+
+    touchStartXRef.current = null
   }
 
   return (
@@ -69,6 +94,8 @@ function Mascot({
           ref={containerRef}>
           <motion.div
             className="flex gap-5 p-1"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             style={{
               transform: `translateX(-${offsetX}px)`,
               width: `${mascotList.length * imageWidth}px`,

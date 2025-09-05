@@ -72,7 +72,7 @@ function GroupCard() {
           size={38}
         />
       ) : groups.length === 0 ? (
-        <div className="text-center text-gray-400 w-full py-6 mt-10 text-sm">
+        <div className="text-center text-gray-400 w-full py-6 mt-10 text-sm absolute">
           등록된 가계부가 없습니다.
         </div>
       ) : (

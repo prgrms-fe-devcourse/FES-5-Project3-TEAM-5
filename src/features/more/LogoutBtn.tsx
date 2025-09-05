@@ -18,7 +18,7 @@ function LogoutBtn() {
       type="button"
       aria-label="로그아웃"
       onClick={() => handleLogout()}
-      className="cursor-pointer">
+      className="cursor-pointer hover:text-neutral-dark transition ease-in-out">
       로그아웃
     </button>
   )

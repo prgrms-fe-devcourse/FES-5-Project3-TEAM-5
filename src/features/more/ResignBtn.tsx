@@ -64,23 +64,21 @@ function ResignBtn() {
   return (
     <>
       <button
-        className="cursor-pointer"
+        className="cursor-pointer hover:text-neutral-dark transition ease-in-out"
         onClick={handleResignModal}>
         회원탈퇴
       </button>
-      {isOpen && (
-        <ConfirmModal
-          open={isOpen}
-          title="회원탈퇴"
-          lines={['탈퇴 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
-          onConfirm={handleResignUser}
-          onCancel={() => {
-            setIsOpen(false)
-          }}
-          confirmText="확인"
-          cancelText="취소"
-        />
-      )}
+      <ConfirmModal
+        open={isOpen}
+        title="회원탈퇴"
+        lines={['탈퇴 후에는 복구가 어려워요.', '그래도 진행하시겠습니까?']}
+        onConfirm={handleResignUser}
+        onCancel={() => {
+          setIsOpen(false)
+        }}
+        confirmText="확인"
+        cancelText="취소"
+      />
     </>
   )
 }

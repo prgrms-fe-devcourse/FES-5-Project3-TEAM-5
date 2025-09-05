@@ -82,6 +82,28 @@ function AddItem() {
       console.error('금액은 최소 100원 이상이어야 합니다.')
       return
     }
+    if (
+      tab === '수입' &&
+      incomeRepeatData &&
+      dayjs(incomeRepeatData.endDate).isBefore(dayjs(date), 'day')
+    ) {
+      showSnackbar({
+        text: '종료일이 생성일 이전일 수 없습니다.',
+        type: 'error'
+      })
+      return
+    }
+    if (
+      tab === '지출' &&
+      expenseRepeatInstallmentData &&
+      dayjs(expenseRepeatInstallmentData.endDate).isBefore(dayjs(date), 'day')
+    ) {
+      showSnackbar({
+        text: '종료일이 생성일 이전일 수 없습니다.',
+        type: 'error'
+      })
+      return
+    }
 
     try {
       const { data: userData } = await supabase.auth.getUser()

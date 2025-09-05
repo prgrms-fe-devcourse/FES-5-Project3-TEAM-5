@@ -29,10 +29,16 @@ const mapping: Record<string, string> = {
 }
 
 function IncomeModal({ open, onClose, onSave, initialData }: Props) {
-  const [isBiMonthly, setIsBiMonthly] = useState(initialData?.isBiMonthly ?? false) // 토글 상태
-  const [selectedPeriod, setSelectedPeriod] = useState(initialData?.selectedPeriod ?? '매일') // 주기 상태
+  const [isBiMonthly, setIsBiMonthly] = useState(
+    initialData?.isBiMonthly ?? false
+  ) // 토글 상태
+  const [selectedPeriod, setSelectedPeriod] = useState(
+    initialData?.selectedPeriod ?? '매일'
+  ) // 주기 상태
 
-  const [endDate, setEndDate] = useState<Date | null>(initialData?.endDate ?? null) // 종료일 상태
+  const [endDate, setEndDate] = useState<Date | null>(
+    initialData?.endDate ?? null
+  ) // 종료일 상태
   const [isEndDateModalOpen, setIsEndDateModalOpen] = useState(false) // 종료일 모달 열림 상태
 
   // 토글 상태에 따라 값 변경
@@ -54,8 +60,10 @@ function IncomeModal({ open, onClose, onSave, initialData }: Props) {
     onSave(undefined) // AddItem에서 초기화
   }
 
-   return (
-    <BaseModal isOpen={open} onClose={onClose}>
+  return (
+    <BaseModal
+      isOpen={open}
+      onClose={onClose}>
       <div className="min-h-[130px]">
         {/* 상단 탭 - 반복 */}
         <div className="mt-5">
@@ -120,28 +128,28 @@ function IncomeModal({ open, onClose, onSave, initialData }: Props) {
       <div className="mt-2 flex gap-3">
         {initialData && ( // 이미 저장된 데이터가 있을 때만 렌더링
           <ResetButton
-            text='초기화'
+            text="초기화"
             onClick={handleReset}
-            className='flex-[1]'
+            className="flex-[1]"
           />
         )}
 
         <SubmitButton
           text="반복 설정"
           disabled={!endDate}
-          className='flex-[2]'
+          className="flex-[2]"
           onClick={() => {
             onSave({ mode: '반복', selectedPeriod, isBiMonthly, endDate })
           }}
         />
       </div>
-      
+
       {/* 종료일 모달 */}
       <EndDateModal
         open={isEndDateModalOpen}
         onClose={() => setIsEndDateModalOpen(false)}
         onSelect={date => setEndDate(date)}
-        selectedDate={endDate}  // 이미 선택된 날짜를 넘김
+        selectedDate={endDate} // 이미 선택된 날짜를 넘김
       />
     </BaseModal>
   )

@@ -4,6 +4,7 @@ import { addVote } from '@/features/vote/service/addVote'
 import { AddTimeButtonList } from '@/features/vote/ui/form/AddTimeButtonList'
 import { validateAddVote } from '@/features/vote/utils/validation'
 import SubmitButton from '@/shared/components/form/SubmitButton'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useUserStore } from '@/shared/stores/useUserStore'
 import { useRef } from 'react'
 import { useNavigate } from 'react-router'
@@ -14,6 +15,8 @@ function AddVotePage() {
   const firstOptionRef = useRef<HTMLInputElement>(null)
   const secondOptionRef = useRef<HTMLInputElement>(null)
   const navigate = useNavigate()
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
+
   const handleSubmit = async () => {
     const userId = useUserStore.getState().user?.id
     const voteTime = voteTimeRef.current
@@ -30,7 +33,10 @@ function AddVotePage() {
     })
 
     if (errorMessage) {
-      alert(errorMessage)
+      showSnackbar({
+        type: 'error',
+        text: errorMessage
+      })
       return
     }
 
@@ -44,10 +50,10 @@ function AddVotePage() {
       }
 
       await addVote(newVote, [firstOption!, secondOption!])
+      showSnackbar({ type: 'success', text: '투표가 생성되었습니다' })
       navigate('/vote')
     } catch (error) {
-      console.error(error)
-      alert('투표 생성 중 오류가 발생했습니다.')
+      showSnackbar({ type: 'error', text: '투표 생성 중 오류가 발생했습니다' })
     }
   }
 

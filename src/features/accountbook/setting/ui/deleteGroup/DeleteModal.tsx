@@ -40,7 +40,7 @@ function DeleteModal({ isDelete, onCancel }: Props) {
 
     if (mainData?.is_main === true) {
       showSnackbar({
-        text: '대표 가계부는 삭제할 수 없어요.\n다른 가계부를 먼저 대표로 지정하세요.',
+        text: '대표 가계부는 삭제할 수 없습니다 \n다른 가계부를 먼저 대표로 지정하시길 바랍니다',
         type: 'error'
       })
       onCancel() // ConfirmModal 닫기

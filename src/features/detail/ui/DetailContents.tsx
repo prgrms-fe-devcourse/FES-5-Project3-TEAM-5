@@ -5,6 +5,7 @@ import ToggleMoreButton from './ToggleMoreButton'
 import { useNavigate } from 'react-router'
 import { deleteAccountItem } from '@/pages/item/delete/deleteAccountItem'
 import { useEffect, useRef } from 'react'
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 
 interface Props {
   isArticleToggleOn: boolean
@@ -43,6 +44,7 @@ export function DetailContents({
 }: Props) {
   const navigate = useNavigate()
   const toggleRef = useRef<HTMLDivElement>(null)
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -61,14 +63,20 @@ export function DetailContents({
   const handleDelete = async (id: string) => {
     try {
       if (noDeleteItem) {
-        alert('할부 또는 반복 일정은 삭제할 수 없어요.')
+        showSnackbar({
+          type: 'error',
+          text: '할부 또는 반복 일정은 삭제할 수 없습니다'
+        })
         return
       }
       await deleteAccountItem(id)
       navigate(-1)
     } catch (error) {
       console.error('삭제 에러:', error)
-      alert('삭제 중 오류가 발생했습니다.')
+      showSnackbar({
+        type: 'error',
+        text: '삭제 중 오류가 발생했습니다'
+      })
     }
   }
 

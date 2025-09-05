@@ -4,6 +4,6 @@ export async function deleteComment(deletedId: string) {
   const { error } = await supabase.from('comments').delete().eq('id', deletedId)
 
   if (error) {
-    alert(`삭제 실패: ${error.message}`)
+    console.error(`삭제 실패: ${error.message}`)
   }
 }

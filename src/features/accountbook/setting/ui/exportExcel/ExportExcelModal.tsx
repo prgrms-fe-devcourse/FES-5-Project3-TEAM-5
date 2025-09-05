@@ -82,7 +82,7 @@ function ExportExcelModal({ isExport, onCancel, onExport }: Props) {
                 <li
                   key={month}
                   onClick={() => setSelectedMonth(month)}
-                  className={`px-8 py-2 cursor-pointer text-center rounded-lg text-black hover:translate-0.5 hover:shadow-md ${
+                  className={`px-6 py-2 cursor-pointer text-center rounded-lg text-black hover:translate-0.5 hover:shadow-md ${
                     selectedMonth === month
                       ? 'bg-primary-light'
                       : 'hover:bg-gray-100'

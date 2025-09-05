@@ -10,7 +10,6 @@ import {
   getDateRange
 } from '@/features/accountbook/setting/utils/exportExcel'
 
-import { useUserStore } from '@/shared/stores/useUserStore'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 
@@ -23,7 +22,6 @@ function SettingPage() {
     year: number
     month: number
   }) => {
-    const userId = useUserStore.getState().user!.id
     const { year, month } = selectedDate
     console.log(selectedDate)
     const { startDate, endDate } = getDateRange(year, month)
@@ -31,7 +29,6 @@ function SettingPage() {
     // 데이터
     const data = await getExcelData({
       groupId: String(groupId),
-      userId,
       startDate,
       endDate
     })

@@ -5,7 +5,7 @@ import kakaoIcon from '@/shared/assets/icons/kakao.svg'
 
 function Login() {
   return (
-    <main className="min-h-dvh flex items-center justify-center bg-neutral-50">
+    <main className="w-full min-h-dvh flex items-center justify-center bg-neutral-50">
       <div className="w-full max-w-[480px] px-5 pt-[max(env(safe-area-inset-top),theme(spacing.8))] pb-[max(env(safe-area-inset-bottom),theme(spacing.8))]">
         <section className="flex flex-col items-center text-center">
           <img

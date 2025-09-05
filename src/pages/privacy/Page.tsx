@@ -123,7 +123,7 @@ export default function PrivacyPage() {
           </h2>
           <div className="space-y-2 text-neutral-dark leading-relaxed">
             <p>
-              이 개인정보처리방침은 2025년 1월 1일부터 적용됩니다. 법령 및
+              이 개인정보처리방침은 2025년 8월 21일부터 적용됩니다. 법령 및
               방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는
               변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다.
             </p>

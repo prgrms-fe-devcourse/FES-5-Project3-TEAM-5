@@ -25,7 +25,7 @@ function NicknameCard() {
   const formattedNickname = formatNickname(nickname)
 
   return (
-    <div className="flex items-center gap-4 p-4 shadow-xl rounded-xl bg-white">
+    <div className="flex items-center gap-4 p-4 shadow-xl rounded-xl bg-white border-t-1 border-gray-100/80">
       <div className="w-[100px] h-[100px] bg-primary-pale rounded-full flex justify-center items-center">
         <img
           src={raiseBear}

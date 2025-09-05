@@ -5,7 +5,7 @@ import kakaoIcon from '@/shared/assets/icons/kakao.svg'
 
 function Login() {
   return (
-    <div className="p-4 w-full absolute top-[45%] left-[50%] -translate-x-1/2 -translate-y-1/2 flex flex-col gap-12">
+    <div className="p-4 w-full h-full flex flex-col gap-12 items-center justify-center pb-10 bg-white">
       <div className="flex flex-row justify-between items-center">
         <div className="text-[25px]">
           <span className="text-[30px] font-bold">또모</span>에 오신 것을 <br />
@@ -19,7 +19,7 @@ function Login() {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 w-full">
         <LoginCard
           iconSrc={googleIcon}
           text="구글"

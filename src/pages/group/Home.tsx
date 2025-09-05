@@ -44,7 +44,7 @@ function Home() {
         </div>
         <div
           className={tw(
-            'grid justify-center gap-9 mx-4 justify-items-center',
+            'grid justify-center gap-9 justify-items-center',
             // 기본: 1개
             'grid-cols-1',
             // 320px 이상일 땐 2개

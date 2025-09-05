@@ -10,6 +10,7 @@ import Login from '@/pages/login/Login'
 import supabase from '@/supabase/supabase'
 import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import Loading from '../loading/Loading'
+import LoginEntry from '@/pages/login/LoginEntry'
 
 type RouteHandle = {
   title?: string
@@ -77,7 +78,7 @@ export const Layout = () => {
         {isLoading ? (
           <Loading className="mt-60" />
         ) : !isAuth ? (
-          <Login />
+          <LoginEntry />
         ) : (
           <>
             {headerTitle && <Header title={headerTitle} />}

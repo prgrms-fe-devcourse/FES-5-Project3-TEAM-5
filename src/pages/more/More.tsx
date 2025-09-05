@@ -8,9 +8,6 @@ function More() {
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(
     null
   )
-  const [activeAccountIndex, setActiveAccountIndex] = useState<number | null>(
-    null
-  )
 
   const accountItems = [<ResignBtn key="resign" />, <LogoutBtn key="logout" />]
 
@@ -55,11 +52,7 @@ function More() {
         <h2 className="text-neutral-dark">계정관리</h2>
         <ul className="flex flex-col gap-4">
           {accountItems.map((item, i) => (
-            <li
-              key={i}
-              onTouchStart={() => setActiveAccountIndex(i)}
-              onTouchEnd={() => setActiveAccountIndex(null)}
-              onTouchCancel={() => setActiveAccountIndex(null)}>
+            <li key={i}>
               {item}
             </li>
           ))}

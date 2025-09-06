@@ -20,7 +20,7 @@ function AddButton({
       onClick={onClick}
       aria-label={ariaLabel}
       className={`${circleSize} rounded-full flex items-center justify-center cursor-pointer
-      bg-[#F6C9A4] hover:bg-[#ED944A] text-[#ED944A] hover:text-white
+      bg-[#F6C9A4] hover:bg-[#ED944A] text-[#ED944A] hover:text-white active:scale-95
         transition-colors ${className ?? ''}`}>
       <svg
         className={plusSize}

@@ -28,7 +28,7 @@ function getMappingData(
   showSnackbar: ExcelOptions['showSnackbar']
 ) {
   if (!data || data.length === 0) {
-    showSnackbar({ text: '데이터가 없습니다.', type: 'error' })
+    showSnackbar({ text: '데이터가 없습니다', type: 'error' })
     return []
   }
 
@@ -56,7 +56,7 @@ export function downloadExcel(
   data: AccountItem[],
   {
     showSnackbar,
-    fileNamePrefix = 'account_items',
+    fileNamePrefix = 'TTOMO',
     serverUrlFallback = ''
   }: ExcelOptions
 ) {
@@ -99,7 +99,7 @@ export function downloadExcel(
       window.location.href = serverUrlFallback
     } else {
       showSnackbar({
-        text: '앱 WebView에서는 직접 다운로드가 지원되지 않습니다. 서버 URL을 제공해주세요',
+        text: '앱 WebView에서는 직접 다운로드가 지원되지 않습니다',
         type: 'error'
       })
     }

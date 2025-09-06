@@ -73,7 +73,7 @@ export const ListItem = ({
 }: Props) => {
   return (
     <div
-      className="w-full border-b border-neutral-light p-2.5 flex justify-between items-center"
+      className="w-full border-b border-neutral-light p-2.5 flex justify-between items-center cursor-pointer"
       onClick={gotoDetail}>
       <div className="flex items-center gap-2.5 text-[16px]">
         <div className="w-[30px] h-[30px] rounded-full bg-gray-50">

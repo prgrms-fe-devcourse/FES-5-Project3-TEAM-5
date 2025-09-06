@@ -1,3 +1,4 @@
+import { useSnackbarStore } from '@/shared/stores/useSnackbarStore'
 import { useEffect, useState } from 'react'
 
 interface Props {
@@ -6,6 +7,7 @@ interface Props {
 
 export function VoteQuestion({ questionRef }: Props) {
   const [textLength, setTextLength] = useState(0)
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   useEffect(() => {
     if (questionRef.current) {
@@ -21,7 +23,7 @@ export function VoteQuestion({ questionRef }: Props) {
     if (value.length > 50) {
       value = value.slice(0, 50)
       questionRef.current.value = value
-      alert('50글자만 작성 가능합니다!')
+      showSnackbar({ type: 'warning', text: '50글자만 작성 가능합니다' })
     }
 
     setTextLength(value.length)

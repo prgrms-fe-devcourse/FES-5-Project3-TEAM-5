@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import momoInvite from '@/shared/assets/momo/momo-invite.png'
+import ScrollToTopButton from '@/shared/components/buttons/ScrollToTopButton'
 
 interface Notice {
   id: number
@@ -71,7 +72,7 @@ const notices: Notice[] = [
 
 export default function NoticePage() {
   return (
-    <div className="min-h-dvh p-4 space-y-6 pb-20">
+    <div className="min-h-dvh p-4 space-y-6">
       <div className="flex items-center justify-between mb-8">
         <div className="space-y-2">
           <h1 className="text-size-2xl font-bold text-primary-base">
@@ -126,6 +127,9 @@ export default function NoticePage() {
             </div>
           </motion.div>
         ))}
+        <div className="flex flex-col justify-end items-end sticky z-50 bottom-3">
+          <ScrollToTopButton/>
+        </div>
       </div>
     </div>
   )

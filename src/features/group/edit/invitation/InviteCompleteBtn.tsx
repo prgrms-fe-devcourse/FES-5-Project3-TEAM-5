@@ -56,7 +56,7 @@ function InviteCompleteBtn({ personal, invitedUsers, groupId, user }: Props) {
 
     if (filteredUsers.length === 0) {
       showSnackbar({
-        text: '이미 초대된 유저입니다.',
+        text: '이미 초대된 유저입니다',
         type: 'warning'
       })
       return
@@ -82,7 +82,7 @@ function InviteCompleteBtn({ personal, invitedUsers, groupId, user }: Props) {
     }
 
     navigate(`/accountBook/${groupId}/settings`)
-    showSnackbar({ text: '초대가 완료되었습니다!', type: 'success' })
+    showSnackbar({ text: '초대가 완료되었습니다', type: 'success' })
   }
 
   return (

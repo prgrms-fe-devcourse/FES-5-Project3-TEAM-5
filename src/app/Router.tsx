@@ -1,4 +1,8 @@
-import { createBrowserRouter, type LoaderFunctionArgs } from 'react-router'
+import {
+  createBrowserRouter,
+  redirect,
+  type LoaderFunctionArgs
+} from 'react-router'
 import dayjs from 'dayjs'
 
 // layouts
@@ -33,6 +37,11 @@ import Invitation from '@/features/group/edit/invitation/Invitation'
 import { StatisticsDetailPage, StatisticsPage } from '@/pages/statistics'
 import { PlansOverview } from '@/pages/plan/PlansOverview'
 import EditItem from '@/pages/item/edit/EditItem'
+import {
+  fetchGroupInfo,
+  validateGroupMember
+} from '@/features/group/service/groupInfo'
+import { useUserStore } from '@/shared/stores/useUserStore'
 
 const getInitialDateForCalendar = (dateParam: string | null) => {
   if (dateParam) return dayjs(dateParam).startOf('day').toISOString()
@@ -44,19 +53,34 @@ const getInitialDateForCalendar = (dateParam: string | null) => {
 
 const eventsLoader = async ({ request, params }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
-
   const dateParam = url.searchParams.get('date')
   const groupId = params.groupId
+  const user = useUserStore.getState().user
+
+  if (!groupId || !user?.id) {
+    throw redirect('/')
+  }
+
+  const validate = await validateGroupMember(user.id, groupId)
+  if (!validate) {
+    localStorage.removeItem('storageGroup')
+    localStorage.removeItem('storageGroupName')
+    throw redirect('/')
+  }
+
+  const groupData = await fetchGroupInfo(groupId)
+  localStorage.setItem('storageGroup', groupData.id)
+  localStorage.setItem('storageGroupName', groupData.name)
 
   const initialDate = getInitialDateForCalendar(dateParam)
 
   const events = await fetchByMonth(
     dayjs(initialDate).year(),
     dayjs(initialDate).month(),
-    groupId ?? ''
+    groupId
   )
 
-  return { initialDate, events }
+  return { initialDate, events, groupId }
 }
 
 export const router = createBrowserRouter([

@@ -23,12 +23,6 @@ import {
 import { useStorageGroup } from '@/features/group/model/useStorageGroup'
 
 import AddButton from '@/shared/components/buttons/AddButton'
-import {
-  fetchGroupInfo,
-  validateGroupMember
-} from '@/features/group/service/groupInfo'
-
-import { useUserStore } from '@/shared/stores/useUserStore'
 
 interface LoaderData {
   events: AccountItem[]
@@ -43,7 +37,6 @@ export const CalendarPage = () => {
 
   const { initialDate, events } = useLoaderData() as LoaderData
   const { groupId } = useParams()
-  const user = useUserStore(state => state.user)
 
   const { searchRecurringItem } = useRecurringItem()
   const { searchInstallmentItem } = useInstallmentItem()
@@ -60,25 +53,6 @@ export const CalendarPage = () => {
   const [setData, setAmountList] = useSelectedDate(
     useShallow(s => [s.setDate, s.setAmountList])
   )
-
-  useEffect(() => {
-    if (!storageGroup) return
-    const fetchGroup = async () => {
-      if (!user?.id) return
-      const validate = await validateGroupMember(user.id, storageGroup)
-
-      if (!validate) {
-        navigate(`/`)
-        localStorage.removeItem('storageGroup')
-        localStorage.removeItem('storageGroupName')
-        return
-      }
-      const data = await fetchGroupInfo(storageGroup)
-      localStorage.setItem('storageGroup', data.id)
-      localStorage.setItem('storageGroupName', data.name)
-    }
-    fetchGroup()
-  }, [storageGroup])
 
   const navigate = useNavigate()
 

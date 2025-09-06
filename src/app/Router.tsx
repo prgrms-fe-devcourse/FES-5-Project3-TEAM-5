@@ -50,15 +50,20 @@ const getInitialDateForCalendar = (dateParam: string | null) => {
     .startOf('day')
     .toISOString()
 }
-
 const eventsLoader = async ({ request, params }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const dateParam = url.searchParams.get('date')
   const groupId = params.groupId
+
+  if (!groupId) {
+    const initialDate = getInitialDateForCalendar(dateParam)
+    return { initialDate, events: [], groupId: null }
+  }
+
   const user = useUserStore.getState().user
 
-  if (!groupId || !user?.id) {
-    throw redirect('/')
+  if (!user?.id) {
+    throw redirect('/login')
   }
 
   const validate = await validateGroupMember(user.id, groupId)

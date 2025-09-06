@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLoaderData, useNavigate } from 'react-router'
+import { useLoaderData, useNavigate, useParams } from 'react-router'
 
 import dayjs from 'dayjs'
 import { useShallow } from 'zustand/shallow'
@@ -36,11 +36,16 @@ export const CalendarPage = () => {
   >([])
 
   const { initialDate, events } = useLoaderData() as LoaderData
+  const { groupId } = useParams()
 
   const { searchRecurringItem } = useRecurringItem()
   const { searchInstallmentItem } = useInstallmentItem()
 
-  const getStorageGroup = useStorageGroup(state => state.getStorageGroup)
+  const [getStorageGroup, setStorageGroup] = useStorageGroup(
+    useShallow(state => [state.getStorageGroup, state.setStorageGroup])
+  )
+  setStorageGroup(groupId ?? '')
+
   const storageGroup = getStorageGroup()
 
   const { fetchExistingKey } = useExistingKey()

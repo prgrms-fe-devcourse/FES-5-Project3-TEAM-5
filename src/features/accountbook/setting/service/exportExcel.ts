@@ -1,6 +1,5 @@
 import supabase from '@/supabase/supabase'
 
-// 엑셀 데이터 불러오기
 export async function getExcelData({
   groupId,
   startDate,
@@ -24,8 +23,8 @@ export async function getExcelData({
         `
     )
     .eq('group_id', groupId)
-    .gte('created_at', startDate)
-    .lt('created_at', endDate)
+    .gte('date', startDate) // created_at → date로 변경
+    .lte('date', endDate) // lt → lte로 변경 (마지막 날도 포함)
 
   if (error) throw error
   return data

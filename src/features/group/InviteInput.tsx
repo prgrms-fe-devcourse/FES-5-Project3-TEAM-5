@@ -21,7 +21,7 @@ function InviteInput({
   personal
 }: Props) {
   const [userList, setUserList] = useState<Users[]>([])
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [inputValue, setInputValue] = useState<string>('')
   const [drop, setDrop] = useState(false)
   const [loading, setLoading] = useState(false)
   const [convertState, setConvertState] = useState({
@@ -70,18 +70,17 @@ function InviteInput({
   ).current
 
   useEffect(() => {
-    if (!inputRef.current?.value) return
-    debouncedFetchUserList(inputRef.current.value)
-  }, [inputRef.current?.value])
+    debouncedFetchUserList(inputValue)
+  }, [inputValue])
 
-  const handleInputChange = () => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDrop(true)
+    setInputValue(e.target.value)
   }
 
   const handleSelectUser = async (user: Users) => {
     setDrop(false)
-    if (!inputRef.current?.value) return
-    inputRef.current.value = user.email
+    setInputValue(user.email)
   }
 
   const addUserToList = (user: Users) => {
@@ -100,9 +99,8 @@ function InviteInput({
         created_at: user.created_at
       }
     ])
-    if (!inputRef.current?.value) return
-    inputRef.current.value = ''
 
+    setInputValue('')
     setDrop(false)
   }
 
@@ -149,8 +147,7 @@ function InviteInput({
       pendingUser: null
     }))
 
-    if (!inputRef.current?.value) return
-    inputRef.current.value = ''
+    setInputValue('')
   }
 
   return (
@@ -160,15 +157,15 @@ function InviteInput({
           label="이메일"
           className=""
           onChange={handleInputChange}
-          ref={inputRef}
+          value={inputValue}
           id="inviteUser"
         />
         <AddButton
           size="sm"
-          onClick={() => handleAddUser(inputRef.current?.value, personal)}
+          onClick={() => handleAddUser(inputValue, personal)}
           className="absolute z-1 right-4"
         />
-        {drop && inputRef.current?.value && (
+        {drop && inputValue && (
           <InviteList
             userList={userList}
             onSelect={handleSelectUser}

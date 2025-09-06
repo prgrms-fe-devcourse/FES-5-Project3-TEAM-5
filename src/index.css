@@ -201,11 +201,4 @@
   body {
     @apply bg-background text-foreground;
   }
-
-  /* 모바일에서 disable-hover 클래스 넣으면 hover 무시 */
-  @media (hover: none) and (pointer: coarse) {
-    .disable-hover:hover {
-      all: unset !important;
-    }
-  }
 }

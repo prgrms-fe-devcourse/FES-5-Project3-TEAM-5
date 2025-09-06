@@ -55,7 +55,7 @@ function Nav() {
                       ? 'text-neutral-light cursor-not-allowed'
                       : isActive
                         ? 'text-primary-base'
-                        : 'text-neutral-dark hover:bg-neutral-100'
+                        : 'text-neutral-dark'
                   )
                 }>
                 <Icon

@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useLoaderData, useNavigate, useParams } from 'react-router'
+import {
+  useLoaderData,
+  useNavigate,
+  useParams,
+  useRevalidator
+} from 'react-router'
 
 import dayjs from 'dayjs'
 import { useShallow } from 'zustand/shallow'
@@ -34,7 +39,7 @@ export const CalendarPage = () => {
   const [calendarEventsByDate, setCalendarEventsByDate] = useState<
     AccountItem[]
   >([])
-
+  const revalidator = useRevalidator()
   const { initialDate, events } = useLoaderData() as LoaderData
   const { groupId } = useParams()
 
@@ -86,8 +91,7 @@ export const CalendarPage = () => {
 
       if (toCreate.length) {
         await createRecurringItem(toCreate)
-        // 새로운 항목이 생성되었으면 페이지 새로고침
-        window.location.reload()
+        revalidator.revalidate()
       }
     }
     run()

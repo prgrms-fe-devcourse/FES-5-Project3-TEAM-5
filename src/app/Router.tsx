@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router'
+import { createBrowserRouter, type LoaderFunctionArgs } from 'react-router'
 import dayjs from 'dayjs'
 
 // layouts
@@ -42,16 +42,20 @@ const getInitialDateForCalendar = (dateParam: string | null) => {
     .toISOString()
 }
 
-const eventsLoader = async ({ request }: { request: Request }) => {
+const eventsLoader = async ({ request, params }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
+
   const dateParam = url.searchParams.get('date')
+  const groupId = params.groupId
+
   const initialDate = getInitialDateForCalendar(dateParam)
 
   const events = await fetchByMonth(
     dayjs(initialDate).year(),
     dayjs(initialDate).month(),
-    localStorage.getItem('storageGroup') || ''
+    groupId ?? ''
   )
+
   return { initialDate, events }
 }
 

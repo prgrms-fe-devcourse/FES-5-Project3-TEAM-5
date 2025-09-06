@@ -6,7 +6,6 @@ import { mascotList } from './create/data/mascots'
 import Loading from '@/shared/components/loading/Loading'
 import { useNavigate } from 'react-router'
 import { getUserGroups } from './create/service/fetch'
-import { useStorageGroup } from './model/useStorageGroup'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Variants, TargetAndTransition } from 'framer-motion'
 import { tw } from '@/shared/utils/tw'
@@ -18,8 +17,6 @@ function GroupCard() {
 
   const navigate = useNavigate()
   const user = useUserStore(useShallow(state => state.user))
-
-  const setStorageGroup = useStorageGroup(state => state.setStorageGroup) // 그룹 선택시 해당 아이디 로컬스토리지 저장 => 나중에 가계부 nav를 위해서 저장
 
   useEffect(() => {
     if (!user?.id) return
@@ -39,15 +36,9 @@ function GroupCard() {
     fetchSelect()
   }, [user?.id])
 
-  const handleCalendar = (
-    e: React.MouseEvent,
-    groupId: string,
-    groupName: string
-  ) => {
+  const handleCalendar = (e: React.MouseEvent, groupId: string) => {
     e.preventDefault()
-    setStorageGroup(groupId)
     navigate(`/accountBook/${groupId}/calendar`)
-    localStorage.setItem('groupName', groupName)
   }
 
   const itemVariants: Variants = {
@@ -89,9 +80,7 @@ function GroupCard() {
                 onTouchStart={() => setActiveIndex(i)}
                 onTouchEnd={() => setActiveIndex(null)}
                 onTouchCancel={() => setActiveIndex(null)} //  iOS 등에서 cancel 처리
-                onClick={e =>
-                  handleCalendar(e, g.group_id, g.groups?.name || '')
-                }
+                onClick={e => handleCalendar(e, g.group_id)}
                 type="button"
                 key={g.group_id}
                 custom={i}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLoaderData, useNavigate } from 'react-router'
+import { useLoaderData, useNavigate, useParams } from 'react-router'
 
 import dayjs from 'dayjs'
 import { useShallow } from 'zustand/shallow'
@@ -23,6 +23,12 @@ import {
 import { useStorageGroup } from '@/features/group/model/useStorageGroup'
 
 import AddButton from '@/shared/components/buttons/AddButton'
+import {
+  fetchGroupInfo,
+  validateGroupMember
+} from '@/features/group/service/groupInfo'
+
+import { useUserStore } from '@/shared/stores/useUserStore'
 
 interface LoaderData {
   events: AccountItem[]
@@ -36,11 +42,17 @@ export const CalendarPage = () => {
   >([])
 
   const { initialDate, events } = useLoaderData() as LoaderData
+  const { groupId } = useParams()
+  const user = useUserStore(state => state.user)
 
   const { searchRecurringItem } = useRecurringItem()
   const { searchInstallmentItem } = useInstallmentItem()
 
-  const getStorageGroup = useStorageGroup(state => state.getStorageGroup)
+  const [getStorageGroup, setStorageGroup] = useStorageGroup(
+    useShallow(state => [state.getStorageGroup, state.setStorageGroup])
+  )
+  setStorageGroup(groupId ?? '')
+
   const storageGroup = getStorageGroup()
 
   const { fetchExistingKey } = useExistingKey()
@@ -48,6 +60,25 @@ export const CalendarPage = () => {
   const [setData, setAmountList] = useSelectedDate(
     useShallow(s => [s.setDate, s.setAmountList])
   )
+
+  useEffect(() => {
+    if (!storageGroup) return
+    const fetchGroup = async () => {
+      if (!user?.id) return
+      const validate = await validateGroupMember(user.id, storageGroup)
+
+      if (!validate) {
+        navigate(`/`)
+        localStorage.removeItem('storageGroup')
+        localStorage.removeItem('storageGroupName')
+        return
+      }
+      const data = await fetchGroupInfo(storageGroup)
+      localStorage.setItem('storageGroup', data.id)
+      localStorage.setItem('storageGroupName', data.name)
+    }
+    fetchGroup()
+  }, [storageGroup])
 
   const navigate = useNavigate()
 

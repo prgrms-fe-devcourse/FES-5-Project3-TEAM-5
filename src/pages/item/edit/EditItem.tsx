@@ -23,6 +23,10 @@ function EditItem() {
 
   const nav = useNavigate()
 
+  const [isEditing, setIsEditing] = useState(false) // 중복 생성 방지 상태
+
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar) // 스낵바
+
   // 아이템 데이터 state
   const {
     amount, setAmount,
@@ -52,9 +56,6 @@ function EditItem() {
   // 카테고리 uuid → korean_name 변환
   const selectedCategoryName = categories.find(c => c.id === selectedCategoryId)?.korean_name ?? ''
 
-  // 스낵바
-  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
-
   // 파일 선택
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -79,9 +80,11 @@ function EditItem() {
   // DB 업데이트
   const handleSubmit = async () => {
     if (Number(amount) < 100) {
-      console.error('금액은 최소 100원 이상이어야 합니다.')
       return
     }
+
+    if (isEditing) return // 중복 수정 방지
+    setIsEditing(true) // 버튼 클릭시 잠금
 
     try{
       const { data: userData } = await supabase.auth.getUser()
@@ -89,7 +92,7 @@ function EditItem() {
 
       const userId = userData.user.id
 
-      const result = await updateAccountItem({
+      await updateAccountItem({
         id: id!,
         amount: Number(amount),
         categoryId: selectedCategoryId,
@@ -100,27 +103,18 @@ function EditItem() {
         prevReceiptUrl: imageUrl,
       })
 
-      nav(-1) // 이전 히스토리로 이동
+      showSnackbar({ type: "success", text: `${itemType} 내역이 수정되었습니다` })
 
-      // const formattedDate = dayjs(date).format("YYYY-MM-DD")
-      // nav(`/accountBook/calendar/detail/${formattedDate}/${id}`, {
-      //   replace: true,
-      // })
+      nav(-1) // 상세 페이지로 이동
+      // nav(`/accountBook/${groupId}/calendar/${id}`, { replace: true })
 
-      console.warn('업데이트 성공:', result)
-    } catch(err) {
-      const e = err as {
-        message?: string
-        details?: string
-        hint?: string
-        code?: string
+    } catch {
+        setIsEditing(false) // 다시 활성화
+        showSnackbar({
+          text: '저장 중 오류가 발생했습니다',
+          type: 'error'
+        })
       }
-      console.error('업데이트 실패 전체 에러:', e)
-      console.error('message:', e.message)
-      console.error('details:', e.details)
-      console.error('hint:', e.hint)
-      console.error('code:', e.code)
-    }
   }
 
 
@@ -236,9 +230,9 @@ function EditItem() {
           />
 
           <SubmitButton
-            text="수정 완료"
+            text={isEditing ? "저장 중..." : "수정 완료"}
             onClick={handleSubmit}
-            disabled={!amount || !selectedCategoryId || (itemType === '지출' && !selectedMethodId) || Number(amount) < 100 || Number(amount) > 99999999}
+            disabled={isEditing || !amount || !selectedCategoryId || (itemType === '지출' && !selectedMethodId) || Number(amount) < 100 || Number(amount) > 99999999}
           />
           
         </form>
@@ -250,7 +244,6 @@ function EditItem() {
         methods={methods}
         onClose={() => setIsPaymentModalOpen(false)}
         onSelect={id => {
-          console.warn('선택한 결제수단 uuid:', id) // 제대로 보이는지 콘솔에서 확인
           setSelectedMethodId(id) // 선택한 결제 수단 uuid 저장
           setIsPaymentModalOpen(false)
         }}
@@ -263,7 +256,6 @@ function EditItem() {
         filterType={itemType === "수입" ? "income" : "expense"}
         onClose={() => setIsCategoryModalOpen(false)}
         onSelect={id => {
-          console.warn('선택한 카테고리 uuid:', id) // 제대로 보이는지 콘솔에서 확인
           setSelectedCategoryId(id) // 선택한 카테고리 uuid 저장
           setIsCategoryModalOpen(false)
         }}

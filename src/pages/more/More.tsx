@@ -8,9 +8,6 @@ function More() {
   const [activeServiceIndex, setActiveServiceIndex] = useState<number | null>(
     null
   )
-  const [activeAccountIndex, setActiveAccountIndex] = useState<number | null>(
-    null
-  )
 
   const accountItems = [<ResignBtn key="resign" />, <LogoutBtn key="logout" />]
 
@@ -35,7 +32,7 @@ function More() {
               onTouchEnd={() => setActiveServiceIndex(null)}
               onTouchCancel={() => setActiveServiceIndex(null)}>
               <button
-                className="group-hover:text-neutral-dark transition ease-in-out  cursor-pointer"
+                className="hover:text-neutral-dark transition ease-in-out  cursor-pointer"
                 onClick={() => {
                   if (text === '공지사항') {
                     nav('notice')
@@ -55,16 +52,7 @@ function More() {
         <h2 className="text-neutral-dark">계정관리</h2>
         <ul className="flex flex-col gap-4">
           {accountItems.map((item, i) => (
-            <li
-              key={i}
-              className={`transition ease-in-out ${
-                activeAccountIndex === i
-                  ? 'text-neutral-dark'
-                  : 'hover:text-neutral-dark'
-              }`}
-              onTouchStart={() => setActiveAccountIndex(i)}
-              onTouchEnd={() => setActiveAccountIndex(null)}
-              onTouchCancel={() => setActiveAccountIndex(null)}>
+            <li key={i}>
               {item}
             </li>
           ))}

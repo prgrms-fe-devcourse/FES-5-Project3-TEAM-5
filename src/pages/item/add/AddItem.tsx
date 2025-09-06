@@ -28,11 +28,15 @@ function AddItem() {
   const [amount, setAmount] = useState('') // 금액
   const memoRef = useRef<HTMLTextAreaElement>(null) // 메모 내용
 
+  const showSnackbar = useSnackbarStore(state => state.showSnackbar) // 스낵바
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null) // 업로드한 사진 객체
   const [imageUrl, setImageUrl] = useState<string | null>(null) // 미리보기 사진 url
   const fileInputRef = useRef<HTMLInputElement>(null) // hidden 처리된 file input 클릭하기 위한 ref
 
   const nav = useNavigate()
+
+  const [isSubmitting, setIsSubmitting] = useState(false) // 중복 생성 방지 상태
 
   // 모달 열림 상태
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false) // 결제 수단 설정 모달
@@ -79,7 +83,6 @@ function AddItem() {
   // DB 저장
   const handleSubmit = async () => {
     if (Number(amount) < 100) {
-      console.error('금액은 최소 100원 이상이어야 합니다.')
       return
     }
     if (
@@ -105,13 +108,16 @@ function AddItem() {
       return
     }
 
+    if (isSubmitting) return // 중복 생성 방지
+    setIsSubmitting(true) // 버튼 클릭 시 잠금
+
     try {
       const { data: userData } = await supabase.auth.getUser()
       if (!userData.user) throw new Error('로그인이 필요합니다.')
 
       const userId = userData.user.id
 
-      const result = await saveAccountItem({
+      await saveAccountItem({
         amount: Number(amount),
         type: tab === '수입' ? 'income' : 'expense',
         date: dayjs(date).format('YYYY-MM-DD'),
@@ -124,33 +130,25 @@ function AddItem() {
         repeatInstallmentData:
           tab === '수입' ? incomeRepeatData : expenseRepeatInstallmentData
       })
+      showSnackbar({ type: "success", text: `${tab} 내역이 작성되었습니다` })
+
       nav(`/accountBook/${localStorage.getItem('storageGroup')}/calendar`, {
         replace: true
       })
 
-      console.warn('저장 성공:', result)
-    } catch (err) {
-      const e = err as {
-        message?: string
-        details?: string
-        hint?: string
-        code?: string
+    } catch {
+        setIsSubmitting(false) // 다시 활성화
+        showSnackbar({
+          text: '저장 중 오류가 발생했습니다',
+          type: 'error'
+        })
       }
-      console.error('저장 실패 전체 에러:', e)
-      console.error('message:', e.message)
-      console.error('details:', e.details)
-      console.error('hint:', e.hint)
-      console.error('code:', e.code)
-    }
   }
 
   // 탭 전환 시 선택된 카테고리 초기화
   useEffect(() => {
     setSelectedCategoryId(null)
   }, [tab])
-
-  // 스낵바
-  const showSnackbar = useSnackbarStore(state => state.showSnackbar)
 
   // 파일 선택
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -292,9 +290,10 @@ function AddItem() {
           />
 
           <SubmitButton
-            text="작성 완료"
+            text={isSubmitting ? "저장 중..." : "작성 완료"}
             onClick={handleSubmit}
             disabled={
+              isSubmitting ||
               !amount ||
               !selectedCategoryId ||
               (tab === '지출' && !selectedMethodId) ||
@@ -311,7 +310,6 @@ function AddItem() {
         methods={methods}
         onClose={() => setIsPaymentModalOpen(false)}
         onSelect={id => {
-          console.warn('선택한 결제수단 uuid:', id) // 제대로 보이는지 콘솔에서 확인
           setSelectedMethodId(id) // 선택한 결제 수단 uuid 저장
           setIsPaymentModalOpen(false)
         }}
@@ -324,7 +322,6 @@ function AddItem() {
         filterType={filterType}
         onClose={() => setIsCategoryModalOpen(false)}
         onSelect={id => {
-          console.warn('선택한 카테고리 uuid:', id) // 제대로 보이는지 콘솔에서 확인
           setSelectedCategoryId(id) // 선택한 카테고리 uuid 저장
           setIsCategoryModalOpen(false)
         }}
@@ -336,7 +333,6 @@ function AddItem() {
           open={isRepeatInstallmentModalOpen}
           onClose={() => setIsRepeatInstallmentModalOpen(false)}
           onSave={data => {
-            console.warn('반복 데이터:', data)
             setIncomeRepeatData(data)
             setIsRepeatInstallmentModalOpen(false)
           }}
@@ -350,7 +346,6 @@ function AddItem() {
           open={isRepeatInstallmentModalOpen}
           onClose={() => setIsRepeatInstallmentModalOpen(false)}
           onSave={data => {
-            console.warn('반복/할부 데이터:', data)
             setExpenseRepeatInstallmentData(data)
             setIsRepeatInstallmentModalOpen(false)
           }}
